@@ -37,8 +37,10 @@ public:
 	MatrixVectorExp FromFileToMatrixVecExp();
 private:
 	std::string getMatrixString();
-	void getMatrixSize(const std::string& strInput, unsigned& nRowNumber, unsigned& nColumnNumber);
+	void exciseMatrixSize(std::string& strInput, unsigned& nRowNumber, unsigned& nColumnNumber);
 	MatrixExp getMatrixFromString(const std::string& strInput, unsigned nRowNumber, unsigned nColumnNumber);
+	std::vector<std::string> parseMatrixToRows(const std::string& strMatrixString);
+	void deleteBorderSymbols(std::string& strInput, char cStartSymbol, char cEndSymbol);
 
 	std::ifstream m_file;
 };

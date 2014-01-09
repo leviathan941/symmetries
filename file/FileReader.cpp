@@ -20,9 +20,11 @@
 #include "FileReader.h"
 #include "Exceptions.h"
 
-#define MATRIX_SIZE_START_DELIMER '['
-#define MATRIX_SIZE_END_DELIMER ']'
+#define MATRIX_SIZE_START_SYMBOL '['
+#define MATRIX_SIZE_END_SYMBOL ']'
 #define ELEMENT_DELIMER ','
+#define MATRIX_ELEMENT_START_SYMBOL '('
+#define MATRIX_ELEMENT_END_SYMBOL ')'
 
 ///////////////////////////////////////////////////////////////////////////
 FileReader::FileReader(boost::filesystem::path &FilePath)
@@ -55,7 +57,7 @@ FileReader::MatrixExp FileReader::FromFileToMatrixExp()
 	std::string strMatrixString = getMatrixString();
 	std::cout << strMatrixString << std::endl;
 	unsigned nRow(0), nColumn(0);
-	getMatrixSize(strMatrixString, nRow, nColumn);
+	exciseMatrixSize(strMatrixString, nRow, nColumn);
 	std::cout << "Row number: " << nRow << " Column number: " << nColumn << std::endl;
 }
 
@@ -82,18 +84,19 @@ std::string FileReader::getMatrixString()
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void FileReader::getMatrixSize(const std::string &strInput, unsigned &nRowNumber, unsigned &nColumnNumber)
+void FileReader::exciseMatrixSize(std::string &strInput, unsigned &nRowNumber, unsigned &nColumnNumber)
 {
 	size_t startPos, endPos;
-	if( ((startPos = strInput.find_first_of(MATRIX_SIZE_START_DELIMER)) == std::string::npos) ||
-		((endPos = strInput.find_first_of(MATRIX_SIZE_END_DELIMER)) == std::string::npos) )
+	if( ((startPos = strInput.find_first_of(MATRIX_SIZE_START_SYMBOL)) == std::string::npos) ||
+		((endPos = strInput.find_first_of(MATRIX_SIZE_END_SYMBOL)) == std::string::npos) )
 	{
 		throw fileException("Incorrect matrix description");
 	}
 
-	std::string strMatrixSize = strInput.substr(startPos, endPos - startPos);
-	strMatrixSize.erase(strMatrixSize.find(MATRIX_SIZE_START_DELIMER), 1);
-	std::cout << strMatrixSize << std::endl;
+	std::string strMatrixSize = strInput.substr(startPos, endPos - startPos + 1);
+	strInput.erase(startPos, endPos - startPos + 1);
+	deleteBorderSymbols(strMatrixSize, MATRIX_SIZE_START_SYMBOL, MATRIX_SIZE_END_SYMBOL);
+	std::cout << strMatrixSize << "\n" << strInput << std::endl;
 
 	size_t delimerPos;
 	if((delimerPos = strMatrixSize.find(ELEMENT_DELIMER)) == std::string::npos)
@@ -117,4 +120,20 @@ FileReader::MatrixExp FileReader::getMatrixFromString(const std::string &strInpu
 	unsigned nColumnNumber)
 {
 
+}
+
+///////////////////////////////////////////////////////////////////////////
+std::vector<std::string> FileReader::parseMatrixToRows(const std::string &strMatrixString)
+{
+
+}
+
+///////////////////////////////////////////////////////////////////////////
+void FileReader::deleteBorderSymbols(std::string &strInput, char cStartSymbol, char cEndSymbol)
+{
+	if(strInput.find_first_of(cStartSymbol) != std::string::npos)
+		strInput.erase(strInput.find_first_of(cStartSymbol), 1);
+
+	if(strInput.find_last_of(cEndSymbol) != std::string::npos)
+		strInput.erase(strInput.find_last_of(cEndSymbol), 1);
 }
