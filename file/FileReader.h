@@ -39,8 +39,9 @@ private:
 	std::string getMatrixString();
 	void exciseMatrixSize(std::string& strInput, unsigned& nRowNumber, unsigned& nColumnNumber);
 	MatrixExp getMatrixFromString(const std::string& strInput, unsigned nRowNumber, unsigned nColumnNumber);
-	std::vector<std::string> parseMatrixToRows(const std::string& strMatrixString);
-	void deleteBorderSymbols(std::string& strInput, char cStartSymbol, char cEndSymbol);
+	std::vector<std::string> splitStringToElements(const std::string& strInput, char cDelimeter);
+	void removeBrackets(std::string& strInput, char cOpenBracket, char cCloseBracket);
+	void removeWhitespaces(std::string& strInput);
 
 	std::ifstream m_file;
 };

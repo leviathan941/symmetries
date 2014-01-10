@@ -20,9 +20,11 @@
 #include "FileReader.h"
 #include "Exceptions.h"
 
+#include <algorithm>
+
 #define MATRIX_SIZE_START_SYMBOL '['
 #define MATRIX_SIZE_END_SYMBOL ']'
-#define ELEMENT_DELIMER ','
+#define MATRIX_ELEMENT_DELIMITER ','
 #define MATRIX_ELEMENT_START_SYMBOL '('
 #define MATRIX_ELEMENT_END_SYMBOL ')'
 
@@ -59,6 +61,9 @@ FileReader::MatrixExp FileReader::FromFileToMatrixExp()
 	unsigned nRow(0), nColumn(0);
 	exciseMatrixSize(strMatrixString, nRow, nColumn);
 	std::cout << "Row number: " << nRow << " Column number: " << nColumn << std::endl;
+	std::cout << "String: " << strMatrixString << std::endl;
+
+	return getMatrixFromString(strMatrixString, nRow, nColumn);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -95,11 +100,11 @@ void FileReader::exciseMatrixSize(std::string &strInput, unsigned &nRowNumber, u
 
 	std::string strMatrixSize = strInput.substr(startPos, endPos - startPos + 1);
 	strInput.erase(startPos, endPos - startPos + 1);
-	deleteBorderSymbols(strMatrixSize, MATRIX_SIZE_START_SYMBOL, MATRIX_SIZE_END_SYMBOL);
+	removeBrackets(strMatrixSize, MATRIX_SIZE_START_SYMBOL, MATRIX_SIZE_END_SYMBOL);
 	std::cout << strMatrixSize << "\n" << strInput << std::endl;
 
 	size_t delimerPos;
-	if((delimerPos = strMatrixSize.find(ELEMENT_DELIMER)) == std::string::npos)
+	if((delimerPos = strMatrixSize.find(MATRIX_ELEMENT_DELIMITER)) == std::string::npos)
 	{
 		throw fileException("Incorrect matrix size");
 	}
@@ -119,21 +124,50 @@ void FileReader::exciseMatrixSize(std::string &strInput, unsigned &nRowNumber, u
 FileReader::MatrixExp FileReader::getMatrixFromString(const std::string &strInput, unsigned nRowNumber,
 	unsigned nColumnNumber)
 {
+	std::string strTemp(strInput);
 
+	removeWhitespaces(strTemp);
+	std::cout << "String: " << strTemp << std::endl;
+
+	removeBrackets(strTemp, MATRIX_ELEMENT_START_SYMBOL, MATRIX_ELEMENT_END_SYMBOL);
+	std::cout << "String: " << strTemp << std::endl;
+
+	std::vector<std::string> vecTemp = splitStringToElements(strTemp, MATRIX_ELEMENT_DELIMITER);
+
+	MatrixExp matr;
+	return matr;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-std::vector<std::string> FileReader::parseMatrixToRows(const std::string &strMatrixString)
+std::vector<std::string> FileReader::splitStringToElements(const std::string &strInput, char cDelimeter)
 {
+	std::string strTemp(strInput);
+	std::vector<std::string> vecOutput;
 
+	size_t pos(0);
+	while((pos = strTemp.find(cDelimeter)) != std::string::npos)
+	{
+		std::string strElement = strTemp.substr(0, pos);
+		vecOutput.push_back(strElement);
+		strTemp.erase(0, pos + 1);
+	}
+
+	if(!strTemp.empty())
+		vecOutput.push_back(strTemp);
+
+	return vecOutput;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void FileReader::deleteBorderSymbols(std::string &strInput, char cStartSymbol, char cEndSymbol)
+void FileReader::removeBrackets(std::string &strInput, char cOpenBracket, char cCloseBracket)
 {
-	if(strInput.find_first_of(cStartSymbol) != std::string::npos)
-		strInput.erase(strInput.find_first_of(cStartSymbol), 1);
+	strInput.erase(std::remove(strInput.begin(), strInput.end(), cOpenBracket), strInput.end());
+	strInput.erase(std::remove(strInput.begin(), strInput.end(), cCloseBracket), strInput.end());
+}
 
-	if(strInput.find_last_of(cEndSymbol) != std::string::npos)
-		strInput.erase(strInput.find_last_of(cEndSymbol), 1);
+///////////////////////////////////////////////////////////////////////////
+void FileReader::removeWhitespaces(std::string& strInput)
+{
+	strInput.erase(std::remove_if(strInput.begin(), strInput.end(), ::isspace),
+		strInput.end());
 }
