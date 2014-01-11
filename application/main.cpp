@@ -19,23 +19,15 @@
 #include <iostream>
 #include "FileReader.h"
 #include "AffineConnection.h"
-//#include "Item.h"
+#include "Item.h"
 
 int main(int argc, const char * argv[])
 {
 	using namespace boost::numeric::ublas;
 
-	boost::filesystem::path filePath("matrix.txt");
+	boost::filesystem::path filePath("metric_tensor.txt");
 	FileReader reader(filePath);
-	reader.FromFileToMatrixExp();
-
-/*	boostMatrixExp metricTensor(2, 2);
-	Expression exprOne(Item(std::string(""), 0, 1));
-	Expression exprZero(Item(std::string(""), 0, 0));
-	metricTensor(0, 0) = exprOne;
-	metricTensor(0, 1) = exprZero;
-	metricTensor(1, 0) = exprZero;
-	metricTensor(1, 1) = exprOne;
+	boostMatrixExp metricTensor = reader.FromFileToMatrixExp();
 	for(unsigned i = 0; i < metricTensor.size1(); ++i)
 	{
 		for(unsigned j = 0; j < metricTensor.size2(); ++j)
@@ -49,6 +41,8 @@ int main(int argc, const char * argv[])
 	
 	MatrixVectorExp torsionTensor(2, 2);
 	Expression exprMinusOne(Item(std::string(""), 0, -1));
+	Expression exprOne(Item(std::string(""), 0, 1));
+	Expression exprZero(Item(std::string(""), 0, 0));
 	Expression exprTwo(Item(std::string(""), 0, 2));
 	Expression exprMinusTwo(Item(std::string(""), 0, -2));
 	boostMatrixExp torsionMatrixOne(2, 2);
@@ -73,6 +67,6 @@ int main(int argc, const char * argv[])
 	affine.calculateChristoffelSymbols();
 	std::cout << "printChristoffelSymbols" << std::endl;
 	affine.printChristoffelSymbols();
-*/
+
 	return 0;
 }

@@ -19,6 +19,7 @@
 
 #include "FileReader.h"
 #include "Exceptions.h"
+#include "Item.h"
 
 #include <algorithm>
 
@@ -110,21 +111,20 @@ void FileReader::exciseMatrixSize(std::string &strInput, unsigned &nRowNumber, u
 	strInput.erase(startPos, endPos - startPos + 1);
 	removeBrackets(strMatrixSize, MATRIX_SIZE_START_SYMBOL, MATRIX_SIZE_END_SYMBOL);
 
-	size_t delimerPos;
-	if((delimerPos = strMatrixSize.find(MATRIX_ELEMENT_DELIMITER)) == std::string::npos)
+	if((strMatrixSize.find(MATRIX_ELEMENT_DELIMITER) == std::string::npos) ||
+		(std::count(strMatrixSize.begin(), strMatrixSize.end(), MATRIX_ELEMENT_DELIMITER) != 1))
 	{
 		throw fileException("Incorrect matrix size");
 	}
 
-	std::stringstream tempStream;
-	tempStream << strMatrixSize.substr(0, delimerPos);
-	tempStream >> nRowNumber;
+	std::vector<std::string> vecMatrixSizes(splitStringToElements(strMatrixSize, MATRIX_ELEMENT_DELIMITER));
+	if(vecMatrixSizes.size() != 2)
+	{
+		throw fileException("Matrix size must contain 2 digits");
+	}
 
-	tempStream.clear();
-	tempStream.str(std::string());
-
-	tempStream << strMatrixSize.substr(delimerPos + 1);
-	tempStream >> nColumnNumber;
+	nRowNumber = std::stoi(vecMatrixSizes[0]);
+	nColumnNumber = std::stoi(vecMatrixSizes[1]);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -139,6 +139,18 @@ FileReader::MatrixExp FileReader::getMatrixFromString(const std::string &strInpu
 	std::vector<std::string> vecTemp = splitStringToElements(strTemp, MATRIX_ELEMENT_DELIMITER);
 
 	MatrixExp matr(nRowNumber, nColumnNumber);
+	unsigned nElem(0);
+	for(unsigned i = 0; i < matr.size1(); ++i)
+	{
+		for(unsigned j = 0; j < matr.size2(); ++j)
+		{
+			// At the moment only matrix which contains digits can be read from a file
+			// TODO: Add full support of reading from a file into Expression
+			Expression exp(Item(std::string(""), 0, std::stod(vecTemp[nElem++])));
+			matr.insert_element(i, j, exp);
+		}
+	}
+
 	return matr;
 }
 
@@ -158,11 +170,6 @@ std::vector<std::string> FileReader::splitStringToElements(const std::string &st
 		strTemp.erase(0, pos + 1);
 	}
 	pushFunc(strTemp);
-
-//	BOOST_FOREACH(std::string &strElem, vecOutput)
-//	{
-//		std::cout << strElem << std::endl;
-//	}
 
 	return vecOutput;
 }

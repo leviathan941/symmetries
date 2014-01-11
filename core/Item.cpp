@@ -47,11 +47,8 @@ Item::Item(VariablesType& variable, double nMultiplier)
 ///////////////////////////////////////////////////////////////////////////
 Item::Item(std::string strVar, double nVarPower, double nMultiplier)
 {
-	try
-	{
+	if(!strVar.empty())
 		m_Variables[strVar] = nVarPower;
-	}
-	CATCH_CORE
 
 	m_nMultiplier = nMultiplier;
 }
