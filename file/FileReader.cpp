@@ -57,7 +57,6 @@ FileReader::MatrixExp FileReader::FromFileToMatrixExp()
 	}
 
 	std::string strMatrixString = getMatrixString();
-	std::cout << strMatrixString << std::endl;
 	unsigned nRow(0), nColumn(0);
 	exciseMatrixSize(strMatrixString, nRow, nColumn);
 	std::cout << "Row number: " << nRow << " Column number: " << nColumn << std::endl;
@@ -83,9 +82,18 @@ std::string FileReader::getMatrixString()
 		throw coreException("Read file isn't opened");
 	}
 
-	std::string strFileLine;
-	std::getline(m_file, strFileLine);
-	return strFileLine;
+	std::string strMatrixString, strFileLine;
+	do
+	{
+		std::getline(m_file, strFileLine);
+		strMatrixString += strFileLine;
+	}
+	while(!strFileLine.empty() && m_file.good());
+
+	std::cout << "Original String: " << strMatrixString << std::endl;
+	removeWhitespaces(strMatrixString);
+
+	return strMatrixString;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -101,7 +109,6 @@ void FileReader::exciseMatrixSize(std::string &strInput, unsigned &nRowNumber, u
 	std::string strMatrixSize = strInput.substr(startPos, endPos - startPos + 1);
 	strInput.erase(startPos, endPos - startPos + 1);
 	removeBrackets(strMatrixSize, MATRIX_SIZE_START_SYMBOL, MATRIX_SIZE_END_SYMBOL);
-	std::cout << strMatrixSize << "\n" << strInput << std::endl;
 
 	size_t delimerPos;
 	if((delimerPos = strMatrixSize.find(MATRIX_ELEMENT_DELIMITER)) == std::string::npos)
@@ -126,15 +133,12 @@ FileReader::MatrixExp FileReader::getMatrixFromString(const std::string &strInpu
 {
 	std::string strTemp(strInput);
 
-	removeWhitespaces(strTemp);
-	std::cout << "String: " << strTemp << std::endl;
-
 	removeBrackets(strTemp, MATRIX_ELEMENT_START_SYMBOL, MATRIX_ELEMENT_END_SYMBOL);
 	std::cout << "String: " << strTemp << std::endl;
 
 	std::vector<std::string> vecTemp = splitStringToElements(strTemp, MATRIX_ELEMENT_DELIMITER);
 
-	MatrixExp matr;
+	MatrixExp matr(nRowNumber, nColumnNumber);
 	return matr;
 }
 
@@ -144,16 +148,21 @@ std::vector<std::string> FileReader::splitStringToElements(const std::string &st
 	std::string strTemp(strInput);
 	std::vector<std::string> vecOutput;
 
+	auto pushFunc =[&vecOutput](const std::string& strElem){ if(!strElem.empty()) vecOutput.push_back(strElem); };
+
 	size_t pos(0);
 	while((pos = strTemp.find(cDelimeter)) != std::string::npos)
 	{
 		std::string strElement = strTemp.substr(0, pos);
-		vecOutput.push_back(strElement);
+		pushFunc(strElement);
 		strTemp.erase(0, pos + 1);
 	}
+	pushFunc(strTemp);
 
-	if(!strTemp.empty())
-		vecOutput.push_back(strTemp);
+//	BOOST_FOREACH(std::string &strElem, vecOutput)
+//	{
+//		std::cout << strElem << std::endl;
+//	}
 
 	return vecOutput;
 }

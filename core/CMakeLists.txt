@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project(core)
 
-set(CMAKE_BUILD_TYPE Debug)
-
 set(CORE_HEADERS
 	AffineConnection.h
 	MatrixVectorExp.h

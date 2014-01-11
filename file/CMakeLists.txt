@@ -11,9 +11,13 @@ set(FILE_SOURCES
 
 set(FILE_LIBS
 	${Boost_LIBRARIES}
+	core
 	)
 
-include_directories(${COMMON_INCLUDE_DIRS})
+include_directories(
+	${COMMON_INCLUDE_DIRS}
+	${CMAKE_SOURCE_DIR}/core
+	)
 
 add_library(${PROJECT_NAME} ${FILE_SOURCES} ${FILE_HEADERS})
 target_link_libraries(${PROJECT_NAME} ${FILE_LIBS})
