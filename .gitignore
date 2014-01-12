@@ -1,0 +1,5 @@
+*.[oa]
+*~
+.directory
+.DS_Store
+*.user

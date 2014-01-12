@@ -1,6 +1,6 @@
 /*
 	Symmetries
-	Copyright (C) 2013  Alexey Kuzin <amkuzink@gmail.com>
+	Copyright (C) 2013, 2014  Alexey Kuzin <amkuzink@gmail.com>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -73,6 +73,30 @@ MatrixVectorExp FileReader::FromFileToMatrixVecExp()
 	{
 		throw coreException("Read file isn't opened");
 	}
+
+	std::vector<MatrixExp> vecMatrices;
+	while(m_file.good())
+	{
+		MatrixExp exp = FromFileToMatrixExp();
+		vecMatrices.push_back(exp);
+	}
+
+	unsigned nRow(0), nColumn(0);
+	BOOST_FOREACH(MatrixExp& matr, vecMatrices)
+	{
+		if(!nRow || !nColumn)
+		{
+			nRow = matr.size1();
+			nColumn = matr.size2();
+		}
+
+		if(nRow != matr.size1() ||
+			nColumn != matr.size2())
+			throw coreException("All matrices must have the same size");
+	}
+
+	MatrixVectorExp vecExpression(vecMatrices, nRow, nColumn);
+	return vecExpression;
 }
 
 ///////////////////////////////////////////////////////////////////////////

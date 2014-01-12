@@ -1,6 +1,6 @@
 /*
 	Symmetries
-	Copyright (C) 2013  Alexey Kuzin <amkuzink@gmail.com>
+	Copyright (C) 2013, 2014  Alexey Kuzin <amkuzink@gmail.com>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,6 +29,8 @@ class MatrixVectorExp
 public:
 	MatrixVectorExp();
 	MatrixVectorExp(const unsigned nRowNumber, const unsigned nColumnNumber);
+	MatrixVectorExp(const std::vector<MatrixVector<Expression>::boostMatrix>& vecMatrices,
+		const unsigned nRowNumber, const unsigned nColumnNumber);
 	MatrixVectorExp(const MatrixVectorExp& other);
 	virtual ~MatrixVectorExp();
 	virtual MatrixVectorExp& operator=(const MatrixVectorExp& other);

@@ -1,6 +1,6 @@
 /*
 	Symmetries
-	Copyright (C) 2013  Alexey Kuzin <amkuzink@gmail.com>
+	Copyright (C) 2013, 2014  Alexey Kuzin <amkuzink@gmail.com>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ public:
 	typedef boost::numeric::ublas::matrix<T> boostMatrix;
 	
 	MatrixVector(const unsigned nRowNumber = 0, const unsigned nColumnNumber = 0);
+	MatrixVector(const std::vector<boostMatrix>& vecMatrices, const unsigned nRowNumber, const unsigned nColumnNumber);
 	MatrixVector(const MatrixVector& otherVector);
 	virtual ~MatrixVector();
 	
@@ -106,6 +107,16 @@ private:
 template <typename T>
 MatrixVector<T>::MatrixVector(const unsigned nRowNumber, const unsigned nColumnNumber):
 m_matrVec(), m_nRowNumber(nRowNumber), m_nColumnNumber(nColumnNumber)
+{
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <typename T>
+MatrixVector<T>::MatrixVector(const std::vector<boostMatrix>& vecMatrices,
+	const unsigned nRowNumber, const unsigned nColumnNumber)
+: m_matrVec(vecMatrices)
+, m_nRowNumber(nRowNumber)
+, m_nColumnNumber(nColumnNumber)
 {
 }
 
