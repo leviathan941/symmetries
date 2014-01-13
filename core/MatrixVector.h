@@ -1,6 +1,6 @@
 /*
 	Symmetries
-	Copyright (C) 2013, 2014  Alexey Kuzin <amkuzink@gmail.com>
+	Copyright (C) 2013, 2014 Alexey Kuzin <amkuzink@gmail.com>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,17 +29,17 @@ class MatrixVector
 {
 public:
 	typedef boost::numeric::ublas::matrix<T> boostMatrix;
-	
+
 	MatrixVector(const unsigned nRowNumber = 0, const unsigned nColumnNumber = 0);
 	MatrixVector(const std::vector<boostMatrix>& vecMatrices, const unsigned nRowNumber, const unsigned nColumnNumber);
 	MatrixVector(const MatrixVector& otherVector);
 	virtual ~MatrixVector();
-	
+
 	virtual MatrixVector<T>& operator=(const MatrixVector<T>& otherVector);
 	virtual bool operator==(const MatrixVector<T>& otherVector) const;
 	virtual bool operator!=(const MatrixVector<T>& otherVector) const;
 	virtual T& operator()(const unsigned nPosition, const unsigned nRow, const unsigned nColumn);
-	
+
 	/**
 	 * This method returns the vector which stores in the class
 	 * @return The vector, which contains matrices
@@ -48,7 +48,7 @@ public:
 	unsigned getMatrixRowSize() const;
 	unsigned getMatrixColumnSize() const;
 	unsigned getVectorSize() const;
-	
+
 	/**
 	 * This method adds the matrix @matr to selected position of the vector
 	 * @param nPosition - position where @matr must be added
@@ -56,21 +56,21 @@ public:
 	 * @return none
 	 */
 	void addMatrix(unsigned nPosition, boostMatrix& matr);
-	
+
 	/**
 	 * This method adds the matrix @matr to the back of the vector
 	 * @param matr - Matrix to add to the vector
 	 * @return none
 	 */
 	void addMatrix(boostMatrix& matr);
-	
+
 	/**
 	 * This method removes matrix from the vector
 	 * @param nPosition - Remove the matrix from this position
 	 * @return none
 	 */
 	void removeMatrix(unsigned nPosition);
-	
+
 	/**
 	 * This method changes matrix on some position in the vector
 	 * @param nPosition - Position of the matrix for changing
@@ -79,22 +79,22 @@ public:
 	 */
 	void setMatrix(unsigned nPosition,
 	boostMatrix& matr);
-	
+
 	boostMatrix getMatrix(unsigned nPosition) const;
-	
+
 	T getElement(unsigned nPosition,
 	unsigned nRow,
 	unsigned nColumn) const;
-	
+
 	void setElement(unsigned nPosition,
 	unsigned nRow,
 	unsigned nColumn,
 	T value);
-	
+
 	void allocateSize(const unsigned vectorSize, const unsigned matrixRowSize, const unsigned matrixColumSize);
-	
+
 	//	void printMatrix(unsigned nPosition) const;
-	
+
 private:
 	std::vector<boostMatrix> m_matrVec;
 	unsigned m_nRowNumber;
@@ -158,7 +158,7 @@ bool MatrixVector<T>::operator==(const MatrixVector& otherVector) const
 	{
 		return false;
 	}
-	
+
 	for(unsigned pos = 0; pos < m_matrVec.size(); ++pos)
 	{
 		for(unsigned i = 0; i < m_matrVec[pos].size1(); ++i)
@@ -315,7 +315,7 @@ void MatrixVector<T>::setElement(unsigned nPosition, unsigned nRow, unsigned nCo
 
 ///////////////////////////////////////////////////////////////////////////
 template <typename T>
-void MatrixVector<T>::allocateSize(const unsigned vectorSize, 
+void MatrixVector<T>::allocateSize(const unsigned vectorSize,
 const unsigned matrixRowSize,
 const unsigned matrixColumSize)
 {

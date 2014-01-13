@@ -1,6 +1,6 @@
 /*
 	Symmetries
-	Copyright (C) 2013, 2014  Alexey Kuzin <amkuzink@gmail.com>
+	Copyright (C) 2013, 2014 Alexey Kuzin <amkuzink@gmail.com>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,15 +17,19 @@
 */
 
 #include <iostream>
+
+#include <QApplication>
+#include <QMainWindow>
+
 #include "FileReader.h"
 #include "AffineConnection.h"
 #include "Item.h"
 
-int main(int argc, const char * argv[])
+int main(int argc, char *argv[])
 {
 	using namespace boost::numeric::ublas;
 
-	boost::filesystem::path MetricFilePath("metric_tensor.txt");
+	boost::filesystem::path MetricFilePath("../metric_tensor.txt");
 	FileReader metricTensorReader(MetricFilePath);
 	boostMatrixExp metricTensor = metricTensorReader.FromFileToMatrixExp();
 	for(unsigned i = 0; i < metricTensor.size1(); ++i)
@@ -38,8 +42,8 @@ int main(int argc, const char * argv[])
 		std::cout << std::endl;
 	}
 	std::cout << "\n\n";
-	
-	boost::filesystem::path torsionFilePath("torsion_tensor.txt");
+
+	boost::filesystem::path torsionFilePath("../torsion_tensor.txt");
 	FileReader torsionTensorReader(torsionFilePath);
 	MatrixVectorExp torsionTensor = torsionTensorReader.FromFileToMatrixVecExp();
 	torsionTensor.print();
@@ -52,6 +56,11 @@ int main(int argc, const char * argv[])
 	affine.calculateChristoffelSymbols();
 	std::cout << "printChristoffelSymbols" << std::endl;
 	affine.printChristoffelSymbols();
+
+	QApplication app(argc, argv);
+	QMainWindow window;
+	window.show();
+	app.exec();
 
 	return 0;
 }

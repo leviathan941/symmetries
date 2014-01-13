@@ -1,6 +1,6 @@
 /*
 	Symmetries
-	Copyright (C) 2013  Alexey Kuzin <amkuzink@gmail.com>
+	Copyright (C) 2013, 2014 Alexey Kuzin <amkuzink@gmail.com>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ bool Expression::operator==(const Expression& otherExp) const
 {
 	if(m_vecItems.size() != otherExp.m_vecItems.size())
 		return false;
-	
+
 	for(unsigned i = 0; i < m_vecItems.size(); ++i)
 	{
 		if(m_vecItems[i] != otherExp.m_vecItems[i])
@@ -213,14 +213,14 @@ void Expression::eraseItem(const unsigned nPosition)
 std::string Expression::toString()
 {
 	std::stringstream strStream;
-	
+
 	for(int i = 0; i < m_vecItems.size(); ++i)
 	{
 		strStream << m_vecItems[i].toString();
 		if(i != m_vecItems.size() - 1)
 			strStream << " + ";
 	}
-	
+
 	return strStream.str();
 }
 

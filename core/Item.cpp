@@ -1,6 +1,6 @@
 /*
 	Symmetries
-	Copyright (C) 2013  Alexey Kuzin <amkuzink@gmail.com>
+	Copyright (C) 2013, 2014 Alexey Kuzin <amkuzink@gmail.com>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -125,7 +125,7 @@ Item Item::operator*(const Item& otherItem)
 	{
 		tempItem.m_Variables.clear();
 	}
-	
+
 	return tempItem;
 }
 
@@ -159,14 +159,14 @@ Item Item::operator/(const Item& otherItem)
 			}
 		}
 		CATCH_CORE
-		
+
 		tempItem.m_nMultiplier /= otherItem.m_nMultiplier;
 		if(tempItem.m_nMultiplier == 0)
 		{
 			tempItem.m_Variables.clear();
 		}
 	}
-	
+
 	return tempItem;
 }
 

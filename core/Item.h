@@ -1,6 +1,6 @@
 /*
 	Symmetries
-	Copyright (C) 2013  Alexey Kuzin <amkuzink@gmail.com>
+	Copyright (C) 2013, 2014 Alexey Kuzin <amkuzink@gmail.com>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ public:
 	virtual Item& operator=(const Item& otherItem);
 	virtual bool operator==(const Item& otherItem) const;
 	virtual bool operator!=(const Item& otherItem) const;
-	
+
 	virtual Item operator*(const Item& otherItem);
 	virtual Item operator/(const Item& otherItem);
 

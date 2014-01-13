@@ -1,6 +1,6 @@
 /*
 	Symmetries
-	Copyright (C) 2013, 2014  Alexey Kuzin <amkuzink@gmail.com>
+	Copyright (C) 2013, 2014 Alexey Kuzin <amkuzink@gmail.com>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ bool MatrixVectorExp::operator!=(const MatrixVectorExp& other) const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Expression& MatrixVectorExp::operator()(const unsigned nPosition, const unsigned nRow, 
+Expression& MatrixVectorExp::operator()(const unsigned nPosition, const unsigned nRow,
 const unsigned nColumn)
 {
 	//	std:: cout << m_content.getVectorSize() << " " << m_content.getMatrixRowSize() <<
@@ -141,7 +141,7 @@ Expression MatrixVectorExp::getExpression(const unsigned position, const unsigne
 std::string MatrixVectorExp::toString()
 {
 	std::stringstream strStream;
-	
+
 	for(unsigned i = 0; i < m_content.getVectorSize(); ++i)
 	{
 		for(unsigned j = 0; j < m_content.getMatrixRowSize(); ++j)
@@ -156,7 +156,7 @@ std::string MatrixVectorExp::toString()
 		}
 		strStream << std::endl;
 	}
-	
+
 	return strStream.str();
 }
 

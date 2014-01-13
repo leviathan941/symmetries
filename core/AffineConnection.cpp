@@ -1,6 +1,6 @@
 /*
 	Symmetries
-	Copyright (C) 2013  Alexey Kuzin <amkuzink@gmail.com>
+	Copyright (C) 2013, 2014 Alexey Kuzin <amkuzink@gmail.com>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ MatrixVectorExp AffineConnection::getChristoffelSymbols() const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void AffineConnection::allocateSize(const unsigned int vectorSize, const unsigned int matrixRowSize, 
+void AffineConnection::allocateSize(const unsigned int vectorSize, const unsigned int matrixRowSize,
 const unsigned int matrixColumnSize)
 {
 	m_christoffelSymbols.allocateSize(vectorSize, matrixRowSize, matrixColumnSize);
@@ -107,7 +107,7 @@ void AffineConnection::calculateChristoffelSymbols()
 		m_nDimension = m_torsionTensor.getContent().getVectorSize();
 		m_christoffelSymbols.allocateSize(m_nDimension, m_nDimension, m_nDimension);
 	}
-	
+
 	for(unsigned k = 0; k < m_torsionTensor.getContent().getVectorSize(); ++k)
 	{
 		for(unsigned i = 0; i < m_torsionTensor.getContent().getMatrixRowSize(); ++i)

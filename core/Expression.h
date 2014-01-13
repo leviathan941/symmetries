@@ -1,6 +1,6 @@
 /*
 	Symmetries
-	Copyright (C) 2013  Alexey Kuzin <amkuzink@gmail.com>
+	Copyright (C) 2013, 2014 Alexey Kuzin <amkuzink@gmail.com>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -36,12 +36,12 @@ public:
 	virtual Expression& operator=(const Expression& otherExp);
 	virtual bool operator==(const Expression& otherExp) const;
 	virtual bool operator!=(const Expression& otherExp) const;
-	
+
 	Expression operator+(const Expression& otherExp);
 	Expression operator-(const Expression& otherExp);
 	Expression operator*(const Expression& otherExp);
 	Expression operator/(const Expression& otherExp);
-	
+
 	Expression operator*(const double nNumber);
 	Expression operator/(const double nNumber);
 
