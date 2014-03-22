@@ -20,10 +20,12 @@ cmake_minimum_required(VERSION 2.8.10)
 project(application)
 
 set(APPLICATION_HEADERS
+	MainWindow.h
 	)
 
 set(APPLICATION_SOURCES
 	main.cpp
+	MainWindow.cpp
 	)
 
 set(APPLICATION_LIBS

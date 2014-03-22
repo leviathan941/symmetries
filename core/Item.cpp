@@ -241,7 +241,17 @@ std::string Item::toString()
 {
 	std::stringstream strStream;
 
-	strStream << m_nMultiplier;
+	if (m_nMultiplier == -1.0)
+	{
+		strStream << "-";
+	} else if (m_nMultiplier == 1.0)
+	{
+		if (m_Variables.empty())
+			strStream << m_nMultiplier;
+	} else
+	{
+		strStream << m_nMultiplier;
+	}
 
 	for(VariablesType::const_iterator iter = m_Variables.begin(); iter != m_Variables.end(); ++iter)
 	{

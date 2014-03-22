@@ -96,6 +96,8 @@ Expression Expression::operator+(const Expression& otherExp)
 			tempExp.pushItem(item);
 		}
 	}
+
+	tempExp.findRemoveEmptyItems();
 	return tempExp;
 }
 
@@ -117,6 +119,8 @@ Expression Expression::operator-(const Expression& otherExp)
 			tempExp.setItemMultiplier((unsigned)foundItem, -item.getMultiplier());
 		}
 	}
+
+	tempExp.findRemoveEmptyItems();
 	return tempExp;
 }
 
@@ -131,6 +135,8 @@ Expression Expression::operator*(const Expression& otherExp)
 			tempExp.m_vecItems.push_back(item * otherItem);
 		}
 	}
+
+	tempExp.findRemoveEmptyItems();
 	return tempExp;
 }
 
@@ -149,8 +155,10 @@ Expression Expression::operator*(const double nNumber)
 	BOOST_FOREACH(Item& item, m_vecItems)
 	{
 		tempExp.setItemMultiplier((unsigned)isSimilarItemInExpression(item),
-		nNumber * item.getMultiplier());
+			item.getMultiplier() * nNumber);
 	}
+
+	tempExp.findRemoveEmptyItems();
 	return tempExp;
 }
 
@@ -161,8 +169,9 @@ Expression Expression::operator/(const double nNumber)
 	BOOST_FOREACH(Item& item, m_vecItems)
 	{
 		tempExp.setItemMultiplier((unsigned)isSimilarItemInExpression(item),
-		nNumber / item.getMultiplier());
+			item.getMultiplier() / nNumber);
 	}
+
 	return tempExp;
 }
 
@@ -210,6 +219,12 @@ void Expression::eraseItem(const unsigned nPosition)
 }
 
 ///////////////////////////////////////////////////////////////////////////
+bool Expression::isEmpty()
+{
+	return (m_vecItems.empty() ? true : false);
+}
+
+///////////////////////////////////////////////////////////////////////////
 std::string Expression::toString()
 {
 	std::stringstream strStream;
@@ -218,7 +233,12 @@ std::string Expression::toString()
 	{
 		strStream << m_vecItems[i].toString();
 		if(i != m_vecItems.size() - 1)
-			strStream << " + ";
+			strStream << "+";
+	}
+
+	if (strStream.str().empty())
+	{
+		strStream << "0";
 	}
 
 	return strStream.str();
@@ -230,3 +250,13 @@ void Expression::print()
 	std::cout << toString();
 }
 
+///////////////////////////////////////////////////////////////////////////
+void Expression::findRemoveEmptyItems()
+{
+	auto pend = std::remove_if(m_vecItems.begin(), m_vecItems.end(),
+		[](const Item &item)
+		{
+			return (item.getMultiplier() == 0);
+		});
+	m_vecItems.erase(pend, m_vecItems.end());
+}

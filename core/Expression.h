@@ -51,10 +51,13 @@ public:
 	int isSimilarItemInExpression(const Item& item) const;
 	void pushItem(const Item& newItem);
 	void eraseItem(const unsigned nPosition);
+	bool isEmpty();
 	std::string toString();
 	void print();
 
 private:
+	void findRemoveEmptyItems();
+
 	std::vector<Item> m_vecItems;
 };
 
