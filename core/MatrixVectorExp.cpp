@@ -90,6 +90,12 @@ const unsigned nColumn)
 }
 
 ///////////////////////////////////////////////////////////////////////////
+MatrixVector<Expression>::boostMatrix& MatrixVectorExp::operator[](const unsigned nPosition)
+{
+	return m_content[nPosition];
+}
+
+///////////////////////////////////////////////////////////////////////////
 void MatrixVectorExp::addMatrix(unsigned int nPosition, MatrixVector<Expression>::boostMatrix& matr)
 {
 	m_content.addMatrix(nPosition, matr);
@@ -123,6 +129,12 @@ void MatrixVectorExp::setElement(unsigned int nPosition, unsigned int nRow, unsi
 void MatrixVectorExp::allocateSize(const unsigned int vectorSize, const unsigned int matrixRowSize, const unsigned int matrixColumSize)
 {
 	m_content.allocateSize(vectorSize, matrixRowSize, matrixColumSize);
+}
+
+///////////////////////////////////////////////////////////////////////////
+void MatrixVectorExp::clear()
+{
+	m_content.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////

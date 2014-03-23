@@ -39,6 +39,7 @@ public:
 	virtual bool operator==(const MatrixVector<T>& otherVector) const;
 	virtual bool operator!=(const MatrixVector<T>& otherVector) const;
 	virtual T& operator()(const unsigned nPosition, const unsigned nRow, const unsigned nColumn);
+	virtual boostMatrix& operator[](const unsigned nPosition);
 
 	/**
 	 * This method returns the vector which stores in the class
@@ -77,14 +78,11 @@ public:
 	 * @param matr - Change a matrix from @nPosition to this matrix
 	 * @return none
 	 */
-	void setMatrix(unsigned nPosition,
-	boostMatrix& matr);
+	void setMatrix(unsigned nPosition, boostMatrix& matr);
 
 	boostMatrix getMatrix(unsigned nPosition) const;
 
-	T getElement(unsigned nPosition,
-	unsigned nRow,
-	unsigned nColumn) const;
+	T getElement(unsigned nPosition, unsigned nRow,	unsigned nColumn) const;
 
 	void setElement(unsigned nPosition,
 	unsigned nRow,
@@ -92,6 +90,8 @@ public:
 	T value);
 
 	void allocateSize(const unsigned vectorSize, const unsigned matrixRowSize, const unsigned matrixColumSize);
+
+	void clear();
 
 	//	void printMatrix(unsigned nPosition) const;
 
@@ -187,6 +187,13 @@ template <typename T>
 T& MatrixVector<T>::operator()(const unsigned int nPosition, const unsigned int nRow, const unsigned int nColumn)
 {
 	return m_matrVec[nPosition](nRow, nColumn);
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <typename T>
+boost::numeric::ublas::matrix<T>& MatrixVector<T>::operator[](const unsigned nPosition)
+{
+	return m_matrVec[nPosition];
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -326,6 +333,15 @@ const unsigned matrixColumSize)
 	}
 	m_nRowNumber = matrixRowSize;
 	m_nColumnNumber = matrixColumSize;
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <typename T>
+void MatrixVector<T>::clear()
+{
+	m_matrVec.clear();
+	m_nRowNumber = 0;
+	m_nColumnNumber = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////

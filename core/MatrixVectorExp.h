@@ -37,6 +37,7 @@ public:
 	virtual bool operator==(const MatrixVectorExp& other) const;
 	virtual bool operator!=(const MatrixVectorExp& other) const;
 	virtual Expression& operator()(const unsigned nPosition, const unsigned nRow, const unsigned nColumn);
+	virtual MatrixVector<Expression>::boostMatrix& operator[](const unsigned nPosition);
 
 	void addMatrix(unsigned nPosition, MatrixVector<Expression>::boostMatrix& matr);
 	void addMatrix(MatrixVector<Expression>::boostMatrix& matr);
@@ -44,6 +45,7 @@ public:
 	void setMatrix(unsigned nPosition, MatrixVector<Expression>::boostMatrix& matr);
 	void setElement(unsigned nPosition, unsigned nRow, unsigned nColumn, Expression& value);
 	void allocateSize(const unsigned vectorSize, const unsigned matrixRowSize, const unsigned matrixColumSize);
+	void clear();
 
 	MatrixVector<Expression> getContent() const;
 	Expression getExpression(const unsigned item, const unsigned row, const unsigned column) const;

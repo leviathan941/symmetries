@@ -25,39 +25,6 @@
 #include "Item.h"
 #include "MainWindow.h"
 
-void calcTestAffineConnection()
-{
-	using namespace boost::numeric::ublas;
-
-	boost::filesystem::path MetricFilePath("../metric_tensor.txt");
-	FileReader metricTensorReader(MetricFilePath);
-	boostMatrixExp metricTensor = metricTensorReader.FromFileToMatrixExp();
-	for(unsigned i = 0; i < metricTensor.size1(); ++i)
-	{
-		for(unsigned j = 0; j < metricTensor.size2(); ++j)
-		{
-			metricTensor(i, j).print();
-			std::cout << " ";
-		}
-		std::cout << std::endl;
-	}
-	std::cout << "\n\n";
-
-	boost::filesystem::path torsionFilePath("../torsion_tensor.txt");
-	FileReader torsionTensorReader(torsionFilePath);
-	MatrixVectorExp torsionTensor = torsionTensorReader.FromFileToMatrixVecExp();
-	torsionTensor.print();
-
-	AffineConnection affine;
-	affine.setMetricTensor(metricTensor);
-	affine.setTorsionTensor(torsionTensor);
-	affine.allocateSize(2, 2, 2);
-	std::cout << "calculateChristoffelSymbols" << std::endl;
-	affine.calculateChristoffelSymbols();
-	std::cout << "printChristoffelSymbols" << std::endl;
-	affine.printChristoffelSymbols();
-}
-
 void calcTestConst2DAffine()
 {
 	using namespace boost::numeric::ublas;
@@ -110,11 +77,15 @@ void calcTestConst2DAffine()
 	AffineConnection affine;
 	affine.setMetricTensor(metricTensor);
 	affine.setTorsionTensor(torsionTensor);
-	affine.allocateSize(2, 2, 2);
 	std::cout << "calculateChristoffelSymbols" << std::endl;
 	affine.calculateChristoffelSymbols();
 	std::cout << "printChristoffelSymbols" << std::endl;
 	affine.printChristoffelSymbols();
+
+	std::cout << "calculateTorsion" << std::endl;
+	affine.calculateTorsion();
+	std::cout << "printTorsion" << std::endl;
+	affine.printTorsion();
 }
 
 void calcTestConst4DAffine()
@@ -339,21 +310,18 @@ void calcTestConst4DAffine()
 	torsionTensor.print();
 
 	AffineConnection affine;
-	affine.allocateSize(4, 4, 4);
 	affine.setMetricTensor(metricTensor);
 	affine.setTorsionTensor(torsionTensor);
 	std::cout << "calculateChristoffelSymbols" << std::endl;
 	affine.calculateChristoffelSymbols();
 	std::cout << "printChristoffelSymbols" << std::endl;
 	affine.printChristoffelSymbols();
-
 }
 
 int main(int argc, char *argv[])
 {
-	//calcTestAffineConnection();
-	//calcTestConst2DAffine();
-	calcTestConst4DAffine();
+	calcTestConst2DAffine();
+	//calcTestConst4DAffine();
 
 	//QApplication app(argc, argv);
 	//MainWindow window;

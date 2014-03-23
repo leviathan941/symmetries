@@ -97,7 +97,7 @@ bool Item::operator!=(const Item& otherItem) const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Item Item::operator*(const Item& otherItem)
+Item Item::operator*(const Item& otherItem) const
 {
 	Item tempItem(*this);
 	try
@@ -130,7 +130,7 @@ Item Item::operator*(const Item& otherItem)
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Item Item::operator/(const Item& otherItem)
+Item Item::operator/(const Item& otherItem) const
 {
 	Item tempItem(*this);
 	if(otherItem.m_nMultiplier == 0)

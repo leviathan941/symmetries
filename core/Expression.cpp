@@ -23,6 +23,7 @@
 #include <iostream>
 #include <sstream>
 #include <boost/foreach.hpp>
+#include <algorithm>
 
 ///////////////////////////////////////////////////////////////////////////
 Expression::Expression() : m_vecItems()
@@ -78,7 +79,7 @@ bool Expression::operator!=(const Expression& otherExp) const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Expression Expression::operator+(const Expression& otherExp)
+Expression Expression::operator+(const Expression& otherExp) const
 {
 	//	otherExp.print();
 	//	print();
@@ -102,7 +103,7 @@ Expression Expression::operator+(const Expression& otherExp)
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Expression Expression::operator-(const Expression& otherExp)
+Expression Expression::operator-(const Expression& otherExp) const
 {
 	Expression tempExp(*this);
 	BOOST_FOREACH(Item item, otherExp.m_vecItems)
@@ -111,11 +112,12 @@ Expression Expression::operator-(const Expression& otherExp)
 		if(foundItem >= 0)
 		{
 			tempExp.setItemMultiplier((unsigned)foundItem,
-			m_vecItems[foundItem].getMultiplier() - item.getMultiplier());
+				m_vecItems[foundItem].getMultiplier() - item.getMultiplier());
 		}
 		else
 		{
 			tempExp.pushItem(item);
+			foundItem = tempExp.isSimilarItemInExpression(item);
 			tempExp.setItemMultiplier((unsigned)foundItem, -item.getMultiplier());
 		}
 	}
@@ -125,10 +127,10 @@ Expression Expression::operator-(const Expression& otherExp)
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Expression Expression::operator*(const Expression& otherExp)
+Expression Expression::operator*(const Expression& otherExp) const
 {
 	Expression tempExp;
-	BOOST_FOREACH(Item& item, m_vecItems)
+	BOOST_FOREACH(const Item& item, m_vecItems)
 	{
 		BOOST_FOREACH(Item otherItem, otherExp.m_vecItems)
 		{
@@ -141,7 +143,7 @@ Expression Expression::operator*(const Expression& otherExp)
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Expression Expression::operator/(const Expression& otherExp)
+Expression Expression::operator/(const Expression& otherExp) const
 {
 	//Placeholder
 	std::cout << "It isn't implemented yet." << std::endl;
@@ -149,10 +151,10 @@ Expression Expression::operator/(const Expression& otherExp)
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Expression Expression::operator*(const double nNumber)
+Expression Expression::operator*(const double nNumber) const
 {
 	Expression tempExp(*this);
-	BOOST_FOREACH(Item& item, m_vecItems)
+	BOOST_FOREACH(const Item& item, m_vecItems)
 	{
 		tempExp.setItemMultiplier((unsigned)isSimilarItemInExpression(item),
 			item.getMultiplier() * nNumber);
@@ -163,10 +165,10 @@ Expression Expression::operator*(const double nNumber)
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Expression Expression::operator/(const double nNumber)
+Expression Expression::operator/(const double nNumber) const
 {
 	Expression tempExp(*this);
-	BOOST_FOREACH(Item& item, m_vecItems)
+	BOOST_FOREACH(const Item& item, m_vecItems)
 	{
 		tempExp.setItemMultiplier((unsigned)isSimilarItemInExpression(item),
 			item.getMultiplier() / nNumber);

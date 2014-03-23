@@ -39,12 +39,14 @@ public:
 	MatrixVectorExp getTorsionTensor() const;
 	MatrixVectorExp getChristoffelSymbols() const;
 
-	void allocateSize(const unsigned vectorSize, const unsigned matrixRowSize, const unsigned matrixColumnSize);
 	void setMetricTensor(boost::numeric::ublas::matrix<Expression>& matrixExp);
 	void setTorsionTensor(MatrixVectorExp& matrixVectorExp);
 
-	void calculateChristoffelSymbols();
+	const MatrixVectorExp& calculateChristoffelSymbols();
+	const MatrixVectorExp& calculateTorsion();
+
 	void printChristoffelSymbols();
+	void printTorsion();
 private:
 	boostMatrixExp m_metricTensor;
 	MatrixVectorExp m_torsionTensor;

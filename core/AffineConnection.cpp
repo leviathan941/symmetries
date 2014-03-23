@@ -17,12 +17,13 @@
 */
 
 #include "AffineConnection.h"
+#include "Exceptions.h"
 
 #include <iostream>
 #include <boost/foreach.hpp>
 
 AffineConnection::AffineConnection()
-:m_metricTensor()
+: m_metricTensor()
 , m_torsionTensor()
 , m_christoffelSymbols()
 , m_nDimension(0)
@@ -34,6 +35,8 @@ AffineConnection::AffineConnection(const AffineConnection& otherAC)
 {
 	m_metricTensor = otherAC.m_metricTensor;
 	m_torsionTensor = otherAC.m_torsionTensor;
+	m_christoffelSymbols = otherAC.m_christoffelSymbols;
+	m_nDimension = otherAC.m_nDimension;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -49,6 +52,8 @@ AffineConnection& AffineConnection::operator=(const AffineConnection& otherAC)
 	{
 		m_metricTensor = otherAC.m_metricTensor;
 		m_torsionTensor = otherAC.m_torsionTensor;
+		m_christoffelSymbols = otherAC.m_christoffelSymbols;
+		m_nDimension = otherAC.m_nDimension;
 	}
 	return *this;
 }
@@ -72,13 +77,6 @@ MatrixVectorExp AffineConnection::getChristoffelSymbols() const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void AffineConnection::allocateSize(const unsigned int vectorSize, const unsigned int matrixRowSize,
-const unsigned int matrixColumnSize)
-{
-	m_christoffelSymbols.allocateSize(vectorSize, matrixRowSize, matrixColumnSize);
-}
-
-///////////////////////////////////////////////////////////////////////////
 void AffineConnection::setMetricTensor(boost::numeric::ublas::matrix<Expression>& matrExp)
 {
 	m_metricTensor = matrExp;
@@ -91,7 +89,7 @@ void AffineConnection::setTorsionTensor(MatrixVectorExp& matrVectorExp)
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void AffineConnection::calculateChristoffelSymbols()
+const MatrixVectorExp& AffineConnection::calculateChristoffelSymbols()
 {
 	if(m_metricTensor.size1() != m_torsionTensor.getContent().getMatrixRowSize() ||
 	m_metricTensor.size2() != m_torsionTensor.getContent().getMatrixColumnSize() ||
@@ -100,7 +98,7 @@ void AffineConnection::calculateChristoffelSymbols()
 	)
 	{
 		std::cerr << "Error. All matrices must have the same dimension." << std::endl;
-		return;
+		throw coreException("Incorrect matrix dimentions.");
 	}
 	else
 	{
@@ -139,11 +137,46 @@ void AffineConnection::calculateChristoffelSymbols()
 			}
 		}
 	}
+
+	return m_christoffelSymbols;
+}
+
+///////////////////////////////////////////////////////////////////////////
+const MatrixVectorExp& AffineConnection::calculateTorsion()
+{
+	using namespace boost::numeric::ublas;
+
+	if (m_christoffelSymbols.getContent().getVectorSize() == 0
+		|| m_christoffelSymbols.getContent().getMatrixRowSize() == 0
+		|| m_christoffelSymbols.getContent().getMatrixColumnSize() == 0)
+	{
+		std::cerr << "Error. Incorrect dimension of the christoffel's matrix." << std::endl;
+		throw coreException("Incorrect matrix dimentions.");
+	} else
+	{
+		m_torsionTensor.clear();
+		m_nDimension = m_christoffelSymbols.getContent().getVectorSize();
+		m_torsionTensor.allocateSize(m_nDimension, m_nDimension, m_nDimension);
+	}
+
+	for (unsigned i = 0; i < m_christoffelSymbols.getContent().getVectorSize(); ++i)
+	{
+		boostMatrixExp transMatrix = trans(m_christoffelSymbols.getContent()[i]);
+		m_torsionTensor[i] = m_christoffelSymbols[i] - transMatrix;
+	}
+
+	return m_torsionTensor;
 }
 
 ///////////////////////////////////////////////////////////////////////////
 void AffineConnection::printChristoffelSymbols()
 {
 	m_christoffelSymbols.print();
+}
+
+///////////////////////////////////////////////////////////////////////////
+void AffineConnection::printTorsion()
+{
+	m_torsionTensor.print();
 }
 

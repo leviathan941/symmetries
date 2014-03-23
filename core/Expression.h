@@ -37,13 +37,13 @@ public:
 	virtual bool operator==(const Expression& otherExp) const;
 	virtual bool operator!=(const Expression& otherExp) const;
 
-	Expression operator+(const Expression& otherExp);
-	Expression operator-(const Expression& otherExp);
-	Expression operator*(const Expression& otherExp);
-	Expression operator/(const Expression& otherExp);
+	Expression operator+(const Expression& otherExp) const;
+	Expression operator-(const Expression& otherExp) const;
+	Expression operator*(const Expression& otherExp) const;
+	Expression operator/(const Expression& otherExp) const;
 
-	Expression operator*(const double nNumber);
-	Expression operator/(const double nNumber);
+	Expression operator*(const double nNumber) const;
+	Expression operator/(const double nNumber) const;
 
 	Item getItem(const unsigned nItemPosition) const;
 	void setItemMultiplier(const unsigned nItemPosition, const double nNewMultiplier);
