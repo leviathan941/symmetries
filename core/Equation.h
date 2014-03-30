@@ -1,6 +1,6 @@
 /*
 	Symmetries
-	Copyright (C) 2013  Alexey Kuzin <amkuzink@gmail.com>
+	Copyright (C) 2013, 2014 Alexey Kuzin <amkuzink@gmail.com>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,15 +20,34 @@
 #ifndef EQUATION_H
 #define EQUATION_H
 
+#include "Expression.h"
+
 class Equation
 {
 
 public:
 	Equation();
+	Equation(Expression leftPart, Expression rightPart);
 	Equation(const Equation& other);
 	virtual ~Equation();
 	virtual Equation& operator=(const Equation& other);
 	virtual bool operator==(const Equation& other) const;
+	virtual bool operator!=(const Equation& other) const;
+
+	virtual Equation operator+(const Equation& other) const;
+	virtual Equation operator-(const Equation& other) const;
+	virtual Equation operator*(const Equation& other) const;
+	virtual Equation operator/(const Equation& other) const;
+
+	virtual Equation operator*(const double nNumber) const;
+	virtual Equation operator/(const double nNumber) const;
+
+	void toLeft();
+	void toRight();
+
+private:
+	Expression m_leftExp;
+	Expression m_rightExp;
 };
 
 #endif // EQUATION_H

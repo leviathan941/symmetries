@@ -81,8 +81,6 @@ bool Expression::operator!=(const Expression& otherExp) const
 ///////////////////////////////////////////////////////////////////////////
 Expression Expression::operator+(const Expression& otherExp) const
 {
-	//	otherExp.print();
-	//	print();
 	Expression tempExp(*this);
 	BOOST_FOREACH(Item item, otherExp.m_vecItems)
 	{
@@ -224,6 +222,12 @@ void Expression::eraseItem(const unsigned nPosition)
 bool Expression::isEmpty()
 {
 	return (m_vecItems.empty() ? true : false);
+}
+
+///////////////////////////////////////////////////////////////////////////
+void Expression::clear()
+{
+	m_vecItems.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////

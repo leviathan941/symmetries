@@ -1,6 +1,6 @@
 /*
 	Symmetries
-	Copyright (C) 2013  Alexey Kuzin <amkuzink@gmail.com>
+	Copyright (C) 2013, 2014 Alexey Kuzin <amkuzink@gmail.com>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,27 +20,129 @@
 #include "Equation.h"
 
 Equation::Equation()
+: m_leftExp(), m_rightExp()
 {
-
 }
 
+///////////////////////////////////////////////////////////////////////////
+Equation::Equation(Expression leftPart, Expression rightPart)
+: m_leftExp(leftPart)
+, m_rightExp(rightPart)
+{
+}
+
+///////////////////////////////////////////////////////////////////////////
 Equation::Equation(const Equation& other)
 {
-
+	m_leftExp = other.m_leftExp;
+	m_leftExp = other.m_rightExp;
 }
 
+///////////////////////////////////////////////////////////////////////////
 Equation::~Equation()
 {
-
 }
 
+///////////////////////////////////////////////////////////////////////////
 Equation& Equation::operator=(const Equation& other)
 {
+	if (this != &other)
+	{
+		m_leftExp = other.m_leftExp;
+		m_rightExp = other.m_rightExp;
+	}
 	return *this;
 }
 
+///////////////////////////////////////////////////////////////////////////
 bool Equation::operator==(const Equation& other) const
 {
-	///TODO: return ...;
+	return ((m_leftExp == other.m_leftExp)
+		&& (m_rightExp == other.m_rightExp));
 }
 
+///////////////////////////////////////////////////////////////////////////
+bool Equation::operator!=(const Equation& other) const
+{
+	return !(*this == other);
+}
+
+///////////////////////////////////////////////////////////////////////////
+Equation Equation::operator+(const Equation& other) const
+{
+	Equation tempEquation(*this);
+
+	tempEquation.m_leftExp = this->m_leftExp + other.m_leftExp;
+	tempEquation.m_rightExp = this->m_rightExp + other.m_rightExp;
+
+	return tempEquation;
+}
+
+///////////////////////////////////////////////////////////////////////////
+Equation Equation::operator-(const Equation& other) const
+{
+	Equation tempEquation(*this);
+
+	tempEquation.m_leftExp = this->m_leftExp - other.m_leftExp;
+	tempEquation.m_rightExp = this->m_rightExp - other.m_rightExp;
+
+	return tempEquation;
+}
+
+///////////////////////////////////////////////////////////////////////////
+Equation Equation::operator*(const Equation& other) const
+{
+	Equation tempEquation(*this);
+
+	tempEquation.m_leftExp = this->m_leftExp * other.m_leftExp;
+	tempEquation.m_rightExp = this->m_rightExp * other.m_rightExp;
+
+	return tempEquation;
+}
+
+///////////////////////////////////////////////////////////////////////////
+Equation Equation::operator/(const Equation& other) const
+{
+	Equation tempEquation(*this);
+
+	tempEquation.m_leftExp = this->m_leftExp / other.m_leftExp;
+	tempEquation.m_rightExp = this->m_rightExp / other.m_rightExp;
+
+	return tempEquation;
+}
+
+///////////////////////////////////////////////////////////////////////////
+Equation Equation::operator*(const double nNumber) const
+{
+	Equation tempEquation(*this);
+
+	tempEquation.m_leftExp = this->m_leftExp * nNumber;
+	tempEquation.m_rightExp = this->m_rightExp * nNumber;
+
+	return tempEquation;
+}
+
+///////////////////////////////////////////////////////////////////////////
+Equation Equation::operator/(const double nNumber) const
+{
+	Equation tempEquation(*this);
+
+	tempEquation.m_leftExp = this->m_leftExp / nNumber;
+	tempEquation.m_rightExp = this->m_rightExp / nNumber;
+
+	return tempEquation;
+}
+
+///////////////////////////////////////////////////////////////////////////
+void Equation::toLeft()
+{
+	m_leftExp = m_leftExp - m_rightExp;
+	m_rightExp.clear();
+}
+
+///////////////////////////////////////////////////////////////////////////
+void Equation::toRight()
+{
+	m_rightExp = m_rightExp - m_leftExp;
+	m_leftExp.clear();
+}

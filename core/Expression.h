@@ -52,6 +52,7 @@ public:
 	void pushItem(const Item& newItem);
 	void eraseItem(const unsigned nPosition);
 	bool isEmpty();
+	void clear();
 	std::string toString();
 	void print();
 
