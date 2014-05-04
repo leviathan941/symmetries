@@ -19,7 +19,7 @@
 
 #include "FileReader.h"
 #include "Exceptions.h"
-#include "Item.h"
+#include "SimpleItem.h"
 
 #include <algorithm>
 
@@ -170,7 +170,7 @@ FileReader::MatrixExp FileReader::getMatrixFromString(const std::string &strInpu
 		{
 			// At the moment only matrix which contains digits can be read from a file
 			// TODO: Add full support of reading from a file into Expression
-			Expression exp(Item(std::string(""), 0, std::stod(vecTemp[nElem++])));
+			Expression exp(SimpleItem(std::string(""), 0, std::stod(vecTemp[nElem++])));
 			matr.insert_element(i, j, exp);
 		}
 	}

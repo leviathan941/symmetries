@@ -36,7 +36,9 @@ public:
 	double& operator[](const std::string& strVariables);
 
 	const VariablesType& getInternalMap() const;
+	const double& at(const std::string& key) const;
 	VariablesType::iterator find(const std::string& key);
+	VariablesType::const_iterator find (const std::string& key) const;
 	VariablesType::const_iterator begin() const;
 	VariablesType::iterator end();
 	VariablesType::const_iterator end() const;

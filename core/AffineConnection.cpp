@@ -179,4 +179,3 @@ void AffineConnection::printTorsion()
 {
 	m_torsionTensor.print();
 }
-

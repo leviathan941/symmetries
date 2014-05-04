@@ -24,10 +24,11 @@ set(CORE_HEADERS
 	MatrixVectorExp.h
 	Expression.h
 	Equation.h
-	Item.h
+	SimpleItem.h
 	MatrixVector.h
 	VariablesMap.h
 	Exceptions.h
+	DifferentialItem.h
 	)
 
 set(CORE_SOURCES
@@ -35,8 +36,9 @@ set(CORE_SOURCES
 	MatrixVectorExp.cpp
 	Expression.cpp
 	Equation.cpp
-	Item.cpp
+	SimpleItem.cpp
 	VariablesMap.cpp
+	DifferentialItem.cpp
 	)
 
 include_directories(${COMMON_INCLUDE_DIRS})

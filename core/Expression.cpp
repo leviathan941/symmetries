@@ -18,7 +18,7 @@
 
 
 #include "Expression.h"
-#include "Item.h"
+#include "SimpleItem.h"
 
 #include <iostream>
 #include <sstream>
@@ -31,7 +31,7 @@ Expression::Expression() : m_vecItems()
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Expression::Expression(const Item& item)
+Expression::Expression(const SimpleItem& item)
 {
 	pushItem(item);
 }
@@ -82,7 +82,7 @@ bool Expression::operator!=(const Expression& otherExp) const
 Expression Expression::operator+(const Expression& otherExp) const
 {
 	Expression tempExp(*this);
-	BOOST_FOREACH(Item item, otherExp.m_vecItems)
+	BOOST_FOREACH(SimpleItem item, otherExp.m_vecItems)
 	{
 		int foundItem = isSimilarItemInExpression(item);
 		if(foundItem >= 0)
@@ -104,7 +104,7 @@ Expression Expression::operator+(const Expression& otherExp) const
 Expression Expression::operator-(const Expression& otherExp) const
 {
 	Expression tempExp(*this);
-	BOOST_FOREACH(Item item, otherExp.m_vecItems)
+	BOOST_FOREACH(SimpleItem item, otherExp.m_vecItems)
 	{
 		int foundItem = isSimilarItemInExpression(item);
 		if(foundItem >= 0)
@@ -128,9 +128,9 @@ Expression Expression::operator-(const Expression& otherExp) const
 Expression Expression::operator*(const Expression& otherExp) const
 {
 	Expression tempExp;
-	BOOST_FOREACH(const Item& item, m_vecItems)
+	BOOST_FOREACH(const SimpleItem& item, m_vecItems)
 	{
-		BOOST_FOREACH(Item otherItem, otherExp.m_vecItems)
+		BOOST_FOREACH(SimpleItem otherItem, otherExp.m_vecItems)
 		{
 			tempExp.m_vecItems.push_back(item * otherItem);
 		}
@@ -152,7 +152,7 @@ Expression Expression::operator/(const Expression& otherExp) const
 Expression Expression::operator*(const double nNumber) const
 {
 	Expression tempExp(*this);
-	BOOST_FOREACH(const Item& item, m_vecItems)
+	BOOST_FOREACH(const SimpleItem& item, m_vecItems)
 	{
 		tempExp.setItemMultiplier((unsigned)isSimilarItemInExpression(item),
 			item.getMultiplier() * nNumber);
@@ -166,7 +166,7 @@ Expression Expression::operator*(const double nNumber) const
 Expression Expression::operator/(const double nNumber) const
 {
 	Expression tempExp(*this);
-	BOOST_FOREACH(const Item& item, m_vecItems)
+	BOOST_FOREACH(const SimpleItem& item, m_vecItems)
 	{
 		tempExp.setItemMultiplier((unsigned)isSimilarItemInExpression(item),
 			item.getMultiplier() / nNumber);
@@ -176,7 +176,7 @@ Expression Expression::operator/(const double nNumber) const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Item Expression::getItem(const unsigned nItemPosition) const
+SimpleItem Expression::getItem(const unsigned nItemPosition) const
 {
 	return m_vecItems[nItemPosition];
 }
@@ -188,13 +188,13 @@ void Expression::setItemMultiplier(const unsigned nItemPosition, const double nN
 }
 
 ///////////////////////////////////////////////////////////////////////////
-std::vector<Item> Expression::getVectorItems() const
+std::vector<SimpleItem> Expression::getVectorItems() const
 {
 	return m_vecItems;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-int Expression::isSimilarItemInExpression(const Item& item) const
+int Expression::isSimilarItemInExpression(const SimpleItem& item) const
 {
 	for(int i = 0; i < m_vecItems.size(); ++i)
 	{
@@ -207,7 +207,7 @@ int Expression::isSimilarItemInExpression(const Item& item) const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void Expression::pushItem(const Item& newItem)
+void Expression::pushItem(const SimpleItem& newItem)
 {
 	m_vecItems.push_back(newItem);
 }
@@ -260,7 +260,7 @@ void Expression::print()
 void Expression::findRemoveEmptyItems()
 {
 	auto pend = std::remove_if(m_vecItems.begin(), m_vecItems.end(),
-		[](const Item &item)
+		[](const SimpleItem &item)
 		{
 			return (item.getMultiplier() == 0);
 		});

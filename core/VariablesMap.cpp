@@ -70,10 +70,25 @@ const VariablesType& CVariablesMap::getInternalMap() const
 	return m_mapInternal;
 }
 
+const double& CVariablesMap::at(const std::string& key) const
+{
+	if (key.empty())
+		throw coreException("CVariablesMap::at: Empty key was passed.");
+	return m_mapInternal.at(key);
+}
+
 ///////////////////////////////////////////////////////////////////////////
 VariablesType::iterator CVariablesMap::find(const std::string& key)
 {
 	if(key.empty())
+		throw coreException("CVariablesMap::find: Empty key was passed.");
+	return m_mapInternal.find(key);
+}
+
+///////////////////////////////////////////////////////////////////////////
+VariablesType::const_iterator CVariablesMap::find (const std::string& key) const
+{
+	if (key.empty())
 		throw coreException("CVariablesMap::find: Empty key was passed.");
 	return m_mapInternal.find(key);
 }

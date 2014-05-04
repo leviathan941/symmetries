@@ -23,13 +23,13 @@
 #include <vector>
 #include <string>
 
-class Item;
+class SimpleItem;
 
 class Expression
 {
 public:
 	Expression();
-	Expression(const Item& item);
+	Expression(const SimpleItem& item);
 	Expression(const Expression& other);
 	virtual ~Expression();
 
@@ -45,11 +45,11 @@ public:
 	Expression operator*(const double nNumber) const;
 	Expression operator/(const double nNumber) const;
 
-	Item getItem(const unsigned nItemPosition) const;
+	SimpleItem getItem(const unsigned nItemPosition) const;
 	void setItemMultiplier(const unsigned nItemPosition, const double nNewMultiplier);
-	std::vector<Item> getVectorItems() const;
-	int isSimilarItemInExpression(const Item& item) const;
-	void pushItem(const Item& newItem);
+	std::vector<SimpleItem> getVectorItems() const;
+	int isSimilarItemInExpression(const SimpleItem& item) const;
+	void pushItem(const SimpleItem& newItem);
 	void eraseItem(const unsigned nPosition);
 	bool isEmpty();
 	void clear();
@@ -59,7 +59,7 @@ public:
 private:
 	void findRemoveEmptyItems();
 
-	std::vector<Item> m_vecItems;
+	std::vector<SimpleItem> m_vecItems;
 };
 
 #endif // EXPRESSION_H

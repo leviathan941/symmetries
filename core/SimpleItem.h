@@ -16,42 +16,44 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ITEM_H
-#define ITEM_H
+#ifndef SIMPLE_ITEM_H
+#define SIMPLE_ITEM_H
 
 #include <string>
 #include <map>
 #include "VariablesMap.h"
 
-class Item
+class SimpleItem
 {
 public:
-	Item();
-	Item(VariablesType& variable, double nMultiplier);
-	Item(std::string strVar, double nVarPower, double nMultiplier);
-	Item(const Item& otherItem);
-	virtual ~Item();
-	virtual Item& operator=(const Item& otherItem);
-	virtual bool operator==(const Item& otherItem) const;
-	virtual bool operator!=(const Item& otherItem) const;
+	SimpleItem();
+	SimpleItem(const VariablesType& variable, double nMultiplier);
+	SimpleItem(std::string strVar, double nVarPower, double nMultiplier);
+	SimpleItem(const SimpleItem& otherItem);
+	virtual ~SimpleItem();
+	virtual SimpleItem& operator=(const SimpleItem& otherItem);
+	virtual bool operator==(const SimpleItem& otherItem) const;
+	virtual bool operator!=(const SimpleItem& otherItem) const;
 
-	virtual Item operator*(const Item& otherItem) const;
-	virtual Item operator/(const Item& otherItem) const;
+	virtual SimpleItem& operator*=(const SimpleItem& otherItem);
+	virtual SimpleItem operator*(const SimpleItem& otherItem) const;
+	virtual SimpleItem& operator/=(const SimpleItem& otherItem);
+	virtual SimpleItem operator/(const SimpleItem& otherItem) const;
 
-	double getMultiplier() const;
-	void setMultiplier(const double newMultiplier);
+	virtual double getMultiplier() const;
+	virtual void setMultiplier(const double newMultiplier);
 
 	VariablesType getVariables() const;
 	void setVariablePower(const std::string sVariable, const double nPower);
 
-	virtual bool isVariablesEqual(const Item& otherItem) const;
+	virtual bool isVariablesEqual(const SimpleItem& otherItem) const;
 
 	std::string toString();
 
 	void print();
-private:
+protected:
 	CVariablesMap m_Variables;
 	double m_nMultiplier;
 };
 
-#endif // ITEM_H
+#endif // SIMPLE_ITEM_H

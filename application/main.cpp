@@ -22,7 +22,7 @@
 
 #include "FileReader.h"
 #include "AffineConnection.h"
-#include "Item.h"
+#include "SimpleItem.h"
 #include "MainWindow.h"
 
 void calcTestConst2DAffine()
@@ -30,8 +30,8 @@ void calcTestConst2DAffine()
 	using namespace boost::numeric::ublas;
 
 	boostMatrixExp metricTensor(2, 2);
-	Item itemOne(std::string(""), 0, 1);
-	Item itemZero(std::string(""), 0, 0);
+	SimpleItem itemOne(std::string(""), 0, 1);
+	SimpleItem itemZero(std::string(""), 0, 0);
 	Expression expOne(itemOne);
 	Expression expZero(itemZero);
 	metricTensor.insert_element(0, 0, expOne);
@@ -52,10 +52,10 @@ void calcTestConst2DAffine()
 	MatrixVectorExp torsionTensor(2, 2);
 	boostMatrixExp torsionMatrix1(2, 2);
 	boostMatrixExp torsionMatrix2(2, 2);
-	Item itemA(std::string("a"), 1, 1);
-	Item itemMinusA(std::string("a"), 1, -1);
-	Item itemB(std::string("b"), 1, 1);
-	Item itemMinusB(std::string("b"), 1, -1);
+	SimpleItem itemA(std::string("a"), 1, 1);
+	SimpleItem itemMinusA(std::string("a"), 1, -1);
+	SimpleItem itemB(std::string("b"), 1, 1);
+	SimpleItem itemMinusB(std::string("b"), 1, -1);
 	Expression expA(itemA);
 	Expression expMinusA(itemMinusA);
 	Expression expB(itemB);
@@ -93,8 +93,8 @@ void calcTestConst4DAffine()
 	using namespace boost::numeric::ublas;
 
 	boostMatrixExp metricTensor(4, 4);
-	Item itemOne(std::string(""), 0, 1);
-	Item itemZero(std::string(""), 0, 0);
+	SimpleItem itemOne(std::string(""), 0, 1);
+	SimpleItem itemZero(std::string(""), 0, 0);
 	Expression expOne(itemOne);
 	Expression expZero(itemZero);
 	metricTensor.insert_element(0, 0, expOne);
@@ -131,57 +131,57 @@ void calcTestConst4DAffine()
 	boostMatrixExp torsionMatrix3(4, 4);
 	boostMatrixExp torsionMatrix4(4, 4);
 
-	Item itemA0(std::string("a0"), 1, 1);
-	Item itemMinusA0(std::string("a0"), 1, -1);
-	Item itemB0(std::string("b0"), 1, 1);
-	Item itemMinusB0(std::string("b0"), 1, -1);
-	Item itemC0(std::string("c0"), 1, 1);
-	Item itemMinusC0(std::string("c0"), 1, -1);
-	Item itemD0(std::string("d0"), 1, 1);
-	Item itemMinusD0(std::string("d0"), 1, -1);
-	Item itemE0(std::string("e0"), 1, 1);
-	Item itemMinusE0(std::string("e0"), 1, -1);
-	Item itemF0(std::string("f0"), 1, 1);
-	Item itemMinusF0(std::string("f0"), 1, -1);
+	SimpleItem itemA0(std::string("a0"), 1, 1);
+	SimpleItem itemMinusA0(std::string("a0"), 1, -1);
+	SimpleItem itemB0(std::string("b0"), 1, 1);
+	SimpleItem itemMinusB0(std::string("b0"), 1, -1);
+	SimpleItem itemC0(std::string("c0"), 1, 1);
+	SimpleItem itemMinusC0(std::string("c0"), 1, -1);
+	SimpleItem itemD0(std::string("d0"), 1, 1);
+	SimpleItem itemMinusD0(std::string("d0"), 1, -1);
+	SimpleItem itemE0(std::string("e0"), 1, 1);
+	SimpleItem itemMinusE0(std::string("e0"), 1, -1);
+	SimpleItem itemF0(std::string("f0"), 1, 1);
+	SimpleItem itemMinusF0(std::string("f0"), 1, -1);
 
-	Item itemA1(std::string("a1"), 1, 1);
-	Item itemMinusA1(std::string("a1"), 1, -1);
-	Item itemB1(std::string("b1"), 1, 1);
-	Item itemMinusB1(std::string("b1"), 1, -1);
-	Item itemC1(std::string("c1"), 1, 1);
-	Item itemMinusC1(std::string("c1"), 1, -1);
-	Item itemD1(std::string("d1"), 1, 1);
-	Item itemMinusD1(std::string("d1"), 1, -1);
-	Item itemE1(std::string("e1"), 1, 1);
-	Item itemMinusE1(std::string("e1"), 1, -1);
-	Item itemF1(std::string("f1"), 1, 1);
-	Item itemMinusF1(std::string("f1"), 1, -1);
+	SimpleItem itemA1(std::string("a1"), 1, 1);
+	SimpleItem itemMinusA1(std::string("a1"), 1, -1);
+	SimpleItem itemB1(std::string("b1"), 1, 1);
+	SimpleItem itemMinusB1(std::string("b1"), 1, -1);
+	SimpleItem itemC1(std::string("c1"), 1, 1);
+	SimpleItem itemMinusC1(std::string("c1"), 1, -1);
+	SimpleItem itemD1(std::string("d1"), 1, 1);
+	SimpleItem itemMinusD1(std::string("d1"), 1, -1);
+	SimpleItem itemE1(std::string("e1"), 1, 1);
+	SimpleItem itemMinusE1(std::string("e1"), 1, -1);
+	SimpleItem itemF1(std::string("f1"), 1, 1);
+	SimpleItem itemMinusF1(std::string("f1"), 1, -1);
 
-	Item itemA2(std::string("a2"), 1, 1);
-	Item itemMinusA2(std::string("a2"), 1, -1);
-	Item itemB2(std::string("b2"), 1, 1);
-	Item itemMinusB2(std::string("b2"), 1, -1);
-	Item itemC2(std::string("c2"), 1, 1);
-	Item itemMinusC2(std::string("c2"), 1, -1);
-	Item itemD2(std::string("d2"), 1, 1);
-	Item itemMinusD2(std::string("d2"), 1, -1);
-	Item itemE2(std::string("e2"), 1, 1);
-	Item itemMinusE2(std::string("e2"), 1, -1);
-	Item itemF2(std::string("f2"), 1, 1);
-	Item itemMinusF2(std::string("f2"), 1, -1);
+	SimpleItem itemA2(std::string("a2"), 1, 1);
+	SimpleItem itemMinusA2(std::string("a2"), 1, -1);
+	SimpleItem itemB2(std::string("b2"), 1, 1);
+	SimpleItem itemMinusB2(std::string("b2"), 1, -1);
+	SimpleItem itemC2(std::string("c2"), 1, 1);
+	SimpleItem itemMinusC2(std::string("c2"), 1, -1);
+	SimpleItem itemD2(std::string("d2"), 1, 1);
+	SimpleItem itemMinusD2(std::string("d2"), 1, -1);
+	SimpleItem itemE2(std::string("e2"), 1, 1);
+	SimpleItem itemMinusE2(std::string("e2"), 1, -1);
+	SimpleItem itemF2(std::string("f2"), 1, 1);
+	SimpleItem itemMinusF2(std::string("f2"), 1, -1);
 
-	Item itemA3(std::string("a3"), 1, 1);
-	Item itemMinusA3(std::string("a3"), 1, -1);
-	Item itemB3(std::string("b3"), 1, 1);
-	Item itemMinusB3(std::string("b3"), 1, -1);
-	Item itemC3(std::string("c3"), 1, 1);
-	Item itemMinusC3(std::string("c3"), 1, -1);
-	Item itemD3(std::string("d3"), 1, 1);
-	Item itemMinusD3(std::string("d3"), 1, -1);
-	Item itemE3(std::string("e3"), 1, 1);
-	Item itemMinusE3(std::string("e3"), 1, -1);
-	Item itemF3(std::string("f3"), 1, 1);
-	Item itemMinusF3(std::string("f3"), 1, -1);
+	SimpleItem itemA3(std::string("a3"), 1, 1);
+	SimpleItem itemMinusA3(std::string("a3"), 1, -1);
+	SimpleItem itemB3(std::string("b3"), 1, 1);
+	SimpleItem itemMinusB3(std::string("b3"), 1, -1);
+	SimpleItem itemC3(std::string("c3"), 1, 1);
+	SimpleItem itemMinusC3(std::string("c3"), 1, -1);
+	SimpleItem itemD3(std::string("d3"), 1, 1);
+	SimpleItem itemMinusD3(std::string("d3"), 1, -1);
+	SimpleItem itemE3(std::string("e3"), 1, 1);
+	SimpleItem itemMinusE3(std::string("e3"), 1, -1);
+	SimpleItem itemF3(std::string("f3"), 1, 1);
+	SimpleItem itemMinusF3(std::string("f3"), 1, -1);
 
 	Expression expA0(itemA0);
 	Expression expMinusA0(itemMinusA0);
