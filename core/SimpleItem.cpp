@@ -141,6 +141,7 @@ SimpleItem& SimpleItem::operator/=(const SimpleItem& otherItem)
 	if(otherItem.m_nMultiplier == 0)
 	{
 		std::cerr << "Error. Division by zero." << std::endl;
+		return *this;
 	}
 	else
 	{

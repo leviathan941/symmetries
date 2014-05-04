@@ -21,7 +21,7 @@
 #define MATRIX_VECTOR_EXP_H
 
 #include "MatrixVector.h"
-#include "Expression.h"
+#include "SimpleExpression.h"
 
 class MatrixVectorExp
 {
@@ -29,30 +29,30 @@ class MatrixVectorExp
 public:
 	MatrixVectorExp();
 	MatrixVectorExp(const unsigned nRowNumber, const unsigned nColumnNumber);
-	MatrixVectorExp(const std::vector<MatrixVector<Expression>::boostMatrix>& vecMatrices,
+	MatrixVectorExp(const std::vector<MatrixVector<SimpleExpression>::boostMatrix>& vecMatrices,
 		const unsigned nRowNumber, const unsigned nColumnNumber);
 	MatrixVectorExp(const MatrixVectorExp& other);
 	virtual ~MatrixVectorExp();
 	virtual MatrixVectorExp& operator=(const MatrixVectorExp& other);
 	virtual bool operator==(const MatrixVectorExp& other) const;
 	virtual bool operator!=(const MatrixVectorExp& other) const;
-	virtual Expression& operator()(const unsigned nPosition, const unsigned nRow, const unsigned nColumn);
-	virtual MatrixVector<Expression>::boostMatrix& operator[](const unsigned nPosition);
+	virtual SimpleExpression& operator()(const unsigned nPosition, const unsigned nRow, const unsigned nColumn);
+	virtual MatrixVector<SimpleExpression>::boostMatrix& operator[](const unsigned nPosition);
 
-	void addMatrix(unsigned nPosition, MatrixVector<Expression>::boostMatrix& matr);
-	void addMatrix(MatrixVector<Expression>::boostMatrix& matr);
+	void addMatrix(unsigned nPosition, MatrixVector<SimpleExpression>::boostMatrix& matr);
+	void addMatrix(MatrixVector<SimpleExpression>::boostMatrix& matr);
 	void removeMatrix(unsigned nPosition);
-	void setMatrix(unsigned nPosition, MatrixVector<Expression>::boostMatrix& matr);
-	void setElement(unsigned nPosition, unsigned nRow, unsigned nColumn, Expression& value);
+	void setMatrix(unsigned nPosition, MatrixVector<SimpleExpression>::boostMatrix& matr);
+	void setElement(unsigned nPosition, unsigned nRow, unsigned nColumn, SimpleExpression& value);
 	void allocateSize(const unsigned vectorSize, const unsigned matrixRowSize, const unsigned matrixColumSize);
 	void clear();
 
-	MatrixVector<Expression> getContent() const;
-	Expression getExpression(const unsigned item, const unsigned row, const unsigned column) const;
+	MatrixVector<SimpleExpression> getContent() const;
+	SimpleExpression getExpression(const unsigned item, const unsigned row, const unsigned column) const;
 	std::string toString();
 	void print();
 private:
-	MatrixVector<Expression> m_content;
+	MatrixVector<SimpleExpression> m_content;
 };
 
 #endif // MATRIX_VECTOR_EXP_H

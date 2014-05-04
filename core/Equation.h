@@ -20,14 +20,14 @@
 #ifndef EQUATION_H
 #define EQUATION_H
 
-#include "Expression.h"
+#include "SimpleExpression.h"
 
 class Equation
 {
 
 public:
 	Equation();
-	Equation(Expression leftPart, Expression rightPart);
+	Equation(SimpleExpression leftPart, SimpleExpression rightPart);
 	Equation(const Equation& other);
 	virtual ~Equation();
 	virtual Equation& operator=(const Equation& other);
@@ -46,8 +46,8 @@ public:
 	void toRight();
 
 private:
-	Expression m_leftExp;
-	Expression m_rightExp;
+	SimpleExpression m_leftExp;
+	SimpleExpression m_rightExp;
 };
 
 #endif // EQUATION_H

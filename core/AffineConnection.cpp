@@ -77,7 +77,7 @@ MatrixVectorExp AffineConnection::getChristoffelSymbols() const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void AffineConnection::setMetricTensor(boost::numeric::ublas::matrix<Expression>& matrExp)
+void AffineConnection::setMetricTensor(boost::numeric::ublas::matrix<SimpleExpression>& matrExp)
 {
 	m_metricTensor = matrExp;
 }
@@ -116,13 +116,13 @@ const MatrixVectorExp& AffineConnection::calculateChristoffelSymbols()
 				{
 					for(unsigned m = 0; m < m_nDimension; ++m)
 					{
-						Expression metricTensorIM(m_metricTensor(i, m));
-						Expression metricTensorKS(m_metricTensor(k, s));
-						Expression metricTensorMJ(m_metricTensor(m, j));
-						Expression torsionTensorMSJ(m_torsionTensor(m, s, j));
-						Expression torsionTensorMSI(m_torsionTensor(m, s, i));
+						SimpleExpression metricTensorIM(m_metricTensor(i, m));
+						SimpleExpression metricTensorKS(m_metricTensor(k, s));
+						SimpleExpression metricTensorMJ(m_metricTensor(m, j));
+						SimpleExpression torsionTensorMSJ(m_torsionTensor(m, s, j));
+						SimpleExpression torsionTensorMSI(m_torsionTensor(m, s, i));
 
-						Expression tempChristoffel = metricTensorKS *
+						SimpleExpression tempChristoffel = metricTensorKS *
 							(metricTensorIM * torsionTensorMSJ +
 							metricTensorMJ * torsionTensorMSI);
 
@@ -132,7 +132,7 @@ const MatrixVectorExp& AffineConnection::calculateChristoffelSymbols()
 						std::cout << std::endl;
 					}
 				}
-				Expression torsionTensorKIJ(m_torsionTensor(k, i, j));
+				SimpleExpression torsionTensorKIJ(m_torsionTensor(k, i, j));
 				m_christoffelSymbols(k, i, j) = (m_christoffelSymbols(k, i, j) + torsionTensorKIJ) * 0.5;
 			}
 		}

@@ -22,23 +22,25 @@ project(core)
 set(CORE_HEADERS
 	AffineConnection.h
 	MatrixVectorExp.h
-	Expression.h
+	SimpleExpression.h
 	Equation.h
 	SimpleItem.h
 	MatrixVector.h
 	VariablesMap.h
 	Exceptions.h
 	DifferentialItem.h
+	DifferentialExpression.h
 	)
 
 set(CORE_SOURCES
 	AffineConnection.cpp
 	MatrixVectorExp.cpp
-	Expression.cpp
+	SimpleExpression.cpp
 	Equation.cpp
 	SimpleItem.cpp
 	VariablesMap.cpp
 	DifferentialItem.cpp
+	DifferentialExpression.cpp
 	)
 
 include_directories(${COMMON_INCLUDE_DIRS})

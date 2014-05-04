@@ -31,9 +31,9 @@ class DifferentialItem
 public:
 	DifferentialItem();
 	DifferentialItem(const VariablesType &variables, double nMultiplier,
-		std::string &sDiff, double nDiffPower);
+		std::string &sDiff, double nDiffPower, double nDiffMultiplier);
 	DifferentialItem(std::string& sVariable, double nPower, double nMultiplier,
-		std::string &sDiff, double nDiffPower);
+		std::string &sDiff, double nDiffPower, double nDiffMultiplier);
 	DifferentialItem(const DifferentialItem& item);
 	virtual ~DifferentialItem();
 
@@ -44,10 +44,16 @@ public:
 	virtual DifferentialItem operator*(const DifferentialItem& otherItem) const;
 	virtual DifferentialItem operator/(const DifferentialItem& otherItem) const;
 
+	virtual double getMultipliers() const;
+	virtual void setMultiplier(const double newMultiplier);
+
 	bool isDifferentialsEqual(const DifferentialItem& otherItem) const;
+
+	std::string toString() const;
 
 private:
 	DifferentialMap m_Differentials;
+	double m_nDiffMultiplier;
 };
 
 #endif // DIFFERENTIAL_ITEM_H

@@ -28,7 +28,7 @@
 class FileReader
 {
 public:
-	typedef boost::numeric::ublas::matrix<Expression> MatrixExp;
+	typedef boost::numeric::ublas::matrix<SimpleExpression> MatrixExp;
 
 	FileReader(boost::filesystem::path& FilePath);
 	virtual ~FileReader();

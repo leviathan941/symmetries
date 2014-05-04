@@ -19,12 +19,12 @@
 #ifndef AFFINE_CONNECTION_H
 #define AFFINE_CONNECTION_H
 
-#include "Expression.h"
+#include "SimpleExpression.h"
 #include "MatrixVectorExp.h"
 
 #include <boost/numeric/ublas/matrix.hpp>
 
-typedef boost::numeric::ublas::matrix<Expression> boostMatrixExp;
+typedef boost::numeric::ublas::matrix<SimpleExpression> boostMatrixExp;
 
 class AffineConnection
 {
@@ -39,7 +39,7 @@ public:
 	MatrixVectorExp getTorsionTensor() const;
 	MatrixVectorExp getChristoffelSymbols() const;
 
-	void setMetricTensor(boost::numeric::ublas::matrix<Expression>& matrixExp);
+	void setMetricTensor(boost::numeric::ublas::matrix<SimpleExpression>& matrixExp);
 	void setTorsionTensor(MatrixVectorExp& matrixVectorExp);
 
 	const MatrixVectorExp& calculateChristoffelSymbols();

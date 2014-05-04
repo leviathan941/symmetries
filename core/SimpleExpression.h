@@ -17,33 +17,33 @@
 */
 
 
-#ifndef EXPRESSION_H
-#define EXPRESSION_H
+#ifndef SIMPLE_EXPRESSION_H
+#define SIMPLE_EXPRESSION_H
 
 #include <vector>
 #include <string>
 
 class SimpleItem;
 
-class Expression
+class SimpleExpression
 {
 public:
-	Expression();
-	Expression(const SimpleItem& item);
-	Expression(const Expression& other);
-	virtual ~Expression();
+	SimpleExpression();
+	SimpleExpression(const SimpleItem& item);
+	SimpleExpression(const SimpleExpression& other);
+	virtual ~SimpleExpression();
 
-	virtual Expression& operator=(const Expression& otherExp);
-	virtual bool operator==(const Expression& otherExp) const;
-	virtual bool operator!=(const Expression& otherExp) const;
+	virtual SimpleExpression& operator=(const SimpleExpression& otherExp);
+	virtual bool operator==(const SimpleExpression& otherExp) const;
+	virtual bool operator!=(const SimpleExpression& otherExp) const;
 
-	Expression operator+(const Expression& otherExp) const;
-	Expression operator-(const Expression& otherExp) const;
-	Expression operator*(const Expression& otherExp) const;
-	Expression operator/(const Expression& otherExp) const;
+	SimpleExpression operator+(const SimpleExpression& otherExp) const;
+	SimpleExpression operator-(const SimpleExpression& otherExp) const;
+	SimpleExpression operator*(const SimpleExpression& otherExp) const;
+	SimpleExpression operator/(const SimpleExpression& otherExp) const;
 
-	Expression operator*(const double nNumber) const;
-	Expression operator/(const double nNumber) const;
+	SimpleExpression operator*(const double nNumber) const;
+	SimpleExpression operator/(const double nNumber) const;
 
 	SimpleItem getItem(const unsigned nItemPosition) const;
 	void setItemMultiplier(const unsigned nItemPosition, const double nNewMultiplier);
@@ -62,4 +62,4 @@ private:
 	std::vector<SimpleItem> m_vecItems;
 };
 
-#endif // EXPRESSION_H
+#endif // SIMPLE_EXPRESSION_H

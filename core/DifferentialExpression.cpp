@@ -1,6 +1,6 @@
 /*
 	Symmetries
-	Copyright (C) 2013, 2014 Alexey Kuzin <amkuzink@gmail.com>
+	Copyright (C) 2014 Alexey Kuzin <amkuzink@gmail.com>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -16,40 +16,38 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "DifferentialExpression.h"
+#include "DifferentialItem.h"
 
-#include "Expression.h"
-#include "SimpleItem.h"
-
-#include <iostream>
-#include <sstream>
 #include <boost/foreach.hpp>
-#include <algorithm>
+#include <sstream>
+#include <iostream>
 
 ///////////////////////////////////////////////////////////////////////////
-Expression::Expression() : m_vecItems()
+DifferentialExpression::DifferentialExpression() : m_vecItems()
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Expression::Expression(const SimpleItem& item)
+DifferentialExpression::DifferentialExpression(const DifferentialItem& item)
 {
 	pushItem(item);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Expression::Expression(const Expression& otherExp)
+DifferentialExpression::DifferentialExpression(const DifferentialExpression& otherExp)
 {
 	m_vecItems = otherExp.m_vecItems;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Expression::~Expression()
+DifferentialExpression::~DifferentialExpression()
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
-Expression& Expression::operator=(const Expression& otherExp)
+DifferentialExpression& DifferentialExpression::operator=(const DifferentialExpression& otherExp)
 {
 	if(&otherExp != this)
 	{
@@ -59,7 +57,7 @@ Expression& Expression::operator=(const Expression& otherExp)
 }
 
 ///////////////////////////////////////////////////////////////////////////
-bool Expression::operator==(const Expression& otherExp) const
+bool DifferentialExpression::operator==(const DifferentialExpression& otherExp) const
 {
 	if(m_vecItems.size() != otherExp.m_vecItems.size())
 		return false;
@@ -73,50 +71,26 @@ bool Expression::operator==(const Expression& otherExp) const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-bool Expression::operator!=(const Expression& otherExp) const
+bool DifferentialExpression::operator!=(const DifferentialExpression& otherExp) const
 {
 	return !(*this == otherExp);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Expression Expression::operator+(const Expression& otherExp) const
+DifferentialExpression DifferentialExpression::operator+(const DifferentialExpression& otherExp) const
 {
-	Expression tempExp(*this);
-	BOOST_FOREACH(SimpleItem item, otherExp.m_vecItems)
-	{
-		int foundItem = isSimilarItemInExpression(item);
-		if(foundItem >= 0)
-		{
-			tempExp.setItemMultiplier((unsigned)isSimilarItemInExpression(item),
-			m_vecItems[foundItem].getMultiplier() + item.getMultiplier());
-		}
-		else
-		{
-			tempExp.pushItem(item);
-		}
-	}
-
-	tempExp.findRemoveEmptyItems();
-	return tempExp;
-}
-
-///////////////////////////////////////////////////////////////////////////
-Expression Expression::operator-(const Expression& otherExp) const
-{
-	Expression tempExp(*this);
-	BOOST_FOREACH(SimpleItem item, otherExp.m_vecItems)
+	DifferentialExpression tempExp(*this);
+	BOOST_FOREACH(DifferentialItem item, otherExp.m_vecItems)
 	{
 		int foundItem = isSimilarItemInExpression(item);
 		if(foundItem >= 0)
 		{
 			tempExp.setItemMultiplier((unsigned)foundItem,
-				m_vecItems[foundItem].getMultiplier() - item.getMultiplier());
+			m_vecItems[foundItem].getMultipliers() + item.getMultipliers());
 		}
 		else
 		{
 			tempExp.pushItem(item);
-			foundItem = tempExp.isSimilarItemInExpression(item);
-			tempExp.setItemMultiplier((unsigned)foundItem, -item.getMultiplier());
 		}
 	}
 
@@ -125,12 +99,36 @@ Expression Expression::operator-(const Expression& otherExp) const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Expression Expression::operator*(const Expression& otherExp) const
+DifferentialExpression DifferentialExpression::operator-(const DifferentialExpression& otherExp) const
 {
-	Expression tempExp;
-	BOOST_FOREACH(const SimpleItem& item, m_vecItems)
+	DifferentialExpression tempExp(*this);
+	BOOST_FOREACH(DifferentialItem item, otherExp.m_vecItems)
 	{
-		BOOST_FOREACH(SimpleItem otherItem, otherExp.m_vecItems)
+		int foundItem = isSimilarItemInExpression(item);
+		if(foundItem >= 0)
+		{
+			tempExp.setItemMultiplier((unsigned)foundItem,
+				m_vecItems[foundItem].getMultipliers() - item.getMultipliers());
+		}
+		else
+		{
+			tempExp.pushItem(item);
+			foundItem = tempExp.isSimilarItemInExpression(item);
+			tempExp.setItemMultiplier((unsigned)foundItem, -item.getMultipliers());
+		}
+	}
+
+	tempExp.findRemoveEmptyItems();
+	return tempExp;
+}
+
+///////////////////////////////////////////////////////////////////////////
+DifferentialExpression DifferentialExpression::operator*(const DifferentialExpression& otherExp) const
+{
+	DifferentialExpression tempExp;
+	BOOST_FOREACH(const DifferentialItem& item, m_vecItems)
+	{
+		BOOST_FOREACH(const DifferentialItem& otherItem, otherExp.m_vecItems)
 		{
 			tempExp.m_vecItems.push_back(item * otherItem);
 		}
@@ -141,7 +139,7 @@ Expression Expression::operator*(const Expression& otherExp) const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Expression Expression::operator/(const Expression& otherExp) const
+DifferentialExpression DifferentialExpression::operator/(const DifferentialExpression& otherExp) const
 {
 	//Placeholder
 	std::cout << "It isn't implemented yet." << std::endl;
@@ -149,13 +147,12 @@ Expression Expression::operator/(const Expression& otherExp) const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Expression Expression::operator*(const double nNumber) const
+DifferentialExpression DifferentialExpression::operator*(const double nNumber) const
 {
-	Expression tempExp(*this);
-	BOOST_FOREACH(const SimpleItem& item, m_vecItems)
+	DifferentialExpression tempExp(*this);
+	BOOST_FOREACH(DifferentialItem& item, tempExp.m_vecItems)
 	{
-		tempExp.setItemMultiplier((unsigned)isSimilarItemInExpression(item),
-			item.getMultiplier() * nNumber);
+		item.setMultiplier(item.getMultipliers() * nNumber);
 	}
 
 	tempExp.findRemoveEmptyItems();
@@ -163,42 +160,29 @@ Expression Expression::operator*(const double nNumber) const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Expression Expression::operator/(const double nNumber) const
+DifferentialExpression DifferentialExpression::operator/(const double nNumber) const
 {
-	Expression tempExp(*this);
-	BOOST_FOREACH(const SimpleItem& item, m_vecItems)
+	DifferentialExpression tempExp(*this);
+	BOOST_FOREACH(DifferentialItem& item, tempExp.m_vecItems)
 	{
-		tempExp.setItemMultiplier((unsigned)isSimilarItemInExpression(item),
-			item.getMultiplier() / nNumber);
+		item.setMultiplier(item.getMultipliers() / nNumber);
 	}
 
 	return tempExp;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-SimpleItem Expression::getItem(const unsigned nItemPosition) const
-{
-	return m_vecItems[nItemPosition];
-}
-
-///////////////////////////////////////////////////////////////////////////
-void Expression::setItemMultiplier(const unsigned nItemPosition, const double nNewMultiplier)
+void DifferentialExpression::setItemMultiplier(const unsigned nItemPosition, const double nNewMultiplier)
 {
 	m_vecItems[nItemPosition].setMultiplier(nNewMultiplier);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-std::vector<SimpleItem> Expression::getVectorItems() const
-{
-	return m_vecItems;
-}
-
-///////////////////////////////////////////////////////////////////////////
-int Expression::isSimilarItemInExpression(const SimpleItem& item) const
+int DifferentialExpression::isSimilarItemInExpression(const DifferentialItem &item) const
 {
 	for(int i = 0; i < m_vecItems.size(); ++i)
 	{
-		if(item.isVariablesEqual(m_vecItems[i]))
+		if(item.isDifferentialsEqual(m_vecItems[i]))
 		{
 			return i;
 		}
@@ -207,31 +191,31 @@ int Expression::isSimilarItemInExpression(const SimpleItem& item) const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void Expression::pushItem(const SimpleItem& newItem)
+void DifferentialExpression::pushItem(const DifferentialItem& newItem)
 {
 	m_vecItems.push_back(newItem);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void Expression::eraseItem(const unsigned nPosition)
+void DifferentialExpression::eraseItem(const unsigned nPosition)
 {
 	m_vecItems.erase(m_vecItems.begin() + nPosition);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-bool Expression::isEmpty()
+bool DifferentialExpression::isEmpty()
 {
 	return (m_vecItems.empty() ? true : false);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void Expression::clear()
+void DifferentialExpression::clear()
 {
 	m_vecItems.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////
-std::string Expression::toString()
+std::string DifferentialExpression::toString()
 {
 	std::stringstream strStream;
 
@@ -251,18 +235,19 @@ std::string Expression::toString()
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void Expression::print()
+void DifferentialExpression::print()
 {
 	std::cout << toString();
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void Expression::findRemoveEmptyItems()
+void DifferentialExpression::findRemoveEmptyItems()
 {
 	auto pend = std::remove_if(m_vecItems.begin(), m_vecItems.end(),
-		[](const SimpleItem &item)
+		[](const DifferentialItem &item)
 		{
-			return (item.getMultiplier() == 0);
+			return (item.getMultipliers() == 0);
 		});
 	m_vecItems.erase(pend, m_vecItems.end());
 }
+

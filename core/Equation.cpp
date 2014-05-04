@@ -25,7 +25,7 @@ Equation::Equation()
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Equation::Equation(Expression leftPart, Expression rightPart)
+Equation::Equation(SimpleExpression leftPart, SimpleExpression rightPart)
 : m_leftExp(leftPart)
 , m_rightExp(rightPart)
 {

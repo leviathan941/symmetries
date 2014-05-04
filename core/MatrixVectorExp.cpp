@@ -33,7 +33,7 @@ m_content(nRowNumber, nColumnNumber)
 }
 
 ///////////////////////////////////////////////////////////////////////////
-MatrixVectorExp::MatrixVectorExp(const std::vector<MatrixVector<Expression>::boostMatrix> &vecMatrices,
+MatrixVectorExp::MatrixVectorExp(const std::vector<MatrixVector<SimpleExpression>::boostMatrix> &vecMatrices,
 	const unsigned nRowNumber, const unsigned nColumnNumber)
 : m_content(vecMatrices, nRowNumber, nColumnNumber)
 {
@@ -74,7 +74,7 @@ bool MatrixVectorExp::operator!=(const MatrixVectorExp& other) const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Expression& MatrixVectorExp::operator()(const unsigned nPosition, const unsigned nRow,
+SimpleExpression& MatrixVectorExp::operator()(const unsigned nPosition, const unsigned nRow,
 const unsigned nColumn)
 {
 	//	std:: cout << m_content.getVectorSize() << " " << m_content.getMatrixRowSize() <<
@@ -90,19 +90,19 @@ const unsigned nColumn)
 }
 
 ///////////////////////////////////////////////////////////////////////////
-MatrixVector<Expression>::boostMatrix& MatrixVectorExp::operator[](const unsigned nPosition)
+MatrixVector<SimpleExpression>::boostMatrix& MatrixVectorExp::operator[](const unsigned nPosition)
 {
 	return m_content[nPosition];
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void MatrixVectorExp::addMatrix(unsigned int nPosition, MatrixVector<Expression>::boostMatrix& matr)
+void MatrixVectorExp::addMatrix(unsigned int nPosition, MatrixVector<SimpleExpression>::boostMatrix& matr)
 {
 	m_content.addMatrix(nPosition, matr);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void MatrixVectorExp::addMatrix(MatrixVector<Expression>::boostMatrix& matr)
+void MatrixVectorExp::addMatrix(MatrixVector<SimpleExpression>::boostMatrix& matr)
 {
 	m_content.addMatrix(matr);
 }
@@ -114,13 +114,13 @@ void MatrixVectorExp::removeMatrix(unsigned int nPosition)
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void MatrixVectorExp::setMatrix(unsigned int nPosition, MatrixVector<Expression>::boostMatrix& matr)
+void MatrixVectorExp::setMatrix(unsigned int nPosition, MatrixVector<SimpleExpression>::boostMatrix& matr)
 {
 	m_content.setMatrix(nPosition, matr);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void MatrixVectorExp::setElement(unsigned int nPosition, unsigned int nRow, unsigned int nColumn, Expression& value)
+void MatrixVectorExp::setElement(unsigned int nPosition, unsigned int nRow, unsigned int nColumn, SimpleExpression& value)
 {
 	m_content.setElement(nPosition, nRow, nColumn, value);
 }
@@ -138,13 +138,13 @@ void MatrixVectorExp::clear()
 }
 
 ///////////////////////////////////////////////////////////////////////////
-MatrixVector<Expression> MatrixVectorExp::getContent() const
+MatrixVector<SimpleExpression> MatrixVectorExp::getContent() const
 {
 	return m_content;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Expression MatrixVectorExp::getExpression(const unsigned position, const unsigned row, const unsigned column) const
+SimpleExpression MatrixVectorExp::getExpression(const unsigned position, const unsigned row, const unsigned column) const
 {
 	return m_content.getElement(position, row, column);
 }
@@ -177,4 +177,3 @@ void MatrixVectorExp::print()
 {
 	std::cout << toString();
 }
-
