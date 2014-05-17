@@ -21,35 +21,39 @@
 #define DIFFERENTIAL_ITEM_H
 
 #include "SimpleItem.h"
+#include "Item.h"
 
 // map: key - differentila index, value - pair: first - power of the differential,
 // second - SimpleItem.
 typedef std::map<std::string, std::pair<double, SimpleItem> > DifferentialMap;
 
-class DifferentialItem
+class DifferentialItem : public Item
 {
 public:
 	DifferentialItem();
 	DifferentialItem(const VariablesType &variables, double nMultiplier,
-		std::string &sDiff, double nDiffPower, double nDiffMultiplier);
-	DifferentialItem(std::string& sVariable, double nPower, double nMultiplier,
-		std::string &sDiff, double nDiffPower, double nDiffMultiplier);
+		std::string sDiff, double nDiffPower, double nDiffMultiplier);
+	DifferentialItem(std::string sVariable, double nPower, double nMultiplier,
+		std::string sDiff, double nDiffPower, double nDiffMultiplier);
+	DifferentialItem(const SimpleItem& simple, std::string sDiff, double nDiffPower,
+		double nDiffMultiplier);
 	DifferentialItem(const DifferentialItem& item);
 	virtual ~DifferentialItem();
 
-	virtual DifferentialItem& operator=(const DifferentialItem& otherItem);
-	virtual bool operator==(const DifferentialItem& otherItem) const;
-	virtual bool operator!=(const DifferentialItem& otherItem) const;
+	virtual Item& operator=(const Item& otherItem);
+	DifferentialItem& operator=(const DifferentialItem& otherItem);
+	virtual bool operator==(const Item& otherItem) const;
+	virtual bool operator!=(const Item& otherItem) const;
 
-	virtual DifferentialItem operator*(const DifferentialItem& otherItem) const;
-	virtual DifferentialItem operator/(const DifferentialItem& otherItem) const;
+	virtual Item& operator*(const Item& otherItem);
+	virtual Item& operator/(const Item& otherItem);
 
-	virtual double getMultipliers() const;
+	virtual double getMultiplier() const;
 	virtual void setMultiplier(const double newMultiplier);
 
-	bool isDifferentialsEqual(const DifferentialItem& otherItem) const;
+	virtual bool isSubitemsEqual(const Item& otherItem) const;
 
-	std::string toString() const;
+	virtual std::string toString() const;
 
 private:
 	DifferentialMap m_Differentials;

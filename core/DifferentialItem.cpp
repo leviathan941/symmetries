@@ -25,13 +25,13 @@
 
 ///////////////////////////////////////////////////////////////////////////
 DifferentialItem::DifferentialItem():
-m_Differentials()
+m_Differentials(), m_nDiffMultiplier(0)
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////
 DifferentialItem::DifferentialItem(const VariablesType &variables, double nMultiplier,
-	std::string& sDiff, double nDiffPower, double nDiffMultiplier)
+	std::string sDiff, double nDiffPower, double nDiffMultiplier)
 {
 	if (!sDiff.empty())
 	{
@@ -47,8 +47,8 @@ DifferentialItem::DifferentialItem(const VariablesType &variables, double nMulti
 }
 
 ///////////////////////////////////////////////////////////////////////////
-DifferentialItem::DifferentialItem(std::string& sVariable, double nPower, double nMultiplier,
-	std::string &sDiff, double nDiffPower, double nDiffMultiplier)
+DifferentialItem::DifferentialItem(std::string sVariable, double nPower, double nMultiplier,
+	std::string sDiff, double nDiffPower, double nDiffMultiplier)
 {
 	if (!sVariable.empty() && !sDiff.empty())
 	{
@@ -64,9 +64,26 @@ DifferentialItem::DifferentialItem(std::string& sVariable, double nPower, double
 }
 
 ///////////////////////////////////////////////////////////////////////////
+DifferentialItem::DifferentialItem(const SimpleItem& simple, std::string sDiff, double nDiffPower,
+	double nDiffMultiplier)
+{
+	if (!sDiff.empty())
+	{
+		m_Differentials[sDiff] = std::pair<double, SimpleItem>(nDiffPower, simple);
+		m_nDiffMultiplier = nDiffMultiplier;
+	}
+	else
+	{
+		throw coreException("DifferentialItem::DifferentialItem."
+			"Differential index cannot be empty.");
+	}
+}
+
+///////////////////////////////////////////////////////////////////////////
 DifferentialItem::DifferentialItem(const DifferentialItem& item)
 {
 	m_Differentials = item.m_Differentials;
+	m_nDiffMultiplier = item.m_nDiffMultiplier;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -75,26 +92,40 @@ DifferentialItem::~DifferentialItem()
 }
 
 ///////////////////////////////////////////////////////////////////////////
-DifferentialItem& DifferentialItem::operator=(const DifferentialItem& otherItem)
+Item& DifferentialItem::operator=(const Item& otherItem)
 {
 	if (*this != otherItem)
 	{
-		m_Differentials = otherItem.m_Differentials;
+		const DifferentialItem& diffItem = static_cast<const DifferentialItem&> (otherItem);
+		m_Differentials = diffItem.m_Differentials;
+		m_nDiffMultiplier = diffItem.m_nDiffMultiplier;
 	}
 	return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-bool DifferentialItem::operator==(const DifferentialItem& otherItem) const
+DifferentialItem& DifferentialItem::operator=(const DifferentialItem& otherItem)
 {
-	if (m_Differentials.size() != otherItem.m_Differentials.size()
+	if (*this != otherItem)
+	{
+		m_Differentials = otherItem.m_Differentials;
+		m_nDiffMultiplier = otherItem.m_nDiffMultiplier;
+	}
+	return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+bool DifferentialItem::operator==(const Item& otherItem) const
+{
+	const DifferentialItem& diffItem = static_cast<const DifferentialItem&> (otherItem);
+	if (m_Differentials.size() != diffItem.m_Differentials.size()
 		|| std::equal(m_Differentials.begin(), m_Differentials.end(),
-		otherItem.m_Differentials.begin()))
+			diffItem.m_Differentials.begin()))
 	{
 		return false;
 	}
 
-	if (m_nDiffMultiplier != otherItem.m_nDiffMultiplier)
+	if (m_nDiffMultiplier != diffItem.m_nDiffMultiplier)
 	{
 		return false;
 	}
@@ -103,106 +134,100 @@ bool DifferentialItem::operator==(const DifferentialItem& otherItem) const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-bool DifferentialItem::operator!=(const DifferentialItem& otherItem) const
+bool DifferentialItem::operator!=(const Item& otherItem) const
 {
 	return !(*this == otherItem);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-DifferentialItem DifferentialItem::operator*(const DifferentialItem& otherItem) const
+Item& DifferentialItem::operator*(const Item& otherItem)
 {
-	DifferentialItem tempItem(*this);
+	const DifferentialItem& diffItem = static_cast<const DifferentialItem&> (otherItem);
 	try
 	{
-		BOOST_FOREACH(DifferentialMap::value_type subItem, otherItem.m_Differentials)
+		BOOST_FOREACH(DifferentialMap::value_type subItem, diffItem.m_Differentials)
 		{
-			if (tempItem.m_Differentials.find(subItem.first) != tempItem.m_Differentials.end())
+			if (m_Differentials.find(subItem.first) != m_Differentials.end())
 			{
-				if (tempItem.m_Differentials[subItem.first].second == subItem.second.second)
+				if (m_Differentials[subItem.first].second == subItem.second.second)
 				{
 					// Adding mathematical powers
-					tempItem.m_Differentials[subItem.first].first += subItem.second.first;
+					m_Differentials[subItem.first].first += subItem.second.first;
 				}
 				else
 				{
 					// Multiplying SimpleItems
-					tempItem.m_Differentials[subItem.first].second *= subItem.second.second;
+					m_Differentials[subItem.first].second *= subItem.second.second;
 				}
 			}
 			else
 			{
-				tempItem.m_Differentials.insert(subItem);
+				m_Differentials.insert(subItem);
 			}
 		}
 	}
 	CATCH_CORE
 
-	tempItem.m_nDiffMultiplier *= otherItem.m_nDiffMultiplier;
-	if (tempItem.m_nDiffMultiplier == 0)
+	m_nDiffMultiplier *= diffItem.m_nDiffMultiplier;
+	if (m_nDiffMultiplier == 0)
 	{
-		tempItem.m_Differentials.clear();
+		m_Differentials.clear();
 	}
 
-	return tempItem;
+	return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-DifferentialItem DifferentialItem::operator/(const DifferentialItem& otherItem) const
+Item& DifferentialItem::operator/(const Item& otherItem)
 {
-	DifferentialItem tempItem(*this);
-	if (otherItem.m_nDiffMultiplier == 0)
+	const DifferentialItem& diffItem = static_cast<const DifferentialItem&> (otherItem);
+	if (diffItem.m_nDiffMultiplier == 0)
 	{
 		std::cerr << "Error. Division by zero." << std::endl;
-		return tempItem;
+		return *this;
 	}
 	else
 	{
 		try
 		{
-			BOOST_FOREACH(DifferentialMap::value_type subItem, otherItem.m_Differentials)
+			BOOST_FOREACH(DifferentialMap::value_type subItem, diffItem.m_Differentials)
 			{
-				if (tempItem.m_Differentials.find(subItem.first) != tempItem.m_Differentials.end())
+				if (m_Differentials.find(subItem.first) != m_Differentials.end())
 				{
-					if (tempItem.m_Differentials[subItem.first].second == subItem.second.second)
+					if (m_Differentials[subItem.first].second == subItem.second.second)
 					{
 						// Subtraction of mathematical powers
-						tempItem.m_Differentials[subItem.first].first -= subItem.second.first;
+						m_Differentials[subItem.first].first -= subItem.second.first;
 					}
 					else
 					{
 						// Dividing SimpleItems
-						tempItem.m_Differentials[subItem.first].second /= subItem.second.second;
+						m_Differentials[subItem.first].second /= subItem.second.second;
 					}
 				}
 				else
 				{
 					subItem.second.first *= -1;
-					tempItem.m_Differentials.insert(subItem);
+					m_Differentials.insert(subItem);
 				}
 			}
 		}
 		CATCH_CORE
 	}
 
-	tempItem.m_nDiffMultiplier /= otherItem.m_nDiffMultiplier;
-	if (tempItem.m_nDiffMultiplier == 0)
+	m_nDiffMultiplier /= diffItem.m_nDiffMultiplier;
+	if (m_nDiffMultiplier == 0)
 	{
-		tempItem.m_Differentials.clear();
+		m_Differentials.clear();
 	}
 
-	return tempItem;
+	return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-double DifferentialItem::getMultipliers() const
+double DifferentialItem::getMultiplier() const
 {
-	double nGeneralMultiplier = 1;
-	BOOST_FOREACH(DifferentialMap::value_type subItem, m_Differentials)
-	{
-		nGeneralMultiplier *= subItem.second.second.getMultiplier();
-	}
-
-	return nGeneralMultiplier *= m_nDiffMultiplier;
+	return m_nDiffMultiplier;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -221,14 +246,15 @@ void DifferentialItem::setMultiplier(const double newMultiplier)
 }
 
 ///////////////////////////////////////////////////////////////////////////
-bool DifferentialItem::isDifferentialsEqual(const DifferentialItem& otherItem) const
+bool DifferentialItem::isSubitemsEqual(const Item& otherItem) const
 {
-	if (m_Differentials.size() != otherItem.m_Differentials.size())
+	const DifferentialItem& diffItem = static_cast<const DifferentialItem&> (otherItem);
+	if (m_Differentials.size() != diffItem.m_Differentials.size())
 	{
 		return false;
 	}
 
-	BOOST_FOREACH(DifferentialMap::value_type subItem, otherItem.m_Differentials)
+	BOOST_FOREACH(DifferentialMap::value_type subItem, diffItem.m_Differentials)
 	{
 		DifferentialMap::const_iterator iter = m_Differentials.find(subItem.first);
 		if (iter == m_Differentials.end())
@@ -259,10 +285,10 @@ std::string DifferentialItem::toString() const
 	} else if (m_nDiffMultiplier == 1.0)
 	{
 		if (m_Differentials.empty())
-			strStream << m_nDiffMultiplier;
+			strStream << m_nDiffMultiplier << "*";
 	} else
 	{
-		strStream << m_nDiffMultiplier;
+		strStream << m_nDiffMultiplier << "*";
 	}
 
 	BOOST_FOREACH(DifferentialMap::value_type subItem, m_Differentials)
@@ -273,7 +299,7 @@ std::string DifferentialItem::toString() const
 		if(subItem.second.first != 1.0)
 			strStream << "^" << subItem.second.first;
 
-		strStream << "( " << subItem.second.second.toString() << " ) ";
+		strStream << "( " << subItem.second.second.toString() << " )";
 	}
 
 	return strStream.str();

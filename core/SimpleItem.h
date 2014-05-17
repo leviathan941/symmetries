@@ -48,7 +48,7 @@ public:
 
 	virtual bool isVariablesEqual(const SimpleItem& otherItem) const;
 
-	std::string toString();
+	std::string toString() const;
 
 	void print();
 protected:

@@ -30,6 +30,7 @@ set(CORE_HEADERS
 	Exceptions.h
 	DifferentialItem.h
 	DifferentialExpression.h
+	AffineLieAlgebra.h
 	)
 
 set(CORE_SOURCES
@@ -41,6 +42,7 @@ set(CORE_SOURCES
 	VariablesMap.cpp
 	DifferentialItem.cpp
 	DifferentialExpression.cpp
+	AffineLieAlgebra.cpp
 	)
 
 include_directories(${COMMON_INCLUDE_DIRS})

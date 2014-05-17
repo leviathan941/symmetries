@@ -111,7 +111,7 @@ VariablesType::iterator CVariablesMap::end()
 }
 
 ///////////////////////////////////////////////////////////////////////////
-bool CVariablesMap::empty()
+bool CVariablesMap::empty() const
 {
 	return m_mapInternal.empty();
 }

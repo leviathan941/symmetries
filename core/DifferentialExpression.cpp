@@ -18,6 +18,7 @@
 
 #include "DifferentialExpression.h"
 #include "DifferentialItem.h"
+#include "Exceptions.h"
 
 #include <boost/foreach.hpp>
 #include <sstream>
@@ -77,24 +78,32 @@ bool DifferentialExpression::operator!=(const DifferentialExpression& otherExp) 
 }
 
 ///////////////////////////////////////////////////////////////////////////
-DifferentialExpression DifferentialExpression::operator+(const DifferentialExpression& otherExp) const
+DifferentialExpression& DifferentialExpression::operator+=(const DifferentialExpression& otherExp)
 {
-	DifferentialExpression tempExp(*this);
-	BOOST_FOREACH(DifferentialItem item, otherExp.m_vecItems)
+
+	BOOST_FOREACH(const DifferentialItem& item, otherExp.m_vecItems)
 	{
 		int foundItem = isSimilarItemInExpression(item);
 		if(foundItem >= 0)
 		{
-			tempExp.setItemMultiplier((unsigned)foundItem,
-			m_vecItems[foundItem].getMultipliers() + item.getMultipliers());
+			setItemMultiplier((unsigned)foundItem,
+				m_vecItems[foundItem].getMultiplier() + item.getMultiplier());
 		}
 		else
 		{
-			tempExp.pushItem(item);
+			pushItem(item);
 		}
 	}
 
-	tempExp.findRemoveEmptyItems();
+	findRemoveEmptyItems();
+	return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+DifferentialExpression DifferentialExpression::operator+(const DifferentialExpression& otherExp) const
+{
+	DifferentialExpression tempExp(*this);
+	tempExp += otherExp;
 	return tempExp;
 }
 
@@ -108,13 +117,13 @@ DifferentialExpression DifferentialExpression::operator-(const DifferentialExpre
 		if(foundItem >= 0)
 		{
 			tempExp.setItemMultiplier((unsigned)foundItem,
-				m_vecItems[foundItem].getMultipliers() - item.getMultipliers());
+				m_vecItems[foundItem].getMultiplier() - item.getMultiplier());
 		}
 		else
 		{
 			tempExp.pushItem(item);
 			foundItem = tempExp.isSimilarItemInExpression(item);
-			tempExp.setItemMultiplier((unsigned)foundItem, -item.getMultipliers());
+			tempExp.setItemMultiplier((unsigned)foundItem, -item.getMultiplier());
 		}
 	}
 
@@ -125,17 +134,18 @@ DifferentialExpression DifferentialExpression::operator-(const DifferentialExpre
 ///////////////////////////////////////////////////////////////////////////
 DifferentialExpression DifferentialExpression::operator*(const DifferentialExpression& otherExp) const
 {
-	DifferentialExpression tempExp;
-	BOOST_FOREACH(const DifferentialItem& item, m_vecItems)
+	DifferentialExpression tempExp = otherExp;
+	DifferentialExpression outExp;
+	BOOST_FOREACH(DifferentialItem& item, tempExp.m_vecItems)
 	{
 		BOOST_FOREACH(const DifferentialItem& otherItem, otherExp.m_vecItems)
 		{
-			tempExp.m_vecItems.push_back(item * otherItem);
+			outExp.m_vecItems.push_back(static_cast<DifferentialItem&>(item * otherItem));
 		}
 	}
 
-	tempExp.findRemoveEmptyItems();
-	return tempExp;
+	outExp.findRemoveEmptyItems();
+	return outExp;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -152,7 +162,7 @@ DifferentialExpression DifferentialExpression::operator*(const double nNumber) c
 	DifferentialExpression tempExp(*this);
 	BOOST_FOREACH(DifferentialItem& item, tempExp.m_vecItems)
 	{
-		item.setMultiplier(item.getMultipliers() * nNumber);
+		item.setMultiplier(item.getMultiplier() * nNumber);
 	}
 
 	tempExp.findRemoveEmptyItems();
@@ -165,14 +175,25 @@ DifferentialExpression DifferentialExpression::operator/(const double nNumber) c
 	DifferentialExpression tempExp(*this);
 	BOOST_FOREACH(DifferentialItem& item, tempExp.m_vecItems)
 	{
-		item.setMultiplier(item.getMultipliers() / nNumber);
+		item.setMultiplier(item.getMultiplier() / nNumber);
 	}
 
 	return tempExp;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void DifferentialExpression::setItemMultiplier(const unsigned nItemPosition, const double nNewMultiplier)
+const DifferentialItem& DifferentialExpression::getItem(unsigned nItemPosition) const
+{
+	if (nItemPosition >= m_vecItems.size())
+	{
+		throw coreException("No such element");
+	}
+	return m_vecItems[nItemPosition];
+}
+
+///////////////////////////////////////////////////////////////////////////
+void DifferentialExpression::setItemMultiplier(const unsigned nItemPosition,
+	const double nNewMultiplier)
 {
 	m_vecItems[nItemPosition].setMultiplier(nNewMultiplier);
 }
@@ -182,7 +203,7 @@ int DifferentialExpression::isSimilarItemInExpression(const DifferentialItem &it
 {
 	for(int i = 0; i < m_vecItems.size(); ++i)
 	{
-		if(item.isDifferentialsEqual(m_vecItems[i]))
+		if(item.isSubitemsEqual(m_vecItems[i]))
 		{
 			return i;
 		}
@@ -215,7 +236,7 @@ void DifferentialExpression::clear()
 }
 
 ///////////////////////////////////////////////////////////////////////////
-std::string DifferentialExpression::toString()
+std::string DifferentialExpression::toString() const
 {
 	std::stringstream strStream;
 
@@ -223,7 +244,7 @@ std::string DifferentialExpression::toString()
 	{
 		strStream << m_vecItems[i].toString();
 		if(i != m_vecItems.size() - 1)
-			strStream << "+";
+			strStream << " + ";
 	}
 
 	if (strStream.str().empty())
@@ -246,7 +267,7 @@ void DifferentialExpression::findRemoveEmptyItems()
 	auto pend = std::remove_if(m_vecItems.begin(), m_vecItems.end(),
 		[](const DifferentialItem &item)
 		{
-			return (item.getMultipliers() == 0);
+			return (item.getMultiplier() == 0);
 		});
 	m_vecItems.erase(pend, m_vecItems.end());
 }

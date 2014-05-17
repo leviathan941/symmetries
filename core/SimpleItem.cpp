@@ -245,7 +245,7 @@ bool SimpleItem::isVariablesEqual(const SimpleItem& otherItem) const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-std::string SimpleItem::toString()
+std::string SimpleItem::toString() const
 {
 	std::stringstream strStream;
 
@@ -261,7 +261,8 @@ std::string SimpleItem::toString()
 		strStream << m_nMultiplier;
 	}
 
-	for(VariablesType::const_iterator iter = m_Variables.begin(); iter != m_Variables.end(); ++iter)
+	for(VariablesType::const_iterator iter = m_Variables.begin();
+		iter != m_Variables.end(); ++iter)
 	{
 		if(!iter->first.empty())
 			strStream << iter->first;

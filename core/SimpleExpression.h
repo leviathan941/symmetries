@@ -39,7 +39,17 @@ public:
 
 	SimpleExpression operator+(const SimpleExpression& otherExp) const;
 	SimpleExpression operator-(const SimpleExpression& otherExp) const;
+
+	SimpleExpression& operator*=(const SimpleExpression& otherExp);
 	SimpleExpression operator*(const SimpleExpression& otherExp) const;
+
+	SimpleExpression& operator*=(const SimpleItem& sepItem);
+	SimpleExpression operator*(const SimpleItem& sepItem) const;
+
+	SimpleExpression& operator/=(const SimpleItem& sepItem);
+	SimpleExpression operator/(const SimpleItem& sepItem) const;
+
+	SimpleExpression& operator/=(const SimpleExpression& otherExp);
 	SimpleExpression operator/(const SimpleExpression& otherExp) const;
 
 	SimpleExpression operator*(const double nNumber) const;

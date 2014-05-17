@@ -37,6 +37,7 @@ public:
 	virtual bool operator==(const DifferentialExpression& otherExp) const;
 	virtual bool operator!=(const DifferentialExpression& otherExp) const;
 
+	DifferentialExpression& operator+=(const DifferentialExpression& otherExp);
 	DifferentialExpression operator+(const DifferentialExpression& otherExp) const;
 	DifferentialExpression operator-(const DifferentialExpression& otherExp) const;
 	DifferentialExpression operator*(const DifferentialExpression& otherExp) const;
@@ -45,13 +46,14 @@ public:
 	DifferentialExpression operator*(const double nNumber) const;
 	DifferentialExpression operator/(const double nNumber) const;
 
+	const DifferentialItem& getItem(unsigned nItemPosition) const;
 	void setItemMultiplier(const unsigned nItemPosition, const double nNewMultiplier);
 	int isSimilarItemInExpression(const DifferentialItem& item) const;
 	void pushItem(const DifferentialItem& newItem);
 	void eraseItem(const unsigned nPosition);
 	bool isEmpty();
 	void clear();
-	std::string toString();
+	std::string toString() const;
 	void print();
 
 private:

@@ -23,9 +23,10 @@
 #include "FileReader.h"
 #include "AffineConnection.h"
 #include "SimpleItem.h"
+#include "AffineLieAlgebra.h"
 #include "MainWindow.h"
 
-void calcTestConst2DAffine()
+AffineConnection getTest2DConstAffine()
 {
 	using namespace boost::numeric::ublas;
 
@@ -77,8 +78,13 @@ void calcTestConst2DAffine()
 	AffineConnection affine;
 	affine.setMetricTensor(metricTensor);
 	affine.setTorsionTensor(torsionTensor);
-	std::cout << "calculateChristoffelSymbols" << std::endl;
 	affine.calculateChristoffelSymbols();
+	return affine;
+}
+
+void calcTestConst2DAffine()
+{
+	AffineConnection affine = getTest2DConstAffine();
 	std::cout << "printChristoffelSymbols" << std::endl;
 	affine.printChristoffelSymbols();
 
@@ -318,10 +324,22 @@ void calcTestConst4DAffine()
 	affine.printChristoffelSymbols();
 }
 
+void testAffine2DLieAlgebra()
+{
+	AffineConnection affine = getTest2DConstAffine();
+	std::cout << "printChristoffelSymbols" << std::endl;
+	affine.printChristoffelSymbols();
+
+	AffineLieAlgebra lieAlgebra(affine);
+	lieAlgebra.buildLieAlgebra();
+	lieAlgebra.printLieSystem();
+}
+
 int main(int argc, char *argv[])
 {
-	calcTestConst2DAffine();
+	//calcTestConst2DAffine();
 	//calcTestConst4DAffine();
+	testAffine2DLieAlgebra();
 
 	//QApplication app(argc, argv);
 	//MainWindow window;

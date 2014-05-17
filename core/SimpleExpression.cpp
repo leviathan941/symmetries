@@ -84,11 +84,11 @@ SimpleExpression SimpleExpression::operator+(const SimpleExpression& otherExp) c
 	SimpleExpression tempExp(*this);
 	BOOST_FOREACH(SimpleItem item, otherExp.m_vecItems)
 	{
-		int foundItem = isSimilarItemInExpression(item);
+		int foundItem = tempExp.isSimilarItemInExpression(item);
 		if(foundItem >= 0)
 		{
-			tempExp.setItemMultiplier((unsigned)isSimilarItemInExpression(item),
-			m_vecItems[foundItem].getMultiplier() + item.getMultiplier());
+			tempExp.setItemMultiplier((unsigned)foundItem,
+				m_vecItems[foundItem].getMultiplier() + item.getMultiplier());
 		}
 		else
 		{
@@ -106,7 +106,7 @@ SimpleExpression SimpleExpression::operator-(const SimpleExpression& otherExp) c
 	SimpleExpression tempExp(*this);
 	BOOST_FOREACH(SimpleItem item, otherExp.m_vecItems)
 	{
-		int foundItem = isSimilarItemInExpression(item);
+		int foundItem = tempExp.isSimilarItemInExpression(item);
 		if(foundItem >= 0)
 		{
 			tempExp.setItemMultiplier((unsigned)foundItem,
@@ -125,27 +125,81 @@ SimpleExpression SimpleExpression::operator-(const SimpleExpression& otherExp) c
 }
 
 ///////////////////////////////////////////////////////////////////////////
-SimpleExpression SimpleExpression::operator*(const SimpleExpression& otherExp) const
+SimpleExpression& SimpleExpression::operator*=(const SimpleExpression& otherExp)
 {
-	SimpleExpression tempExp;
-	BOOST_FOREACH(const SimpleItem& item, m_vecItems)
+	SimpleExpression tempExp(*this);
+	m_vecItems.clear();
+	BOOST_FOREACH(const SimpleItem& item, tempExp.m_vecItems)
 	{
-		BOOST_FOREACH(SimpleItem otherItem, otherExp.m_vecItems)
+		BOOST_FOREACH(const SimpleItem& otherItem, otherExp.m_vecItems)
 		{
-			tempExp.m_vecItems.push_back(item * otherItem);
+			m_vecItems.push_back(item * otherItem);
 		}
 	}
 
-	tempExp.findRemoveEmptyItems();
+	findRemoveEmptyItems();
+	return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+SimpleExpression SimpleExpression::operator*(const SimpleExpression& otherExp) const
+{
+	SimpleExpression tempExp(*this);
+	tempExp *= otherExp;
 	return tempExp;
+}
+
+///////////////////////////////////////////////////////////////////////////
+SimpleExpression& SimpleExpression::operator*=(const SimpleItem& sepItem)
+{
+	BOOST_FOREACH(SimpleItem& item, m_vecItems)
+	{
+		item *= sepItem;
+	}
+	return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+SimpleExpression SimpleExpression::operator*(const SimpleItem& sepItem) const
+{
+	SimpleExpression tempExp(*this);
+	tempExp *= sepItem;
+	return tempExp;
+}
+
+///////////////////////////////////////////////////////////////////////////
+SimpleExpression& SimpleExpression::operator/=(const SimpleItem& sepItem)
+{
+	BOOST_FOREACH(SimpleItem& item, m_vecItems)
+	{
+		item /= sepItem;
+	}
+	return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+SimpleExpression SimpleExpression::operator/(const SimpleItem& sepItem) const
+{
+	SimpleExpression tempExp(*this);
+	tempExp /= sepItem;
+	return tempExp;
+}
+
+///////////////////////////////////////////////////////////////////////////
+SimpleExpression& SimpleExpression::operator/=(const SimpleExpression& otherExp)
+{
+	//Placeholder
+	std::cout << "It isn't implemented yet." << std::endl;
+	findRemoveEmptyItems();
+	return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
 SimpleExpression SimpleExpression::operator/(const SimpleExpression& otherExp) const
 {
-	//Placeholder
-	std::cout << "It isn't implemented yet." << std::endl;
-	return *this;
+	SimpleExpression tempExp(*this);
+	tempExp /= otherExp;
+	return tempExp;
 }
 
 ///////////////////////////////////////////////////////////////////////////

@@ -18,6 +18,7 @@
 
 
 #include "MatrixVectorExp.h"
+#include "Exceptions.h"
 
 #include <sstream>
 
@@ -80,11 +81,13 @@ const unsigned nColumn)
 	//	std:: cout << m_content.getVectorSize() << " " << m_content.getMatrixRowSize() <<
 	//		" " << m_content.getMatrixColumnSize() << std::endl;
 	if(!(nPosition < m_content.getVectorSize() &&
-	nRow < m_content.getMatrixRowSize() &&
-	nColumn < m_content.getMatrixColumnSize())
+		nRow < m_content.getMatrixRowSize() &&
+		nColumn < m_content.getMatrixColumnSize())
 	)
 	{
-		std::cout << "No such element" << std::endl;
+		std::cout << "No such element: (" << nPosition << ", " << nRow << ", " << nColumn
+			<< ")" << std::endl;
+		throw coreException("No such element in MatrixVectorExp");
 	}
 	return m_content(nPosition, nRow, nColumn);
 }

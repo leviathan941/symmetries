@@ -42,7 +42,7 @@ public:
 	VariablesType::const_iterator begin() const;
 	VariablesType::iterator end();
 	VariablesType::const_iterator end() const;
-	bool empty();
+	bool empty() const;
 	std::pair<VariablesType::iterator, bool> insert(const std::pair<std::string, double>& mapElement);
 	void erase(VariablesType::iterator position);
 	void erase(const std::string& key);
