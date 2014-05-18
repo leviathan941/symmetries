@@ -94,7 +94,7 @@ DifferentialItem::~DifferentialItem()
 ///////////////////////////////////////////////////////////////////////////
 Item& DifferentialItem::operator=(const Item& otherItem)
 {
-	if (*this != otherItem)
+	if (this != &otherItem)
 	{
 		const DifferentialItem& diffItem = static_cast<const DifferentialItem&> (otherItem);
 		m_Differentials = diffItem.m_Differentials;
@@ -106,7 +106,7 @@ Item& DifferentialItem::operator=(const Item& otherItem)
 ///////////////////////////////////////////////////////////////////////////
 DifferentialItem& DifferentialItem::operator=(const DifferentialItem& otherItem)
 {
-	if (*this != otherItem)
+	if (this != &otherItem)
 	{
 		m_Differentials = otherItem.m_Differentials;
 		m_nDiffMultiplier = otherItem.m_nDiffMultiplier;
@@ -264,7 +264,7 @@ bool DifferentialItem::isSubitemsEqual(const Item& otherItem) const
 		else
 		{
 			if (iter->second.first != subItem.second.first
-				|| !iter->second.second.isVariablesEqual(subItem.second.second))
+				|| !iter->second.second.isSubitemsEqual(subItem.second.second))
 			{
 				return false;
 			}

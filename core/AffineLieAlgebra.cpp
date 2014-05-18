@@ -54,7 +54,8 @@ void AffineLieAlgebra::buildLieAlgebra()
 					BOOST_FOREACH(const SimpleItem& christItem, christoffels(k, s, j)
 						.getVectorItems())
 					{
-						expDiXsGksj.pushItem(DifferentialItem(christItem * simpleItem1,
+						expDiXsGksj.pushItem(DifferentialItem(
+							static_cast<const SimpleItem&>(simpleItem1 * christItem),
 							createDiffIndex(1, i + 1), 1, 1));
 					}
 					std::cout << "expDiXsGksj = " << expDiXsGksj.toString() << std::endl;
@@ -64,7 +65,8 @@ void AffineLieAlgebra::buildLieAlgebra()
 					BOOST_FOREACH(const SimpleItem& christItem, christoffels(k, i, s)
 						.getVectorItems())
 					{
-						expDjXsGkis.pushItem(DifferentialItem(christItem * simpleItem2,
+						expDjXsGkis.pushItem(DifferentialItem(
+							static_cast<const SimpleItem&>(simpleItem2 * christItem),
 							createDiffIndex(1, j + 1), 1, 1));
 					}
 					std::cout << "expDjXsGkis = " << expDjXsGkis.toString() << std::endl;
@@ -74,7 +76,8 @@ void AffineLieAlgebra::buildLieAlgebra()
 					BOOST_FOREACH(const SimpleItem& christItem, christoffels(s, i, j)
 						.getVectorItems())
 					{
-						expDsXkGsij.pushItem(DifferentialItem(christItem * simpleItem3,
+						expDsXkGsij.pushItem(DifferentialItem(
+							static_cast<const SimpleItem&>(simpleItem3 * christItem),
 							createDiffIndex(1, s + 1), 1, -1));
 					}
 					std::cout << "expDsXkGsij = " << expDsXkGsij.toString() << std::endl;

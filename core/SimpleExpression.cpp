@@ -66,7 +66,7 @@ bool SimpleExpression::operator==(const SimpleExpression& otherExp) const
 
 	for(unsigned i = 0; i < m_vecItems.size(); ++i)
 	{
-		if(m_vecItems[i] != otherExp.m_vecItems[i])
+		if((Item&)m_vecItems[i] != (Item&)otherExp.m_vecItems[i])
 			return false;
 	}
 	return true;
@@ -129,11 +129,11 @@ SimpleExpression& SimpleExpression::operator*=(const SimpleExpression& otherExp)
 {
 	SimpleExpression tempExp(*this);
 	m_vecItems.clear();
-	BOOST_FOREACH(const SimpleItem& item, tempExp.m_vecItems)
+	BOOST_FOREACH(SimpleItem& item, tempExp.m_vecItems)
 	{
 		BOOST_FOREACH(const SimpleItem& otherItem, otherExp.m_vecItems)
 		{
-			m_vecItems.push_back(item * otherItem);
+			m_vecItems.push_back(static_cast<const SimpleItem&>(item * otherItem));
 		}
 	}
 
@@ -250,7 +250,7 @@ int SimpleExpression::isSimilarItemInExpression(const SimpleItem& item) const
 {
 	for(int i = 0; i < m_vecItems.size(); ++i)
 	{
-		if(item.isVariablesEqual(m_vecItems[i]))
+		if(item.isSubitemsEqual((Item&)m_vecItems[i]))
 		{
 			return i;
 		}

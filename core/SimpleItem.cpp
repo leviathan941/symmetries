@@ -66,6 +66,18 @@ SimpleItem::~SimpleItem()
 }
 
 ///////////////////////////////////////////////////////////////////////////
+Item& SimpleItem::operator=(const Item& otherItem)
+{
+	if(&otherItem != this)
+	{
+		const SimpleItem& simple = static_cast<const SimpleItem&>(otherItem);
+		m_Variables = simple.m_Variables;
+		m_nMultiplier = simple.m_nMultiplier;
+	}
+	return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
 SimpleItem& SimpleItem::operator=(const SimpleItem& otherItem)
 {
 	if(&otherItem != this)
@@ -77,9 +89,9 @@ SimpleItem& SimpleItem::operator=(const SimpleItem& otherItem)
 }
 
 ///////////////////////////////////////////////////////////////////////////
-bool SimpleItem::operator==(const SimpleItem& otherItem) const
+bool SimpleItem::operator==(const Item& otherItem) const
 {
-	if((m_nMultiplier != otherItem.getMultiplier()) || !isVariablesEqual(otherItem))
+	if((m_nMultiplier != otherItem.getMultiplier()) || !isSubitemsEqual(otherItem))
 	{
 		return false;
 	}
@@ -87,9 +99,9 @@ bool SimpleItem::operator==(const SimpleItem& otherItem) const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-bool SimpleItem::operator!=(const SimpleItem& otherItem) const
+bool SimpleItem::operator!=(const Item& otherItem) const
 {
-	if((m_nMultiplier != otherItem.getMultiplier()) || !isVariablesEqual(otherItem))
+	if((m_nMultiplier != otherItem.getMultiplier()) || !isSubitemsEqual(otherItem))
 	{
 		return true;
 	}
@@ -97,11 +109,12 @@ bool SimpleItem::operator!=(const SimpleItem& otherItem) const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-SimpleItem& SimpleItem::operator*=(const SimpleItem& otherItem)
+Item& SimpleItem::operator*=(const Item& otherItem)
 {
+	const SimpleItem& simple = static_cast<const SimpleItem&>(otherItem);
 	try
 	{
-		BOOST_FOREACH(VariablesType::value_type mapElement, otherItem.m_Variables.getInternalMap())
+		BOOST_FOREACH(VariablesType::value_type mapElement, simple.m_Variables.getInternalMap())
 		{
 			if(m_Variables.find(mapElement.first) != m_Variables.end())
 			{
@@ -119,7 +132,7 @@ SimpleItem& SimpleItem::operator*=(const SimpleItem& otherItem)
 	}
 	CATCH_CORE
 
-	m_nMultiplier *= otherItem.m_nMultiplier;
+	m_nMultiplier *= simple.m_nMultiplier;
 	if(m_nMultiplier == 0)
 	{
 		m_Variables.clear();
@@ -129,16 +142,16 @@ SimpleItem& SimpleItem::operator*=(const SimpleItem& otherItem)
 }
 
 ///////////////////////////////////////////////////////////////////////////
-SimpleItem SimpleItem::operator*(const SimpleItem& otherItem) const
+Item& SimpleItem::operator*(const Item& otherItem)
 {
-	SimpleItem tempItem(*this);
-	return tempItem *= otherItem;
+	return (*this) *= otherItem;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-SimpleItem& SimpleItem::operator/=(const SimpleItem& otherItem)
+Item& SimpleItem::operator/=(const Item& otherItem)
 {
-	if(otherItem.m_nMultiplier == 0)
+	const SimpleItem& simple = static_cast<const SimpleItem&>(otherItem);
+	if(simple.m_nMultiplier == 0)
 	{
 		std::cerr << "Error. Division by zero." << std::endl;
 		return *this;
@@ -147,7 +160,7 @@ SimpleItem& SimpleItem::operator/=(const SimpleItem& otherItem)
 	{
 		try
 		{
-			BOOST_FOREACH(VariablesType::value_type mapElement, otherItem.m_Variables.getInternalMap())
+			BOOST_FOREACH(VariablesType::value_type mapElement, simple.m_Variables.getInternalMap())
 			{
 				if(m_Variables.find(mapElement.first) != m_Variables.end())
 				{
@@ -168,7 +181,7 @@ SimpleItem& SimpleItem::operator/=(const SimpleItem& otherItem)
 		}
 		CATCH_CORE
 
-		m_nMultiplier /= otherItem.m_nMultiplier;
+		m_nMultiplier /= simple.m_nMultiplier;
 		if(m_nMultiplier == 0)
 		{
 			m_Variables.clear();
@@ -179,10 +192,9 @@ SimpleItem& SimpleItem::operator/=(const SimpleItem& otherItem)
 }
 
 ///////////////////////////////////////////////////////////////////////////
-SimpleItem SimpleItem::operator/(const SimpleItem& otherItem) const
+Item& SimpleItem::operator/(const Item& otherItem)
 {
-	SimpleItem tempItem(*this);
-	return tempItem /= otherItem;
+	return (*this) /= otherItem;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -226,9 +238,10 @@ void SimpleItem::setVariablePower(const std::string sVariable, const double nPow
 }
 
 ///////////////////////////////////////////////////////////////////////////
-bool SimpleItem::isVariablesEqual(const SimpleItem& otherItem) const
+bool SimpleItem::isSubitemsEqual(const Item& otherItem) const
 {
-	if(m_Variables.size() != otherItem.m_Variables.size())
+	const SimpleItem& simple = static_cast<const SimpleItem&>(otherItem);
+	if(m_Variables.size() != simple.m_Variables.size())
 	{
 		return false;
 	}
@@ -236,8 +249,8 @@ bool SimpleItem::isVariablesEqual(const SimpleItem& otherItem) const
 	for(VariablesType::const_iterator i = m_Variables.begin();
 		i != m_Variables.end(); ++i)
 	{
-		if (otherItem.m_Variables.find(i->first) == otherItem.m_Variables.end()
-				|| i->second != otherItem.m_Variables.at(i->first))
+		if (simple.m_Variables.find(i->first) == simple.m_Variables.end()
+				|| i->second != simple.m_Variables.at(i->first))
 			return false;
 	}
 

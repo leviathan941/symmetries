@@ -19,11 +19,13 @@
 #ifndef SIMPLE_ITEM_H
 #define SIMPLE_ITEM_H
 
+#include "VariablesMap.h"
+#include "Item.h"
+
 #include <string>
 #include <map>
-#include "VariablesMap.h"
 
-class SimpleItem
+class SimpleItem : public Item
 {
 public:
 	SimpleItem();
@@ -31,14 +33,15 @@ public:
 	SimpleItem(std::string strVar, double nVarPower, double nMultiplier);
 	SimpleItem(const SimpleItem& otherItem);
 	virtual ~SimpleItem();
+	virtual Item& operator=(const Item& otherItem);
 	virtual SimpleItem& operator=(const SimpleItem& otherItem);
-	virtual bool operator==(const SimpleItem& otherItem) const;
-	virtual bool operator!=(const SimpleItem& otherItem) const;
+	virtual bool operator==(const Item& otherItem) const;
+	virtual bool operator!=(const Item& otherItem) const;
 
-	virtual SimpleItem& operator*=(const SimpleItem& otherItem);
-	virtual SimpleItem operator*(const SimpleItem& otherItem) const;
-	virtual SimpleItem& operator/=(const SimpleItem& otherItem);
-	virtual SimpleItem operator/(const SimpleItem& otherItem) const;
+	virtual Item& operator*=(const Item& otherItem);
+	virtual Item& operator*(const Item& otherItem);
+	virtual Item& operator/=(const Item& otherItem);
+	virtual Item& operator/(const Item& otherItem);
 
 	virtual double getMultiplier() const;
 	virtual void setMultiplier(const double newMultiplier);
@@ -46,7 +49,7 @@ public:
 	VariablesType getVariables() const;
 	void setVariablePower(const std::string sVariable, const double nPower);
 
-	virtual bool isVariablesEqual(const SimpleItem& otherItem) const;
+	virtual bool isSubitemsEqual(const Item& otherItem) const;
 
 	std::string toString() const;
 
