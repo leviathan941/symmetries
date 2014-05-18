@@ -80,7 +80,6 @@ bool DifferentialExpression::operator!=(const DifferentialExpression& otherExp) 
 ///////////////////////////////////////////////////////////////////////////
 DifferentialExpression& DifferentialExpression::operator+=(const DifferentialExpression& otherExp)
 {
-
 	BOOST_FOREACH(const DifferentialItem& item, otherExp.m_vecItems)
 	{
 		int foundItem = isSimilarItemInExpression(item);

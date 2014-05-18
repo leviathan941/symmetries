@@ -140,7 +140,7 @@ bool DifferentialItem::operator!=(const Item& otherItem) const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Item& DifferentialItem::operator*(const Item& otherItem)
+Item& DifferentialItem::operator*=(const Item& otherItem)
 {
 	const DifferentialItem& diffItem = static_cast<const DifferentialItem&> (otherItem);
 	try
@@ -178,7 +178,13 @@ Item& DifferentialItem::operator*(const Item& otherItem)
 }
 
 ///////////////////////////////////////////////////////////////////////////
-Item& DifferentialItem::operator/(const Item& otherItem)
+Item& DifferentialItem::operator*(const Item& otherItem)
+{
+	return (*this) *= otherItem;
+}
+
+///////////////////////////////////////////////////////////////////////////
+Item& DifferentialItem::operator/=(const Item& otherItem)
 {
 	const DifferentialItem& diffItem = static_cast<const DifferentialItem&> (otherItem);
 	if (diffItem.m_nDiffMultiplier == 0)
@@ -222,6 +228,12 @@ Item& DifferentialItem::operator/(const Item& otherItem)
 	}
 
 	return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+Item& DifferentialItem::operator/(const Item& otherItem)
+{
+	return (*this) /= otherItem;
 }
 
 ///////////////////////////////////////////////////////////////////////////

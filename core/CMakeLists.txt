@@ -23,7 +23,7 @@ set(CORE_HEADERS
 	AffineConnection.h
 	MatrixVectorExp.h
 	SimpleExpression.h
-	Equation.h
+	DifferentialEquation.h
 	SimpleItem.h
 	MatrixVector.h
 	VariablesMap.h
@@ -37,7 +37,7 @@ set(CORE_SOURCES
 	AffineConnection.cpp
 	MatrixVectorExp.cpp
 	SimpleExpression.cpp
-	Equation.cpp
+	DifferentialEquation.cpp
 	SimpleItem.cpp
 	VariablesMap.cpp
 	DifferentialItem.cpp

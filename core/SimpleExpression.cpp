@@ -66,7 +66,7 @@ bool SimpleExpression::operator==(const SimpleExpression& otherExp) const
 
 	for(unsigned i = 0; i < m_vecItems.size(); ++i)
 	{
-		if((Item&)m_vecItems[i] != (Item&)otherExp.m_vecItems[i])
+		if(m_vecItems[i] != otherExp.m_vecItems[i])
 			return false;
 	}
 	return true;
@@ -250,7 +250,7 @@ int SimpleExpression::isSimilarItemInExpression(const SimpleItem& item) const
 {
 	for(int i = 0; i < m_vecItems.size(); ++i)
 	{
-		if(item.isSubitemsEqual((Item&)m_vecItems[i]))
+		if(item.isSubitemsEqual(m_vecItems[i]))
 		{
 			return i;
 		}

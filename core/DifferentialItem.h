@@ -45,7 +45,9 @@ public:
 	virtual bool operator==(const Item& otherItem) const;
 	virtual bool operator!=(const Item& otherItem) const;
 
+	virtual Item& operator*=(const Item& otherItem);
 	virtual Item& operator*(const Item& otherItem);
+	virtual Item& operator/=(const Item& otherItem);
 	virtual Item& operator/(const Item& otherItem);
 
 	virtual double getMultiplier() const;

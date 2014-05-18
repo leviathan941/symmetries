@@ -86,14 +86,17 @@ void AffineLieAlgebra::buildLieAlgebra()
 
 					tempExp += expDiXsGksj + expDjXsGkis + expDsXkGsij;
 				}
-				m_vecLieSystem.push_back(tempExp);
+
+				DifferentialExpression zeroExp;
+				DifferentialEquation tempEquation(tempExp, zeroExp);
+				m_vecLieSystem.push_back(tempEquation);
 			}
 		}
 	}
 }
 
 ///////////////////////////////////////////////////////////////////////////
-const std::vector<DifferentialExpression>& AffineLieAlgebra::getLieSystem() const
+const std::vector<DifferentialEquation>& AffineLieAlgebra::getLieSystem() const
 {
 	return m_vecLieSystem;
 }
@@ -101,9 +104,9 @@ const std::vector<DifferentialExpression>& AffineLieAlgebra::getLieSystem() cons
 ///////////////////////////////////////////////////////////////////////////
 void AffineLieAlgebra::printLieSystem() const
 {
-	BOOST_FOREACH(const DifferentialExpression& exp, m_vecLieSystem)
+	BOOST_FOREACH(const DifferentialEquation& equation, m_vecLieSystem)
 	{
-		std::cout << exp.toString() << std::endl;
+		std::cout << equation.toString() << std::endl;
 	}
 }
 

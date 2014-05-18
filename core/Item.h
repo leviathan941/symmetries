@@ -25,11 +25,14 @@
 class Item
 {
 public:
+	virtual ~Item() {}
 	virtual Item& operator=(const Item& otherItem) = 0;
 	virtual bool operator==(const Item& otherItem) const = 0;
 	virtual bool operator!=(const Item& otherItem) const = 0;
 
+	virtual Item& operator*=(const Item& otherItem) = 0;
 	virtual Item& operator*(const Item& otherItem) = 0;
+	virtual Item& operator/=(const Item& otherItem) = 0;
 	virtual Item& operator/(const Item& otherItem) = 0;
 
 	virtual double getMultiplier() const = 0;

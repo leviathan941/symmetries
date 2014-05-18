@@ -21,7 +21,7 @@
 #define AFFINE_LIE_ALGEBRA_H
 
 #include "AffineConnection.h"
-#include "DifferentialExpression.h"
+#include "DifferentialEquation.h"
 
 class AffineLieAlgebra
 {
@@ -29,7 +29,7 @@ public:
 	AffineLieAlgebra(const AffineConnection& connection);
 
 	void buildLieAlgebra();
-	const std::vector<DifferentialExpression> &getLieSystem() const;
+	const std::vector<DifferentialEquation> &getLieSystem() const;
 
 	void printLieSystem() const;
 
@@ -39,7 +39,7 @@ private:
 	std::string createDiffIndex(unsigned count, ...);
 
 	AffineConnection m_affineConnection;
-	std::vector<DifferentialExpression> m_vecLieSystem;
+	std::vector<DifferentialEquation> m_vecLieSystem;
 };
 
 #endif // AFFINE_LIE_ALGEBRA_H

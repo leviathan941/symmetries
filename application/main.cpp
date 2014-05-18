@@ -332,6 +332,7 @@ void testAffine2DLieAlgebra()
 
 	AffineLieAlgebra lieAlgebra(affine);
 	lieAlgebra.buildLieAlgebra();
+	std::cout << "print Lie algebra" << std::endl;
 	lieAlgebra.printLieSystem();
 }
 
