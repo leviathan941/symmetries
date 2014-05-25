@@ -27,7 +27,11 @@
 #define BUTTON_WIDTH 24
 #define BUTTON_HEIGHT 24
 #define WIDGET_VERTICAL_SPACING 5
+#ifdef __APPLE__
 #define BUTTONS_HORIZONTAL_SPACING 12
+#else
+#define BUTTONS_HORIZONTAL_SPACING 0
+#endif
 
 TensorListWidget::TensorListWidget(QWidget *parent) :
 	QWidget(parent)

@@ -23,6 +23,7 @@
 #include <boost/foreach.hpp>
 #include <sstream>
 #include <iostream>
+#include <algorithm>
 
 ///////////////////////////////////////////////////////////////////////////
 DifferentialExpression::DifferentialExpression() : m_vecItems()
