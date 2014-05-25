@@ -340,12 +340,12 @@ int main(int argc, char *argv[])
 {
 	//calcTestConst2DAffine();
 	//calcTestConst4DAffine();
-	testAffine2DLieAlgebra();
+	//testAffine2DLieAlgebra();
 
-	//QApplication app(argc, argv);
-	//MainWindow window;
-	//window.show();
-	//app.exec();
+	QApplication app(argc, argv);
+	MainWindow window;
+	window.show();
+	app.exec();
 
 	return 0;
 }

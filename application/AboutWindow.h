@@ -16,43 +16,18 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
 
-#include <QMainWindow>
+#ifndef ABOUT_WINDOW_H
+#define ABOUT_WINDOW_H
 
-class QMenuBar;
-class QMenu;
-class QAction;
+#include <QDialog>
 
-class AboutWindow;
-class TensorListWidget;
-class OutputViewWidget;
-
-class MainWindow : public QMainWindow
+class AboutWindow : public QDialog
 {
 	Q_OBJECT
 public:
-	explicit MainWindow(QWidget *parent = 0);
+	explicit AboutWindow(QWidget *parent = 0);
 
-private:
-	// Fields
-	QMenuBar* m_menuBar;
-
-	QAction* m_actionImport;
-	QAction* m_actionAbout;
-
-	QWidget* m_centralWidget;
-
-	AboutWindow* m_aboutWindow;
-	TensorListWidget* m_tensorListWidget;
-	OutputViewWidget* m_outputViewWidget;
-
-	// Methods
-	void createMenuBar();
-
-private slots:
-	void onActionAboutTriggered(bool bChecked);
 };
 
-#endif // MAINWINDOW_H
+#endif // ABOUT_WINDOW_H

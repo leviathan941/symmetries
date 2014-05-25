@@ -16,9 +16,65 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
 #include "MainWindow.h"
+#include "AboutWindow.h"
+#include "TensorListWidget.h"
+#include "OutputViewWidget.h"
+// Qt
+#include <QMenuBar>
+#include <QAction>
+#include <QDialog>
+#include <QHBoxLayout>
+
+#define MINIMUM_WIDTH 800
+#define MINIMUM_HEIGHT 600
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent)
 {
+	createMenuBar();
+
+	m_aboutWindow = new AboutWindow(this);
+	m_tensorListWidget = new TensorListWidget(this);
+	m_outputViewWidget = new OutputViewWidget(this);
+
+	QHBoxLayout* mainLayout = new QHBoxLayout;
+	mainLayout->addWidget(m_tensorListWidget, 0, Qt::AlignLeft);
+	mainLayout->addWidget(m_outputViewWidget, 1, Qt::AlignRight);
+
+	m_centralWidget = new QWidget(this);
+	m_centralWidget->setLayout(mainLayout);
+
+	setMinimumSize(QSize(MINIMUM_WIDTH, MINIMUM_HEIGHT));
+	setObjectName(QString("MainWindow"));
+	setCentralWidget(m_centralWidget);
+}
+
+///////////////////////////////////////////////////////////////////////////
+void MainWindow::createMenuBar()
+{
+	m_menuBar = new QMenuBar(this);
+
+	QMenu* fileMenu = m_menuBar->addMenu(tr("&File"));
+	QMenu* helpMenu = m_menuBar->addMenu(tr("&Help"));
+
+	m_actionAbout = new QAction(tr("About"), this);
+	m_actionAbout->setMenuRole(QAction::AboutQtRole);
+	helpMenu->addAction(m_actionAbout);
+
+	m_actionImport = new QAction(tr("Import"), this);
+	m_actionImport->setMenuRole(QAction::NoRole);
+	fileMenu->addAction(m_actionImport);
+
+	m_menuBar->setNativeMenuBar(true);
+	setMenuBar(m_menuBar);
+
+	connect(m_actionAbout, SIGNAL(triggered(bool)), this, SLOT(onActionAboutTriggered(bool)));
+}
+
+///////////////////////////////////////////////////////////////////////////
+void MainWindow::onActionAboutTriggered(bool bChecked)
+{
+	m_aboutWindow->show();
 }

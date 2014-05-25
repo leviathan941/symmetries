@@ -16,43 +16,29 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
 
-#include <QMainWindow>
+#ifndef TENSOR_LIST_WIDGET_H
+#define TENSOR_LIST_WIDGET_H
 
-class QMenuBar;
-class QMenu;
-class QAction;
+#include <QWidget>
 
-class AboutWindow;
-class TensorListWidget;
-class OutputViewWidget;
+class QListWidget;
+class QPushButton;
 
-class MainWindow : public QMainWindow
+class TensorListWidget : public QWidget
 {
 	Q_OBJECT
 public:
-	explicit MainWindow(QWidget *parent = 0);
+	explicit TensorListWidget(QWidget *parent = 0);
 
 private:
-	// Fields
-	QMenuBar* m_menuBar;
-
-	QAction* m_actionImport;
-	QAction* m_actionAbout;
-
-	QWidget* m_centralWidget;
-
-	AboutWindow* m_aboutWindow;
-	TensorListWidget* m_tensorListWidget;
-	OutputViewWidget* m_outputViewWidget;
-
-	// Methods
-	void createMenuBar();
+	QListWidget* m_tensorList;
+	QPushButton* m_pushBtnAddTensor;
+	QPushButton* m_pushBtnRemoveTensor;
 
 private slots:
-	void onActionAboutTriggered(bool bChecked);
+	void onAddTensorButtonClicked();
+	void onRemoveTensorButtonClicked();
 };
 
-#endif // MAINWINDOW_H
+#endif // TENSOR_LIST_WIDGET_H
