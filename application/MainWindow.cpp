@@ -67,14 +67,26 @@ void MainWindow::createMenuBar()
 	m_actionImport->setMenuRole(QAction::NoRole);
 	fileMenu->addAction(m_actionImport);
 
+	m_actionExit = new QAction(tr("Exit"), this);
+	m_actionExit->setMenuRole(QAction::AboutQtRole);
+	fileMenu->addSeparator();
+	fileMenu->addAction(m_actionExit);
+
 	m_menuBar->setNativeMenuBar(true);
 	setMenuBar(m_menuBar);
 
 	connect(m_actionAbout, SIGNAL(triggered(bool)), this, SLOT(onActionAboutTriggered(bool)));
+	connect(m_actionExit, SIGNAL(triggered(bool)), this, SLOT(onActionExitTriggered(bool)));
 }
 
 ///////////////////////////////////////////////////////////////////////////
 void MainWindow::onActionAboutTriggered(bool bChecked)
 {
 	m_aboutWindow->show();
+}
+
+///////////////////////////////////////////////////////////////////////////
+void MainWindow::onActionExitTriggered(bool bChecked)
+{
+	exit(0);
 }

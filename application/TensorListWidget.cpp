@@ -18,6 +18,7 @@
 
 
 #include "TensorListWidget.h"
+#include "TensorPropWindow.h"
 
 #include <QListWidget>
 #include <QPushButton>
@@ -69,7 +70,8 @@ TensorListWidget::TensorListWidget(QWidget *parent) :
 ///////////////////////////////////////////////////////////////////////////
 void TensorListWidget::onAddTensorButtonClicked()
 {
-	// Placeholder
+	TensorPropWindow tensorWindow(this);
+	tensorWindow.exec();
 }
 
 ///////////////////////////////////////////////////////////////////////////

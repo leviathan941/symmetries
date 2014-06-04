@@ -1,6 +1,6 @@
 /*
 	Symmetries
-	Copyright (C) 2014 Alexey Kuzin <amkuzink@gmail.com>
+	Copyright (C) 2014 Mikhail Barenboim <mikelbn@yandex.ru>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,29 +17,33 @@
 */
 
 
-#ifndef TENSOR_LIST_WIDGET_H
-#define TENSOR_LIST_WIDGET_H
+#ifndef TENZOR_PROP_WINDOW_H
+#define TENZOR_PROP_WINDOW_H
 
-#include <QWidget>
+#include <QDialog>
 
-class QListWidget;
+class QLabel;
 class QPushButton;
-class TensorPropWindow;
+class QComboBox;
+class QSpinBox;
 
-class TensorListWidget : public QWidget
+class TensorPropWindow : public QDialog
 {
 	Q_OBJECT
 public:
-	explicit TensorListWidget(QWidget *parent = 0);
+	explicit TensorPropWindow(QWidget *parent);
 
 private:
-	QListWidget* m_tensorList;
-	QPushButton* m_pushBtnAddTensor;
-	QPushButton* m_pushBtnRemoveTensor;
+	QPushButton* m_okButton;
+	QPushButton* m_cancelButton;
+	QLabel* m_typeLabel;
+	QLabel* m_dimLabel;
+	QComboBox* m_typeComBox;
+	QSpinBox* m_dimSpinBox;
 
 private slots:
-	void onAddTensorButtonClicked();
-	void onRemoveTensorButtonClicked();
+	void onOkClicked();
+	void onCancelClicked();
 };
 
-#endif // TENSOR_LIST_WIDGET_H
+#endif // TENZOR_PROP_WINDOW_H

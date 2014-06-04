@@ -24,6 +24,7 @@ set(APPLICATION_UI_HEADERS
 	AboutWindow.h
 	TensorListWidget.h
 	OutputViewWidget.h
+	TensorPropWindow.h
 	)
 
 set(APPLICATION_SOURCES
@@ -35,6 +36,7 @@ set(APPLICATION_UI_SOURCES
 	AboutWindow.cpp
 	TensorListWidget.cpp
 	OutputViewWidget.cpp
+	TensorPropWindow.cpp
 	)
 
 set(APPLICATION_LIBS

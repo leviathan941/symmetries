@@ -40,6 +40,7 @@ private:
 	QMenuBar* m_menuBar;
 
 	QAction* m_actionImport;
+	QAction* m_actionExit;
 	QAction* m_actionAbout;
 
 	QWidget* m_centralWidget;
@@ -53,6 +54,7 @@ private:
 
 private slots:
 	void onActionAboutTriggered(bool bChecked);
+	void onActionExitTriggered(bool bChecked);
 };
 
 #endif // MAINWINDOW_H
