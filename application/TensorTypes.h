@@ -1,6 +1,5 @@
 /*
 	Symmetries
-	Copyright (C) 2014 Alexey Kuzin <amkuzink@gmail.com>
 	Copyright (C) 2014 Mikhail Barenboim <mikelbn@yandex.ru>
 
 	This program is free software: you can redistribute it and/or modify
@@ -17,29 +16,30 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef TENSOR_TYPES_H
+#define TENSOR_TYPES_H
 
-#ifndef TENSOR_LIST_WIDGET_H
-#define TENSOR_LIST_WIDGET_H
+#include <map>
 
-#include <QWidget>
+class QString;
+class QStringList;
 
-class QListWidget;
-class QPushButton;
-
-class TensorListWidget : public QWidget
+class TensorTypes
 {
-	Q_OBJECT
 public:
-	explicit TensorListWidget(QWidget *parent = 0);
+	explicit TensorTypes();
+	enum TensorType
+	{
+		METRIC_TENSOR,
+		TORSION_TENSOR
+	};
+
+	static QString getTensorTypeAsString(TensorType type);
+	static QStringList getAllTypes();
 
 private:
-	QListWidget* m_tensorList;
-	QPushButton* m_pushBtnAddTensor;
-	QPushButton* m_pushBtnRemoveTensor;
-
-private slots:
-	void onAddTensorButtonClicked();
-	void onRemoveTensorButtonClicked();
+	static std::map<TensorType, QString> init();
+	static std::map<TensorType, QString> m_tensorTypes;
 };
 
-#endif // TENSOR_LIST_WIDGET_H
+#endif // TENSOR_TYPES_H

@@ -2,6 +2,7 @@
 #
 # Symmetries
 # Copyright (C) 2013, 2014 Alexey Kuzin <amkuzink@gmail.com>
+# Copyright (C) 2014 Mikhail Barenboim <mikelbn@yandex.ru>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,6 +27,8 @@ set(APPLICATION_UI_HEADERS
 	OutputViewWidget.h
 	MatrixViewWidget.h
 	MatrixElementWidget.h
+	TensorPropWindow.h
+	TensorTypes.h
 	)
 
 set(APPLICATION_SOURCES
@@ -39,6 +42,8 @@ set(APPLICATION_UI_SOURCES
 	OutputViewWidget.cpp
 	MatrixViewWidget.cpp
 	MatrixElementWidget.cpp
+	TensorPropWindow.cpp
+	TensorTypes.cpp
 	)
 
 include_directories(

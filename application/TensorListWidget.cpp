@@ -1,6 +1,7 @@
 /*
 	Symmetries
 	Copyright (C) 2014 Alexey Kuzin <amkuzink@gmail.com>
+	Copyright (C) 2014 Mikhail Barenboim <mikelbn@yandex.ru>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -18,6 +19,7 @@
 
 
 #include "TensorListWidget.h"
+#include "TensorPropWindow.h"
 
 #include <QListWidget>
 #include <QPushButton>
@@ -70,7 +72,8 @@ TensorListWidget::TensorListWidget(QWidget *parent) :
 ///////////////////////////////////////////////////////////////////////////
 void TensorListWidget::onAddTensorButtonClicked()
 {
-	// Placeholder
+	TensorPropWindow tensorWindow(this);
+	tensorWindow.exec();
 }
 
 ///////////////////////////////////////////////////////////////////////////

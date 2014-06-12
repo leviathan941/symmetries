@@ -1,6 +1,5 @@
 /*
 	Symmetries
-	Copyright (C) 2014 Alexey Kuzin <amkuzink@gmail.com>
 	Copyright (C) 2014 Mikhail Barenboim <mikelbn@yandex.ru>
 
 	This program is free software: you can redistribute it and/or modify
@@ -17,45 +16,34 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
 
-#include <QMainWindow>
+#ifndef TENSOR_PROP_WINDOW_H
+#define TENSOR_PROP_WINDOW_H
 
-class QMenuBar;
-class QMenu;
-class QAction;
+#include <QDialog>
 
-class AboutWindow;
-class TensorListWidget;
-class OutputViewWidget;
+class QLabel;
+class QPushButton;
+class QComboBox;
+class QSpinBox;
 
-class MainWindow : public QMainWindow
+class TensorPropWindow : public QDialog
 {
 	Q_OBJECT
 public:
-	explicit MainWindow(QWidget *parent = 0);
+	explicit TensorPropWindow(QWidget *parent);
 
 private:
-	// Fields
-	QMenuBar* m_menuBar;
-
-	QAction* m_actionImport;
-	QAction* m_actionExit;
-	QAction* m_actionAbout;
-
-	QWidget* m_centralWidget;
-
-	AboutWindow* m_aboutWindow;
-	TensorListWidget* m_tensorListWidget;
-	OutputViewWidget* m_outputViewWidget;
-
-	// Methods
-	void createMenuBar();
+	QPushButton* m_okButton;
+	QPushButton* m_cancelButton;
+	QLabel* m_typeLabel;
+	QLabel* m_dimLabel;
+	QComboBox* m_typeComBox;
+	QSpinBox* m_dimSpinBox;
 
 private slots:
-	void onActionAboutTriggered(bool bChecked);
-	void onActionExitTriggered(bool bChecked);
+	void onOkClicked();
+	void onCancelClicked();
 };
 
-#endif // MAINWINDOW_H
+#endif // TENSOR_PROP_WINDOW_H
