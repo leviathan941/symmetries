@@ -1,6 +1,7 @@
 /*
 	Symmetries
 	Copyright (C) 2014 Alexey Kuzin <amkuzink@gmail.com>
+	Copyright (C) 2014 Mikhail Barenboim <mikelbn@yandex.ru>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,6 +27,7 @@
 #include <QAction>
 #include <QDialog>
 #include <QHBoxLayout>
+#include <QApplication>
 
 #define MINIMUM_WIDTH 800
 #define MINIMUM_HEIGHT 600
@@ -68,7 +70,7 @@ void MainWindow::createMenuBar()
 	fileMenu->addAction(m_actionImport);
 
 	m_actionExit = new QAction(tr("Exit"), this);
-	m_actionExit->setMenuRole(QAction::AboutQtRole);
+	m_actionExit->setMenuRole(QAction::QuitRole);
 	fileMenu->addSeparator();
 	fileMenu->addAction(m_actionExit);
 
@@ -88,5 +90,5 @@ void MainWindow::onActionAboutTriggered(bool bChecked)
 ///////////////////////////////////////////////////////////////////////////
 void MainWindow::onActionExitTriggered(bool bChecked)
 {
-	exit(0);
+	qApp->exit();
 }

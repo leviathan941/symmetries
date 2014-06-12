@@ -18,6 +18,7 @@
 
 
 #include "TensorPropWindow.h"
+#include "TensorTypes.h"
 
 #include <QLabel>
 #include <QPushButton>
@@ -25,50 +26,36 @@
 #include <QSpinBox>
 #include <QFormLayout>
 
-#define MINIMUM_WIDTH 300
-#define MINIMUM_HEIGHT 150
-#define BUTTON_WIDTH 60
-#define BUTTON_HEIGHT 30
-#define TYPE_LABEL_WIDTH 75
-#define TYPE_LABEL_HEIGHT 30
-#define TYPE_COMBOBOX_WIDTH 200
-#define TYPE_COMBOBOX_HEIGHT 30
-#define DIMENSION_LABEL_WIDTH 75
-#define DIMENSION_LABEL_HEIGHT 30
-#define DIMENSION_SPINBOX_WIDTH 60
-#define DIMENSION_SPINBOX_HEIGHT 30
+#define SPIN_BOX_MAX_VALUE 100
+#define SPIN_BOX_MIN_VALUE 1
 
 TensorPropWindow::TensorPropWindow(QWidget *parent) :
 	QDialog(parent)
 {
 	setWindowTitle(tr("Tensor properties"));
-	setFixedSize(MINIMUM_WIDTH, MINIMUM_HEIGHT);
 
 	m_typeLabel = new QLabel(this);
-	m_typeLabel->setFixedSize(QSize(TYPE_LABEL_WIDTH, TYPE_LABEL_HEIGHT));
+	m_typeLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_typeLabel->setText(tr("Type"));
 
 	m_typeComBox = new QComboBox(this);
-	m_typeComBox->setFixedSize(QSize(TYPE_COMBOBOX_WIDTH, TYPE_COMBOBOX_HEIGHT));
-	m_typeComBox->addItem(tr("Torsion tensor"));
-	m_typeComBox->addItem(tr("Metric tensor"));
+	m_typeComBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+	m_typeComBox->addItems(TensorTypes::getAllTypes());
 
 	m_dimLabel = new QLabel(this);
-	m_dimLabel->setFixedSize(QSize(DIMENSION_LABEL_WIDTH, DIMENSION_LABEL_HEIGHT));
+	m_dimLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_dimLabel->setText(tr("Dimension"));
 
 	m_dimSpinBox = new QSpinBox(this);
-	m_dimSpinBox->setFixedSize(QSize(DIMENSION_SPINBOX_WIDTH, DIMENSION_SPINBOX_HEIGHT));
-	m_dimSpinBox->setRange(1, 100);
-	m_dimSpinBox->setSingleStep(1);
-	m_dimSpinBox->setValue(1);
+	m_dimSpinBox->setRange(SPIN_BOX_MIN_VALUE, SPIN_BOX_MAX_VALUE);
+	m_dimSpinBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
 	m_okButton = new QPushButton(this);
-	m_okButton->setFixedSize(QSize(BUTTON_WIDTH, BUTTON_HEIGHT));
+	m_okButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_okButton->setText(tr("OK"));
 
 	m_cancelButton = new QPushButton(this);
-	m_cancelButton->setFixedSize(QSize(BUTTON_WIDTH, BUTTON_HEIGHT));
+	m_cancelButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_cancelButton->setText(tr("Cancel"));
 
 	QFormLayout* mainFormLayout = new QFormLayout;

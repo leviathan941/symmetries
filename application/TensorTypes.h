@@ -16,34 +16,29 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef TENSOR_TYPES_H
+#define TENSOR_TYPES_H
 
-#ifndef TENSOR_PROP_WINDOW_H
-#define TENSOR_PROP_WINDOW_H
+#include <map>
 
-#include <QDialog>
+class QString;
+class QStringList;
 
-class QLabel;
-class QPushButton;
-class QComboBox;
-class QSpinBox;
-
-class TensorPropWindow : public QDialog
+class TensorTypes
 {
-	Q_OBJECT
 public:
-	explicit TensorPropWindow(QWidget *parent);
+	explicit TensorTypes();
+	enum TensorType
+	{
+		METRIC_TENSOR,
+		TORSION_TENSOR
+	};
 
+	static QString getTensorTypeAsString(TensorType type);
+	static QStringList getAllTypes();
 private:
-	QPushButton* m_okButton;
-	QPushButton* m_cancelButton;
-	QLabel* m_typeLabel;
-	QLabel* m_dimLabel;
-	QComboBox* m_typeComBox;
-	QSpinBox* m_dimSpinBox;
-
-private slots:
-	void onOkClicked();
-	void onCancelClicked();
+	static std::map<TensorType, QString> init();
+	static std::map<TensorType, QString> m_tensorTypes;
 };
 
-#endif // TENSOR_PROP_WINDOW_H
+#endif // TENSOR_TYPES_H
