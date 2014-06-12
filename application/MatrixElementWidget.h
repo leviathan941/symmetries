@@ -17,20 +17,29 @@
 */
 
 
-#include "OutputViewWidget.h"
-#include "MatrixViewWidget.h"
-#include "QHBoxLayout"
+#ifndef MATRIX_ELEMENT_WIDGET_H
+#define MATRIX_ELEMENT_WIDGET_H
 
-OutputViewWidget::OutputViewWidget(QWidget *parent) :
-	QWidget(parent)
+#include <QWidget>
+
+class QLabel;
+class QLineEdit;
+
+class MatrixElementWidget : public QWidget
 {
-	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	Q_OBJECT
+public:
+	MatrixElementWidget(QWidget *parent = 0);
+	MatrixElementWidget(QWidget *parent, const QString& sElementIndex, const QString& sElement);
 
-	// Just for testing.
-	// TODO Delete later, when this class is implemented.
-	MatrixViewWidget* matrixView = new MatrixViewWidget(15, 15, this);
-	QHBoxLayout* layout = new QHBoxLayout;
-	layout->setContentsMargins(0, 0, 0, 0);
-	layout->addWidget(matrixView);
-	setLayout(layout);
-}
+	void setElementIndex(const QString& sElementIndex);
+	QString getElementIndex() const;
+	void setElement(const QString& sElement);
+	QString getElement() const;
+
+private:
+	QLabel* m_labelIndex;
+	QLineEdit* m_editElement;
+};
+
+#endif // MATRIX_ELEMENT_WIDGET_H

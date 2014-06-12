@@ -29,6 +29,7 @@
 
 #define MINIMUM_WIDTH 800
 #define MINIMUM_HEIGHT 600
+#define CONTENT_MARGIN 20
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent)
@@ -41,7 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	QHBoxLayout* mainLayout = new QHBoxLayout;
 	mainLayout->addWidget(m_tensorListWidget, 0, Qt::AlignLeft);
-	mainLayout->addWidget(m_outputViewWidget, 1, Qt::AlignRight);
+	mainLayout->addWidget(m_outputViewWidget, 1);
 
 	m_centralWidget = new QWidget(this);
 	m_centralWidget->setLayout(mainLayout);
@@ -49,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	setMinimumSize(QSize(MINIMUM_WIDTH, MINIMUM_HEIGHT));
 	setObjectName(QString("MainWindow"));
 	setCentralWidget(m_centralWidget);
+	setContentsMargins(CONTENT_MARGIN, CONTENT_MARGIN, CONTENT_MARGIN, CONTENT_MARGIN);
 }
 
 ///////////////////////////////////////////////////////////////////////////

@@ -17,20 +17,30 @@
 */
 
 
-#include "OutputViewWidget.h"
-#include "MatrixViewWidget.h"
-#include "QHBoxLayout"
+#ifndef MATRIX_VIEW_WIDGET_H
+#define MATRIX_VIEW_WIDGET_H
 
-OutputViewWidget::OutputViewWidget(QWidget *parent) :
-	QWidget(parent)
+#include <boost/numeric/ublas/matrix.hpp>
+#include <string>
+
+#include <QScrollArea>
+
+class QGridLayout;
+
+class MatrixViewWidget : public QScrollArea
 {
-	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	Q_OBJECT
+public:
+	MatrixViewWidget(unsigned nRowNumber, unsigned nColumnNumber, QWidget *parent = 0);
 
-	// Just for testing.
-	// TODO Delete later, when this class is implemented.
-	MatrixViewWidget* matrixView = new MatrixViewWidget(15, 15, this);
-	QHBoxLayout* layout = new QHBoxLayout;
-	layout->setContentsMargins(0, 0, 0, 0);
-	layout->addWidget(matrixView);
-	setLayout(layout);
-}
+	void setMatrix(boost::numeric::ublas::matrix<std::string> matrix);
+	boost::numeric::ublas::matrix<std::string> getMatrix() const;
+
+private:
+	// Fields
+	QGridLayout* m_gridLayout;
+	// Methods
+	QString makeStringIndex(unsigned nRow, unsigned nColumn);
+};
+
+#endif // MATRIX_VIEW_WIDGET_H

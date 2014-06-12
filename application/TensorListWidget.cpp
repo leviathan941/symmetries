@@ -56,6 +56,7 @@ TensorListWidget::TensorListWidget(QWidget *parent) :
 	mainLayout->addWidget(m_tensorList);
 	mainLayout->addLayout(addRemoveLayout);
 	mainLayout->setSpacing(WIDGET_VERTICAL_SPACING);
+	mainLayout->setContentsMargins(0, 0, 0, 0);
 
 	setLayout(mainLayout);
 	setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
