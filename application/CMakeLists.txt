@@ -23,8 +23,10 @@ project(application)
 set(APPLICATION_UI_HEADERS
 	MainWindow.h
 	AboutWindow.h
+	ImportTensorWindow.h
 	TensorListWidget.h
 	OutputViewWidget.h
+	TabsWidget.h
 	MatrixViewWidget.h
 	MatrixElementWidget.h
 	TensorPropWindow.h
@@ -38,8 +40,10 @@ set(APPLICATION_SOURCES
 set(APPLICATION_UI_SOURCES
 	MainWindow.cpp
 	AboutWindow.cpp
+	ImportTensorWindow.cpp
 	TensorListWidget.cpp
 	OutputViewWidget.cpp
+	TabsWidget.cpp
 	MatrixViewWidget.cpp
 	MatrixElementWidget.cpp
 	TensorPropWindow.cpp

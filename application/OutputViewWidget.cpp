@@ -1,6 +1,7 @@
 /*
 	Symmetries
 	Copyright (C) 2014 Alexey Kuzin <amkuzink@gmail.com>
+	Copyright (C) 2014 Mikhail Barenboim <mikelbn@yandex.ru>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -19,18 +20,62 @@
 
 #include "OutputViewWidget.h"
 #include "MatrixViewWidget.h"
-#include "QHBoxLayout"
+#include "TabsWidget.h"
+
+#include <QListWidget>
+#include <QPushButton>
+#include <QFormLayout>
+#include <QPainter>
+
+#define WIDGET_STYLESHEET\
+	"OutputViewWidget {border: 1px solid; border-color: #999999}"
 
 OutputViewWidget::OutputViewWidget(QWidget *parent) :
 	QWidget(parent)
 {
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-	// Just for testing.
-	// TODO Delete later, when this class is implemented.
-	MatrixViewWidget* matrixView = new MatrixViewWidget(15, 15, this);
-	QHBoxLayout* layout = new QHBoxLayout;
-	layout->setContentsMargins(0, 0, 0, 0);
-	layout->addWidget(matrixView);
-	setLayout(layout);
+	setObjectName("OutputViewWidget");
+	setStyleSheet(WIDGET_STYLESHEET);
+
+	m_resultsList = new QListWidget(this);
+	m_resultsList->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+	m_resultsList->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+
+	m_removeButton = new QPushButton(this);
+	m_removeButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+	m_removeButton->setText(tr("Remove"));
+
+	m_addButton = new QPushButton(this);
+	m_addButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+	m_addButton->setText(tr("Add"));
+
+	TabsWidget* tabs = new TabsWidget(this);
+	// For test:
+	tabs->add(new MatrixViewWidget(50,50),"test");
+
+	QHBoxLayout* buttonLayout = new QHBoxLayout;
+	buttonLayout->addWidget(m_removeButton);
+	buttonLayout->addWidget(m_addButton);
+	buttonLayout->setAlignment(Qt::AlignRight);
+
+	QHBoxLayout* listAndTabs = new QHBoxLayout;
+	listAndTabs->addWidget(m_resultsList);
+	listAndTabs->addWidget(tabs);
+
+	QVBoxLayout* mainLayout = new QVBoxLayout;
+
+	mainLayout->setContentsMargins(5, 5, 5, 5);
+	mainLayout->addLayout(listAndTabs);
+	mainLayout->addLayout(buttonLayout);
+	setLayout(mainLayout);
+}
+
+///////////////////////////////////////////////////////////////////////////
+void OutputViewWidget::paintEvent(QPaintEvent* event)
+{
+	QStyleOption opt;
+	opt.init(this);
+	QPainter p(this);
+	style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }

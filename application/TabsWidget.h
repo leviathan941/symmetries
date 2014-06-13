@@ -1,6 +1,6 @@
 /*
 	Symmetries
-	Copyright (C) 2014 Alexey Kuzin <amkuzink@gmail.com>
+	Copyright (C) 2014 Mikhail Barenboim <mikelbn@yandex.ru>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -16,28 +16,24 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef TABS_WIDGET_H
+#define TABS_WIDGET_H
 
-#ifndef OUTPUT_VIEW_WIDGET_H
-#define OUTPUT_VIEW_WIDGET_H
+#include <QTabWidget>
 
-#include <QWidget>
 
-class QListWidget;
-class QPushButton;
-
-class OutputViewWidget : public QWidget
+class TabsWidget : public QTabWidget
 {
 	Q_OBJECT
 public:
-	explicit OutputViewWidget(QWidget *parent = 0);
+	explicit TabsWidget(QWidget *parent);
+
+	void add(QWidget *widget, QString tabName);
+	void remove(int tabNumber);
+	void removeAll();
 
 private:
-	QListWidget* m_resultsList;
-	QPushButton* m_removeButton;
-	QPushButton* m_addButton;
-
-protected:
-	void paintEvent(QPaintEvent* event);
+	QTabWidget *m_outputTabs;
 };
 
-#endif // OUTPUT_VIEW_WIDGET_H
+#endif // TABS_WIDGET_H
