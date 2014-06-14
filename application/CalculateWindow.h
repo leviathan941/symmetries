@@ -27,6 +27,7 @@ class QTextEdit;
 class QPushButton;
 class QListWidget;
 class OperationRequirementWidget;
+class TabsWidget;
 
 class CalculateWindow : public QDialog
 {
@@ -39,6 +40,7 @@ private:
 	QPushButton* m_pushBtnOk;
 	QPushButton* m_pushBtnCancel;
 	OperationRequirementWidget* m_calcReqWidget;
+	TabsWidget* m_tensorView;
 
 private slots:
 	void onOkButtonClicked();

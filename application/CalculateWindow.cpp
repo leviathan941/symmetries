@@ -20,6 +20,7 @@
 #include "CalculateWindow.h"
 #include "OperationItems.h"
 #include "OperationRequirementWidget.h"
+#include "TabsWidget.h"
 #include "Exceptions.h"
 
 #include <QComboBox>
@@ -28,7 +29,6 @@
 #include <QListWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QStackedLayout>
 
 #define MINIMUM_WIDTH 500
 #define MINIMUM_HEIGHT 400
@@ -48,11 +48,11 @@ CalculateWindow::CalculateWindow(QWidget *parent) :
 	calcListLayout->addWidget(m_comBoxCalcItem, 0, Qt::AlignTop);
 	calcListLayout->addWidget(m_calcReqWidget, 1);
 
-	// TODO Create TabsWidget here and add to listDescLayout
+	m_tensorView = new TabsWidget(this);
 
 	QHBoxLayout* listAndTensorViewLayout = new QHBoxLayout;
 	listAndTensorViewLayout->addLayout(calcListLayout, 0);
-	// TODO add TabsWidget to layout
+	listAndTensorViewLayout->addWidget(m_tensorView, 1);
 
 	m_pushBtnOk = new QPushButton(tr("OK"), this);
 	m_pushBtnOk->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -109,5 +109,5 @@ void CalculateWindow::onCalcItemCurrentIndexChanged(int nIndex)
 ///////////////////////////////////////////////////////////////////////////
 void CalculateWindow::onReqWidgetTensorChoosed(int nTensorIndex)
 {
-	// TODO show tensor in TabsWidget.
+	// TODO show tensor from the store in TabsWidget.
 }

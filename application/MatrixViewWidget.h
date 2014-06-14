@@ -35,6 +35,7 @@ public:
 
 	void setMatrix(boost::numeric::ublas::matrix<std::string> matrix);
 	boost::numeric::ublas::matrix<std::string> getMatrix() const;
+	void setReadOnly(bool bEnable);
 
 private:
 	// Fields

@@ -25,6 +25,7 @@
 
 #define ELEMENT_EDIT_MINIMUM_WIDTH 50
 #define CONTENT_MARGIN 5
+#define CONTENT_RIGHT_MARGIN 10
 
 MatrixElementWidget::MatrixElementWidget(QWidget *parent) :
 	QWidget(parent)
@@ -37,7 +38,8 @@ MatrixElementWidget::MatrixElementWidget(QWidget *parent) :
 	QFormLayout* mainLayout = new QFormLayout;
 	mainLayout->addRow(m_labelIndex, m_editElement);
 	mainLayout->setFormAlignment(Qt::AlignRight);
-	mainLayout->setContentsMargins(CONTENT_MARGIN, CONTENT_MARGIN, CONTENT_MARGIN, CONTENT_MARGIN);
+	mainLayout->setContentsMargins(CONTENT_MARGIN, CONTENT_MARGIN, CONTENT_RIGHT_MARGIN,
+		CONTENT_MARGIN);
 	setLayout(mainLayout);
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
@@ -71,4 +73,10 @@ void MatrixElementWidget::setElement(const QString &sElement)
 QString MatrixElementWidget::getElement() const
 {
 	return m_editElement->text();
+}
+
+///////////////////////////////////////////////////////////////////////////
+void MatrixElementWidget::setReadOnly(bool bEnable)
+{
+	m_editElement->setReadOnly(bEnable);
 }
