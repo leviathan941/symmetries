@@ -51,6 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	m_centralWidget = new QWidget(this);
 	m_centralWidget->setLayout(mainLayout);
 
+	setWindowTitle(tr("Symmetries"));
 	setMinimumSize(QSize(MINIMUM_WIDTH, MINIMUM_HEIGHT));
 	setObjectName(QString("MainWindow"));
 	setCentralWidget(m_centralWidget);

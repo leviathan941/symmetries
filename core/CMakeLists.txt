@@ -31,6 +31,7 @@ set(CORE_HEADERS
 	DifferentialItem.h
 	DifferentialExpression.h
 	AffineLieAlgebra.h
+	Calculation.h
 	)
 
 set(CORE_SOURCES
@@ -43,6 +44,7 @@ set(CORE_SOURCES
 	DifferentialItem.cpp
 	DifferentialExpression.cpp
 	AffineLieAlgebra.cpp
+	Calculation.cpp
 	)
 
 include_directories(${COMMON_INCLUDE_DIRS})

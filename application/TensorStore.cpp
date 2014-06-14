@@ -1,6 +1,7 @@
 /*
 	Symmetries
 	Copyright (C) 2014 Mikhail Barenboim <mikelbn@yandex.ru>
+	Copyright (C) 2014 Alexey Kuzin <amkuzink@gmail.com>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -19,11 +20,10 @@
 #include "TensorStore.h"
 #include "Exceptions.h"
 
-TensorStore::TensorStore()
-{
-}
+#include <QStringList>
 
-///////////////////////////////////////////////////////////////////////////
+typedef std::map<unsigned, TensorStore::TensorProperties> TensorsMap;
+
 TensorStore::TensorProperties::TensorProperties(QString& sTensorName, MatrixVectorExp& tensor)
 {
 	m_tensorName = sTensorName;
@@ -43,6 +43,12 @@ MatrixVectorExp& TensorStore::TensorProperties::getTensor()
 }
 
 ///////////////////////////////////////////////////////////////////////////
+TensorStore::TensorStore()
+{
+}
+
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
 void TensorStore::addTensor(QString sTensorName, MatrixVectorExp& tensor)
 {
 	static unsigned newTensorIndex = m_tensors.size();
@@ -53,7 +59,7 @@ void TensorStore::addTensor(QString sTensorName, MatrixVectorExp& tensor)
 ///////////////////////////////////////////////////////////////////////////
 MatrixVectorExp& TensorStore::getTensor(unsigned nIndex)
 {
-	std::map<unsigned, TensorProperties>::iterator it = m_tensors.find(nIndex);
+	TensorsMap::iterator it = m_tensors.find(nIndex);
 	if (it == m_tensors.end())
 	{
 		throw guiException("No such tensor");
@@ -64,7 +70,7 @@ MatrixVectorExp& TensorStore::getTensor(unsigned nIndex)
 ///////////////////////////////////////////////////////////////////////////
 MatrixVector<QString> TensorStore::getStringTensor(unsigned nIndex)
 {
-	std::map<unsigned, TensorProperties>::iterator it = m_tensors.find(nIndex);
+	TensorsMap::iterator it = m_tensors.find(nIndex);
 	if (it == m_tensors.end())
 	{
 		throw guiException("No such tensor");
@@ -95,14 +101,25 @@ MatrixVector<QString> TensorStore::getStringTensor(unsigned nIndex)
 }
 
 ///////////////////////////////////////////////////////////////////////////
-QString TensorStore::getTensorName(unsigned nIndex)
+QString TensorStore::getTensorName(unsigned nIndex) const
 {
-	std::map<unsigned, TensorProperties>::iterator it = m_tensors.find(nIndex);
+	TensorsMap::const_iterator it = m_tensors.find(nIndex);
 	if (it == m_tensors.end())
 	{
 		throw guiException("No such tensor");
 	}
 	return it->second.getTensorName();
+}
+
+///////////////////////////////////////////////////////////////////////////
+QStringList TensorStore::getTensorNames() const
+{
+	QStringList tensorNames;
+	BOOST_FOREACH(const TensorsMap::value_type& tensorItem, m_tensors)
+	{
+		tensorNames.append(tensorItem.second.getTensorName());
+	}
+	return tensorNames;
 }
 
 ///////////////////////////////////////////////////////////////////////////

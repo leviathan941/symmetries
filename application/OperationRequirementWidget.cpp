@@ -20,6 +20,7 @@
 #include "OperationRequirementWidget.h"
 #include "OperationItems.h"
 #include "Exceptions.h"
+#include "TensorStore.h"
 
 #include <QFormLayout>
 #include <QString>
@@ -27,6 +28,7 @@
 #include <QComboBox>
 #include <QPainter>
 #include <QDebug>
+#include <QMessageBox>
 #include <boost/foreach.hpp>
 
 #define MAIN_STYLESHEET\
@@ -74,13 +76,22 @@ void OperationRequirementWidget::addRow(TensorTypes::TensorType tensorType)
 	{
 		QLabel* tensorLabel = new QLabel(TensorTypes::getTensorTypeAsString(tensorType), this);
 		QComboBox* tensorsChoice = new QComboBox(this);
-		// TODO Fill the combo box.
+
+		QStringList tensorNames = TensorStore::getInstance().getTensorNames();
+		if (tensorNames.empty())
+		{
+			throw guiException("You need to add tensors to calculate anything");
+		}
+		tensorsChoice->addItems(tensorNames);
+		tensorsChoice->setCurrentIndex(-1);
+		connect(tensorsChoice, SIGNAL(activated(int)), this,
+			SLOT(onReqTensorComBoxActivated(int)));
 
 		m_calcTensors.insert(std::make_pair(tensorType, tensorsChoice));
 
 		m_mainLayout->addRow(tensorLabel, tensorsChoice);
 	}
-	CATCH_GUI
+	CATCH_GUI("Error")
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -124,7 +135,7 @@ void OperationRequirementWidget::clearLayout(QLayout* layout)
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void OperationRequirementWidget::onCurrentIndexChanged(int nIndex)
+void OperationRequirementWidget::onReqTensorComBoxActivated(int nIndex)
 {
 	emit tensorChoosed(nIndex);
 }

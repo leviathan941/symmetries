@@ -22,6 +22,9 @@
 #include "OperationRequirementWidget.h"
 #include "TabsWidget.h"
 #include "Exceptions.h"
+#include "TensorStore.h"
+#include "Calculation.h"
+#include "AffineLieAlgebra.h"
 
 #include <QComboBox>
 #include <QPushButton>
@@ -30,6 +33,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QDebug>
+#include <QMessageBox>
 
 #define MINIMUM_WIDTH 500
 #define MINIMUM_HEIGHT 400
@@ -51,6 +55,7 @@ CalculateWindow::CalculateWindow(QWidget *parent) :
 	calcListLayout->addWidget(m_calcReqWidget, 1);
 
 	m_tensorView = new TabsWidget(this);
+	m_tensorView->setReadOnly(true);
 
 	QHBoxLayout* listAndTensorViewLayout = new QHBoxLayout;
 	listAndTensorViewLayout->setSpacing(HORIZ_SPACING);
@@ -72,20 +77,93 @@ CalculateWindow::CalculateWindow(QWidget *parent) :
 
 	setLayout(mainLayout);
 
+	qRegisterMetaType<MatrixVectorExp>("MatrixVectorExp");
+
 	connect(m_pushBtnOk, SIGNAL(clicked()), this, SLOT(onOkButtonClicked()));
 	connect(m_pushBtnCancel, SIGNAL(clicked()), this, SLOT(onCancelButtonClicked()));
 	connect(m_comBoxCalcItem, SIGNAL(currentIndexChanged(int)), this,
 		SLOT(onCalcItemCurrentIndexChanged(int)));
 	connect(m_calcReqWidget, SIGNAL(tensorChoosed(int)), this,
-		SLOT(onReqWidgetTensorChoosed(int)));
+		SLOT(onReqWidgetTensorChosen(int)));
 
 	onCalcItemCurrentIndexChanged(0);
 }
 
 ///////////////////////////////////////////////////////////////////////////
+void CalculateWindow::calculateAffineConnection()
+{
+	std::map<TensorTypes::TensorType, unsigned> chosenTensors = m_calcReqWidget->getItems();
+
+	std::map<TensorTypes::TensorType, unsigned>::iterator iter = chosenTensors.find(
+		TensorTypes::METRIC_TENSOR);
+	if (iter == chosenTensors.end())
+	{
+		throw guiException("Metric tensor has not been chosen.");
+	}
+	unsigned metricTensorIndex = iter->second;
+
+	iter = chosenTensors.find(TensorTypes::TORSION_TENSOR);
+	if (iter == chosenTensors.end())
+	{
+		throw guiException("Torsion tensor has not been chosen.");
+	}
+	unsigned torsionTensorIndex = iter->second;
+
+	MatrixVectorExp metricTensor = TensorStore::getInstance().getTensor(metricTensorIndex);
+	MatrixVectorExp torsionTensor = TensorStore::getInstance().getTensor(torsionTensorIndex);
+	MatrixVectorExp christoffelSymbols;
+	try
+	{
+		christoffelSymbols = Calculation::calculateAffineConnection(metricTensor, torsionTensor);
+	}
+	catch (coreException& e)
+	{
+		throw guiException(e.what());
+	}
+
+	emit connectionCalculated(christoffelSymbols);
+}
+
+///////////////////////////////////////////////////////////////////////////
+void CalculateWindow::buildAffineLieAlgebra()
+{
+	std::map<TensorTypes::TensorType, unsigned> chosenTensors = m_calcReqWidget->getItems();
+	std::map<TensorTypes::TensorType, unsigned>::iterator iter = chosenTensors.find(
+		TensorTypes::AFFINE_CONNECTION);
+	if (iter == chosenTensors.end())
+	{
+		throw guiException("Affine connection has not been chosen.");
+	}
+	unsigned affineConnectionIndex = iter->second;
+
+	MatrixVectorExp affineConnection = TensorStore::getInstance().getTensor(affineConnectionIndex);
+
+	AffineLieAlgebra lieAlgebra = Calculation::buildAffineLieAlgebra(affineConnection);
+	std::string lieAlgebraAsString = lieAlgebra.toString();
+	emit lieAlgebraBuilt(QString::fromStdString(lieAlgebraAsString));
+}
+
+///////////////////////////////////////////////////////////////////////////
 void CalculateWindow::onOkButtonClicked()
 {
-	// TODO Add start calculating here.
+	try
+	{
+		switch ((OperationItems::AllowableItem) m_comBoxCalcItem->currentIndex())
+		{
+			case OperationItems::AFFINE_CONNECTION:
+				calculateAffineConnection();
+				break;
+
+			case OperationItems::AFFINE_LIE_ALGEBRA:
+				buildAffineLieAlgebra();
+				break;
+
+			default:
+				throw guiException("Operation item has not been chose.");
+				break;
+		}
+	}
+	CATCH_GUI("Error")
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -105,11 +183,15 @@ void CalculateWindow::onCalcItemCurrentIndexChanged(int nIndex)
 			= OperationItems::getTensorTypesByItemId((OperationItems::AllowableItem) nIndex);
 		m_calcReqWidget->addItems(reqTensors);
 	}
-	CATCH_GUI
+	CATCH_GUI("Error")
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void CalculateWindow::onReqWidgetTensorChoosed(int nTensorIndex)
+void CalculateWindow::onReqWidgetTensorChosen(int nTensorIndex)
 {
-	// TODO show tensor from the store in TabsWidget.
+	if (nTensorIndex < 0)
+		return;
+
+	MatrixVector<QString> tensor = TensorStore::getInstance().getStringTensor(nTensorIndex);
+	m_tensorView->setTensor(tensor);
 }

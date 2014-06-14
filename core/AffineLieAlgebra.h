@@ -20,17 +20,18 @@
 #ifndef AFFINE_LIE_ALGEBRA_H
 #define AFFINE_LIE_ALGEBRA_H
 
-#include "AffineConnection.h"
+#include "MatrixVectorExp.h"
 #include "DifferentialEquation.h"
 
 class AffineLieAlgebra
 {
 public:
-	AffineLieAlgebra(const AffineConnection& connection);
+	AffineLieAlgebra(const MatrixVectorExp& connection);
 
 	void buildLieAlgebra();
 	const std::vector<DifferentialEquation> &getLieSystem() const;
 
+	std::string toString() const;
 	void printLieSystem() const;
 
 private:
@@ -38,7 +39,7 @@ private:
 		double nMultiplier);
 	std::string createDiffIndex(unsigned count, ...);
 
-	AffineConnection m_affineConnection;
+	MatrixVectorExp m_affineConnection;
 	std::vector<DifferentialEquation> m_vecLieSystem;
 };
 

@@ -284,8 +284,8 @@ boost::numeric::ublas::matrix<T> MatrixVector<T>::getMatrix(unsigned nPosition) 
 	if(m_matrVec.size() < nPosition)
 	{
 		std::cerr << "MatrixVector::getMatrix\tCannot get a matrix from position "
-		<< nPosition << " because the matrix doesn't exist. Please add a matrix first"
-		<< std::endl;
+			<< nPosition << " because the matrix doesn't exist. Please add a matrix first"
+			<< std::endl;
 	}
 	return m_matrVec[nPosition];
 }

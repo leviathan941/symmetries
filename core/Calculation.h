@@ -1,6 +1,5 @@
 /*
 	Symmetries
-	Copyright (C) 2014 Mikhail Barenboim <mikelbn@yandex.ru>
 	Copyright (C) 2014 Alexey Kuzin <amkuzink@gmail.com>
 
 	This program is free software: you can redistribute it and/or modify
@@ -17,26 +16,22 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef TABS_WIDGET_H
-#define TABS_WIDGET_H
 
-#include "MatrixVectorExp.h"
+#ifndef CALCULATION_H
+#define CALCULATION_H
 
-#include <QTabWidget>
+class MatrixVectorExp;
+class AffineLieAlgebra;
 
-class TabsWidget : public QTabWidget
+class Calculation
 {
-	Q_OBJECT
 public:
-	explicit TabsWidget(QWidget *parent);
-
-	void addMatrix(boost::numeric::ublas::matrix<QString>& matrix, const QString& tabName);
-	void setTensor(MatrixVector<QString> tensor);
-	void setReadOnly(bool bEnable);
-	void removeAll();
+	static MatrixVectorExp calculateAffineConnection(MatrixVectorExp& metricTensor,
+		MatrixVectorExp& torsionTensor);
+	static AffineLieAlgebra buildAffineLieAlgebra(MatrixVectorExp& affineConnection);
 
 private:
-	bool m_isReadOnly;
+	Calculation();
 };
 
-#endif // TABS_WIDGET_H
+#endif // CALCULATION_H

@@ -70,9 +70,10 @@ public:
 	std::cout << "Core error is happened: " << e.what() << std::endl;\
 }
 
-#define CATCH_GUI catch(guiException& e)\
+#define CATCH_GUI(sTitle) catch(guiException& e)\
 {\
 	qDebug() << "GUI error is happened: " << e.what();\
+	QMessageBox::critical(this, sTitle, QString::fromStdString(e.what()));\
 }
 
 #endif // EXCEPTIONS_H

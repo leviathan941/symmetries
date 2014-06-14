@@ -1,6 +1,7 @@
 /*
 	Symmetries
 	Copyright (C) 2014 Mikhail Barenboim <mikelbn@yandex.ru>
+	Copyright (C) 2014 Alexey Kuzin <amkuzink@gmail.com>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -36,7 +37,8 @@ public:
 	void addTensor(QString sTensorName, MatrixVectorExp& tensor);
 	MatrixVectorExp& getTensor(unsigned nIndex);
 	MatrixVector<QString> getStringTensor(unsigned nIndex);
-	QString getTensorName(unsigned nIndex);
+	QString getTensorName(unsigned nIndex) const;
+	QStringList getTensorNames() const;
 	void removeTensor(unsigned nIndex);
 	void removeAllTensors();
 

@@ -51,6 +51,7 @@ public:
 
 	MatrixVector<SimpleExpression> getContent() const;
 	SimpleExpression getExpression(const unsigned item, const unsigned row, const unsigned column) const;
+	expBoostMatrix getMatrix(unsigned nPosition) const;
 	std::string toString();
 	void print();
 private:

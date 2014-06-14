@@ -27,7 +27,7 @@
 #define DIFF_INDEX_SEPARATOR ','
 #define VARIABLE_SYMBOL "X"
 
-AffineLieAlgebra::AffineLieAlgebra(const AffineConnection &connection)
+AffineLieAlgebra::AffineLieAlgebra(const MatrixVectorExp &connection)
 {
 	m_affineConnection = connection;
 }
@@ -35,23 +35,21 @@ AffineLieAlgebra::AffineLieAlgebra(const AffineConnection &connection)
 ///////////////////////////////////////////////////////////////////////////
 void AffineLieAlgebra::buildLieAlgebra()
 {
-	MatrixVectorExp christoffels = m_affineConnection.getChristoffelSymbols();
-
-	for (unsigned k = 0; k < christoffels.getContent().getVectorSize(); ++k)
+	for (unsigned k = 0; k < m_affineConnection.getContent().getVectorSize(); ++k)
 	{
-		for (unsigned i = 0; i < christoffels.getContent().getMatrixRowSize(); ++i)
+		for (unsigned i = 0; i < m_affineConnection.getContent().getMatrixRowSize(); ++i)
 		{
-			for (unsigned j = 0; j < christoffels.getContent().getMatrixColumnSize(); ++j)
+			for (unsigned j = 0; j < m_affineConnection.getContent().getMatrixColumnSize(); ++j)
 			{
 				DifferentialItem itemDijXk(createVariable(VARIABLE_SYMBOL, k + 1, 1, 1),
 					createDiffIndex(2, i + 1, j + 1), 1, 1);
 				std::cout << "itemDijXk = " << itemDijXk.toString() << std::endl;
 				DifferentialExpression tempExp(itemDijXk);
-				for (unsigned s = 0; s < christoffels.getContent().getVectorSize(); ++s)
+				for (unsigned s = 0; s < m_affineConnection.getContent().getVectorSize(); ++s)
 				{
 					DifferentialExpression expDiXsGksj;
 					SimpleItem simpleItem1 = createVariable(VARIABLE_SYMBOL, s + 1, 1, 1);
-					BOOST_FOREACH(const SimpleItem& christItem, christoffels(k, s, j)
+					BOOST_FOREACH(const SimpleItem& christItem, m_affineConnection(k, s, j)
 						.getVectorItems())
 					{
 						expDiXsGksj.pushItem(DifferentialItem(
@@ -62,7 +60,7 @@ void AffineLieAlgebra::buildLieAlgebra()
 
 					DifferentialExpression expDjXsGkis;
 					SimpleItem simpleItem2 = createVariable(VARIABLE_SYMBOL, s + 1, 1, 1);
-					BOOST_FOREACH(const SimpleItem& christItem, christoffels(k, i, s)
+					BOOST_FOREACH(const SimpleItem& christItem, m_affineConnection(k, i, s)
 						.getVectorItems())
 					{
 						expDjXsGkis.pushItem(DifferentialItem(
@@ -73,7 +71,7 @@ void AffineLieAlgebra::buildLieAlgebra()
 
 					DifferentialExpression expDsXkGsij;
 					SimpleItem simpleItem3 = createVariable(VARIABLE_SYMBOL, k + 1, 1, 1);
-					BOOST_FOREACH(const SimpleItem& christItem, christoffels(s, i, j)
+					BOOST_FOREACH(const SimpleItem& christItem, m_affineConnection(s, i, j)
 						.getVectorItems())
 					{
 						expDsXkGsij.pushItem(DifferentialItem(
@@ -102,12 +100,20 @@ const std::vector<DifferentialEquation>& AffineLieAlgebra::getLieSystem() const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void AffineLieAlgebra::printLieSystem() const
+std::string AffineLieAlgebra::toString() const
 {
+	std::stringstream stream;
 	BOOST_FOREACH(const DifferentialEquation& equation, m_vecLieSystem)
 	{
-		std::cout << equation.toString() << std::endl;
+		stream << equation.toString() << std::endl;
 	}
+	return stream.str();
+}
+
+///////////////////////////////////////////////////////////////////////////
+void AffineLieAlgebra::printLieSystem() const
+{
+	std::cout << toString();
 }
 
 ///////////////////////////////////////////////////////////////////////////

@@ -1,6 +1,7 @@
 /*
 	Symmetries
 	Copyright (C) 2014 Mikhail Barenboim <mikelbn@yandex.ru>
+	Copyright (C) 2014 Alexey Kuzin <amkuzink@gmail.com>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,6 +24,7 @@
 #include <boost/foreach.hpp>
 
 TabsWidget::TabsWidget(QWidget *parent)
+	: m_isReadOnly(false)
 {
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
@@ -31,6 +33,7 @@ TabsWidget::TabsWidget(QWidget *parent)
 void TabsWidget::addMatrix(boost::numeric::ublas::matrix<QString> &matrix, const QString &tabName)
 {
 	MatrixViewWidget* matrixView = new MatrixViewWidget(matrix.size1(), matrix.size2(), this);
+	matrixView->setReadOnly(m_isReadOnly);
 	matrixView->setMatrix(matrix);
 	addTab(matrixView, tabName);
 }
@@ -57,5 +60,19 @@ void TabsWidget::removeAll()
 	{
 		delete widget(i);
 		QTabWidget::removeTab(i);
+	}
+}
+
+///////////////////////////////////////////////////////////////////////////
+void TabsWidget::setReadOnly(bool bEnable)
+{
+	m_isReadOnly = bEnable;
+	for (int i = 0; i < count(); ++i)
+	{
+		MatrixViewWidget* matrixView = qobject_cast<MatrixViewWidget*>(widget(i));
+		if (matrixView)
+		{
+			matrixView->setReadOnly(bEnable);
+		}
 	}
 }

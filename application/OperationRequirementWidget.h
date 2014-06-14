@@ -53,7 +53,7 @@ protected:
 	void paintEvent(QPaintEvent* event);
 
 private slots:
-	void onCurrentIndexChanged(int nIndex);
+	void onReqTensorComBoxActivated(int nIndex);
 
 signals:
 	void tensorChoosed(int nTensorIndex);

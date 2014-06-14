@@ -153,6 +153,17 @@ SimpleExpression MatrixVectorExp::getExpression(const unsigned position, const u
 }
 
 ///////////////////////////////////////////////////////////////////////////
+MatrixVectorExp::expBoostMatrix MatrixVectorExp::getMatrix(unsigned nPosition) const
+{
+	if (nPosition > m_content.getVectorSize() - 1)
+	{
+		throw coreException("MatrixVectorExp::getMatrix: No matrix at the position");
+	}
+
+	return m_content.getMatrix(nPosition);
+}
+
+///////////////////////////////////////////////////////////////////////////
 std::string MatrixVectorExp::toString()
 {
 	std::stringstream strStream;

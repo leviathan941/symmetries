@@ -20,6 +20,8 @@
 #ifndef CALCULATE_WINDOW_H
 #define CALCULATE_WINDOW_H
 
+#include "MatrixVectorExp.h"
+
 #include <QDialog>
 
 class QComboBox;
@@ -42,11 +44,18 @@ private:
 	OperationRequirementWidget* m_calcReqWidget;
 	TabsWidget* m_tensorView;
 
+	void calculateAffineConnection();
+	void buildAffineLieAlgebra();
+
 private slots:
 	void onOkButtonClicked();
 	void onCancelButtonClicked();
 	void onCalcItemCurrentIndexChanged(int nIndex);
-	void onReqWidgetTensorChoosed(int nTensorIndex);
+	void onReqWidgetTensorChosen(int nTensorIndex);
+
+signals:
+	void connectionCalculated(MatrixVectorExp tensor);
+	void lieAlgebraBuilt(QString lieSystem);
 };
 
 #endif // CALCULATE_WINDOW_H
