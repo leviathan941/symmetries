@@ -46,6 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	QHBoxLayout* mainLayout = new QHBoxLayout;
 	mainLayout->addWidget(m_tensorListWidget, 0, Qt::AlignLeft);
 	mainLayout->addWidget(m_outputViewWidget, 1);
+	mainLayout->setSpacing(10);
 
 	m_centralWidget = new QWidget(this);
 	m_centralWidget->setLayout(mainLayout);

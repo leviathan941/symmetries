@@ -19,6 +19,7 @@
 
 #include "TensorPropWindow.h"
 #include "TensorTypes.h"
+#include "ImportTensorWindow.h"
 
 #include <QLabel>
 #include <QPushButton>
@@ -80,11 +81,13 @@ TensorPropWindow::TensorPropWindow(QWidget *parent) :
 ///////////////////////////////////////////////////////////////////////////
 void TensorPropWindow::onOkClicked()
 {
-	// Placeholder
+	int dimension = m_dimSpinBox->value();
+	ImportTensorWindow importTensorWindow(this, dimension);
+	importTensorWindow.exec();
 }
 
 ///////////////////////////////////////////////////////////////////////////
 void TensorPropWindow::onCancelClicked()
 {
-	close();
+	TensorPropWindow::close();
 }

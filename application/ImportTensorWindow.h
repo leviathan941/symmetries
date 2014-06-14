@@ -1,6 +1,6 @@
 /*
 	Symmetries
-	Copyright (C) 2014 Alexey Kuzin <amkuzink@gmail.com>
+	Copyright (C) 2014 Mikhail Barenboim <mikelbn@yandex.ru>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -16,28 +16,32 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef IMPORT_TENSOR_WINDOW_H
+#define IMPORT_TENSOR_WINDOW_H
 
-#ifndef OUTPUT_VIEW_WIDGET_H
-#define OUTPUT_VIEW_WIDGET_H
+#include <QDialog>
 
-#include <QWidget>
-
-class QListWidget;
 class QPushButton;
+class QLabel;
+class QLineEdit;
 
-class OutputViewWidget : public QWidget
+class ImportTensorWindow : public QDialog
 {
 	Q_OBJECT
 public:
-	explicit OutputViewWidget(QWidget *parent = 0);
+	explicit ImportTensorWindow(QWidget *parent = 0, int dimension = 0);
 
 private:
-	QListWidget* m_resultsList;
-	QPushButton* m_removeButton;
-	QPushButton* m_addButton;
+	QPushButton* m_importButton;
+	QPushButton* m_okButton;
+	QPushButton* m_cancelButton;
+	QLabel* m_nameLabel;
+	QLineEdit* m_nameLine;
 
-protected:
-	void paintEvent(QPaintEvent* event);
+private slots:
+	void onImportClicked();
+	void onOkClicked();
+	void onCancelClicked();
 };
 
-#endif // OUTPUT_VIEW_WIDGET_H
+#endif // IMPORT_TENSOR_WINDOW_H
