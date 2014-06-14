@@ -17,6 +17,7 @@
 */
 
 #include "TensorTypes.h"
+#include "Exceptions.h"
 
 #include <QString>
 #include <QStringList>
@@ -33,7 +34,7 @@ QString TensorTypes::getTensorTypeAsString(TensorType type)
 	tensorTypeMap::iterator typeIter = m_tensorTypes.find(type);
 	if(typeIter == m_tensorTypes.end())
 	{
-		return QString("");
+		throw coreException("Fatal error. No such tensor type.");
 	}
 	return typeIter->second;
 }
@@ -57,5 +58,6 @@ tensorTypeMap TensorTypes::init()
 	tensorTypeMap tensorTypes;
 	tensorTypes.insert(std::make_pair(METRIC_TENSOR, "Metric tensor"));
 	tensorTypes.insert(std::make_pair(TORSION_TENSOR, "Torsion tensor"));
+	tensorTypes.insert(std::make_pair(AFFINE_CONNECTION, "Affine Connection"));
 	return tensorTypes;
 }

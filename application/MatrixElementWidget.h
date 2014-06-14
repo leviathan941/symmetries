@@ -37,6 +37,8 @@ public:
 	void setElement(const QString& sElement);
 	QString getElement() const;
 
+	void setReadOnly(bool bEnable);
+
 private:
 	QLabel* m_labelIndex;
 	QLineEdit* m_editElement;

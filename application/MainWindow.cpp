@@ -22,6 +22,7 @@
 #include "AboutWindow.h"
 #include "TensorListWidget.h"
 #include "OutputViewWidget.h"
+#include "CalculateWindow.h"
 // Qt
 #include <QMenuBar>
 #include <QAction>
@@ -65,12 +66,16 @@ void MainWindow::createMenuBar()
 	QMenu* helpMenu = m_menuBar->addMenu(tr("&Help"));
 
 	m_actionAbout = new QAction(tr("About"), this);
-	m_actionAbout->setMenuRole(QAction::AboutQtRole);
+	m_actionAbout->setMenuRole(QAction::AboutRole);
 	helpMenu->addAction(m_actionAbout);
 
 	m_actionImport = new QAction(tr("Import"), this);
 	m_actionImport->setMenuRole(QAction::NoRole);
 	fileMenu->addAction(m_actionImport);
+
+	m_actionCalculate = new QAction(tr("Calculate"), this);
+	m_actionCalculate->setMenuRole(QAction::NoRole);
+	fileMenu->addAction(m_actionCalculate);
 
 	m_actionExit = new QAction(tr("Exit"), this);
 	m_actionExit->setMenuRole(QAction::QuitRole);
@@ -80,8 +85,19 @@ void MainWindow::createMenuBar()
 	m_menuBar->setNativeMenuBar(true);
 	setMenuBar(m_menuBar);
 
-	connect(m_actionAbout, SIGNAL(triggered(bool)), this, SLOT(onActionAboutTriggered(bool)));
-	connect(m_actionExit, SIGNAL(triggered(bool)), this, SLOT(onActionExitTriggered(bool)));
+	if (!connect(m_actionAbout, SIGNAL(triggered(bool)), this, SLOT(onActionAboutTriggered(bool))))
+	{
+		qDebug("actionAbout connect is failed");
+	}
+	if (!connect(m_actionExit, SIGNAL(triggered(bool)), this, SLOT(onActionExitTriggered(bool))))
+	{
+		qDebug("actionExit connect is failed");
+	}
+	if (!connect(m_actionCalculate, SIGNAL(triggered(bool)), this,
+		SLOT(onActionCalculateTriggered(bool))))
+	{
+		qDebug("actionCalculate connect is failed");
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -94,4 +110,11 @@ void MainWindow::onActionAboutTriggered(bool bChecked)
 void MainWindow::onActionExitTriggered(bool bChecked)
 {
 	qApp->exit();
+}
+
+///////////////////////////////////////////////////////////////////////////
+void MainWindow::onActionCalculateTriggered(bool bChecked)
+{
+	CalculateWindow* calcWindow = new CalculateWindow(this);
+	calcWindow->exec();
 }

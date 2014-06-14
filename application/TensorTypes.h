@@ -27,11 +27,11 @@ class QStringList;
 class TensorTypes
 {
 public:
-	explicit TensorTypes();
 	enum TensorType
 	{
 		METRIC_TENSOR,
-		TORSION_TENSOR
+		TORSION_TENSOR,
+		AFFINE_CONNECTION
 	};
 
 	static QString getTensorTypeAsString(TensorType type);

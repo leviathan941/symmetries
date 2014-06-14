@@ -50,9 +50,10 @@ OutputViewWidget::OutputViewWidget(QWidget *parent) :
 	m_addButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_addButton->setText(tr("Add"));
 
-	TabsWidget* tabs = new TabsWidget(this);
 	// For test:
-	tabs->add(new MatrixViewWidget(50,50),"test");
+	TabsWidget* tabs = new TabsWidget(this);
+	MatrixViewWidget* testTabsWidget = new MatrixViewWidget(50, 50);
+	tabs->add(testTabsWidget,"test");
 
 	QHBoxLayout* buttonLayout = new QHBoxLayout;
 	buttonLayout->addWidget(m_removeButton);

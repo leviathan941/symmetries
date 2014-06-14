@@ -38,7 +38,7 @@ MatrixViewWidget::MatrixViewWidget(unsigned nRowNumber, unsigned nColumnNumber, 
 		for (unsigned j = 0; j < nColumnNumber; ++j)
 		{
 			QString elementIndex = makeStringIndex(i, j);
-			MatrixElementWidget* element = new MatrixElementWidget(centralWidget, elementIndex, QString(""));
+			MatrixElementWidget* element = new MatrixElementWidget(centralWidget, elementIndex, "");
 
 			m_gridLayout->addWidget(element, i, j);
 		}
@@ -79,9 +79,9 @@ stringMatrix MatrixViewWidget::getMatrix() const
 
 	for (int i = 0; i < m_gridLayout->rowCount(); ++i)
 	{
-		for (int j = 0; m_gridLayout->columnCount(); ++j)
+		for (int j = 0; j < m_gridLayout->columnCount(); ++j)
 		{
-			MatrixElementWidget* element = static_cast<MatrixElementWidget*>
+			MatrixElementWidget* element = qobject_cast<MatrixElementWidget*>
 				(m_gridLayout->itemAtPosition(i, j)->widget());
 			QString elementString = element->getElement();
 			matrix.insert_element(i, j, elementString);
@@ -89,6 +89,20 @@ stringMatrix MatrixViewWidget::getMatrix() const
 	}
 
 	return matrix;
+}
+
+///////////////////////////////////////////////////////////////////////////
+void MatrixViewWidget::setReadOnly(bool bEnable)
+{
+	for (int i = 0; i < m_gridLayout->rowCount(); ++i)
+	{
+		for (int j = 0; j < m_gridLayout->columnCount(); ++j)
+		{
+			MatrixElementWidget* element = qobject_cast<MatrixElementWidget*>
+				(m_gridLayout->itemAtPosition(i, j)->widget());
+			element->setReadOnly(bEnable);
+		}
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////

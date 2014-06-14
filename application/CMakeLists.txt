@@ -22,6 +22,8 @@ project(application)
 
 set(APPLICATION_HEADERS
 	TensorStore.h
+	TensorTypes.h
+	OperationItems.h
 	)
 
 set(APPLICATION_UI_HEADERS
@@ -34,12 +36,15 @@ set(APPLICATION_UI_HEADERS
 	MatrixViewWidget.h
 	MatrixElementWidget.h
 	TensorPropWindow.h
-	TensorTypes.h
+	CalculateWindow.h
+	OperationRequirementWidget.h
 	)
 
 set(APPLICATION_SOURCES
 	main.cpp
 	TensorStore.cpp
+	TensorTypes.cpp
+	OperationItems.cpp
 	)
 
 set(APPLICATION_UI_SOURCES
@@ -52,7 +57,8 @@ set(APPLICATION_UI_SOURCES
 	MatrixViewWidget.cpp
 	MatrixElementWidget.cpp
 	TensorPropWindow.cpp
-	TensorTypes.cpp
+	CalculateWindow.cpp
+	OperationRequirementWidget.cpp
 	)
 
 include_directories(

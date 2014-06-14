@@ -17,32 +17,36 @@
 */
 
 
-#ifndef MATRIX_VIEW_WIDGET_H
-#define MATRIX_VIEW_WIDGET_H
+#ifndef CALCULATE_WINDOW_H
+#define CALCULATE_WINDOW_H
 
-#include <boost/numeric/ublas/matrix.hpp>
-#include <string>
+#include <QDialog>
 
-#include <QScrollArea>
-#include <QString>
+class QComboBox;
+class QTextEdit;
+class QPushButton;
+class QListWidget;
+class OperationRequirementWidget;
+class TabsWidget;
 
-class QGridLayout;
-
-class MatrixViewWidget : public QScrollArea
+class CalculateWindow : public QDialog
 {
 	Q_OBJECT
 public:
-	MatrixViewWidget(unsigned nRowNumber, unsigned nColumnNumber, QWidget *parent = 0);
-
-	void setMatrix(boost::numeric::ublas::matrix<QString> matrix);
-	boost::numeric::ublas::matrix<QString> getMatrix() const;
-	void setReadOnly(bool bEnable);
+	explicit CalculateWindow(QWidget *parent = 0);
 
 private:
-	// Fields
-	QGridLayout* m_gridLayout;
-	// Methods
-	QString makeStringIndex(unsigned nRow, unsigned nColumn);
+	QComboBox* m_comBoxCalcItem;
+	QPushButton* m_pushBtnOk;
+	QPushButton* m_pushBtnCancel;
+	OperationRequirementWidget* m_calcReqWidget;
+	TabsWidget* m_tensorView;
+
+private slots:
+	void onOkButtonClicked();
+	void onCancelButtonClicked();
+	void onCalcItemCurrentIndexChanged(int nIndex);
+	void onReqWidgetTensorChoosed(int nTensorIndex);
 };
 
-#endif // MATRIX_VIEW_WIDGET_H
+#endif // CALCULATE_WINDOW_H
