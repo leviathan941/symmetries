@@ -24,6 +24,7 @@ set(APPLICATION_HEADERS
 	TensorStore.h
 	TensorTypes.h
 	OperationItems.h
+	ExpressionParser.h
 	)
 
 set(APPLICATION_UI_HEADERS
@@ -45,6 +46,7 @@ set(APPLICATION_SOURCES
 	TensorStore.cpp
 	TensorTypes.cpp
 	OperationItems.cpp
+	ExpressionParser.cpp
 	)
 
 set(APPLICATION_UI_SOURCES
