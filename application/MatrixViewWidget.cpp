@@ -38,7 +38,7 @@ MatrixViewWidget::MatrixViewWidget(unsigned nRowNumber, unsigned nColumnNumber, 
 		for (unsigned j = 0; j < nColumnNumber; ++j)
 		{
 			QString elementIndex = makeStringIndex(i, j);
-			MatrixElementWidget* element = new MatrixElementWidget(centralWidget, elementIndex, QString(""));
+			MatrixElementWidget* element = new MatrixElementWidget(centralWidget, elementIndex, "");
 
 			m_gridLayout->addWidget(element, i, j);
 		}

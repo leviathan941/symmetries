@@ -20,6 +20,11 @@
 cmake_minimum_required(VERSION 2.8.11)
 project(application)
 
+set(APPLICATION_HEADERS
+	TensorTypes.h
+	OperationItems.h
+	)
+
 set(APPLICATION_UI_HEADERS
 	MainWindow.h
 	AboutWindow.h
@@ -28,11 +33,14 @@ set(APPLICATION_UI_HEADERS
 	MatrixViewWidget.h
 	MatrixElementWidget.h
 	TensorPropWindow.h
-	TensorTypes.h
+	CalculateWindow.h
+	OperationRequirementWidget.h
 	)
 
 set(APPLICATION_SOURCES
 	main.cpp
+	TensorTypes.cpp
+	OperationItems.cpp
 	)
 
 set(APPLICATION_UI_SOURCES
@@ -43,7 +51,8 @@ set(APPLICATION_UI_SOURCES
 	MatrixViewWidget.cpp
 	MatrixElementWidget.cpp
 	TensorPropWindow.cpp
-	TensorTypes.cpp
+	CalculateWindow.cpp
+	OperationRequirementWidget.cpp
 	)
 
 include_directories(
@@ -75,7 +84,7 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/file
 	)
 
-add_executable(${GENERIC_PROJECT_NAME} ${APPLICATION_SOURCES} ${APPLICATION_UI_HEADERS}
-	${APPLICATION_UI_SOURCES} ${RESOURCES_SOURCES})
+add_executable(${GENERIC_PROJECT_NAME} ${APPLICATION_HEADERS} ${APPLICATION_SOURCES}
+	${APPLICATION_UI_HEADERS} ${APPLICATION_UI_SOURCES} ${RESOURCES_SOURCES})
 target_link_libraries(${GENERIC_PROJECT_NAME} ${APPLICATION_LIBS})
 qt5_use_modules(${GENERIC_PROJECT_NAME} Widgets)

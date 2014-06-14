@@ -1,6 +1,6 @@
 /*
 	Symmetries
-	Copyright (C) 2014 Mikhail Barenboim <mikelbn@yandex.ru>
+	Copyright (C) 2014 Alexey Kuzin <amkuzink@gmail.com>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -16,30 +16,35 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef TENSOR_TYPES_H
-#define TENSOR_TYPES_H
 
-#include <map>
+#ifndef CALCULATE_WINDOW_H
+#define CALCULATE_WINDOW_H
 
-class QString;
-class QStringList;
+#include <QDialog>
 
-class TensorTypes
+class QComboBox;
+class QTextEdit;
+class QPushButton;
+class QListWidget;
+class OperationRequirementWidget;
+
+class CalculateWindow : public QDialog
 {
+	Q_OBJECT
 public:
-	enum TensorType
-	{
-		METRIC_TENSOR,
-		TORSION_TENSOR,
-		AFFINE_CONNECTION
-	};
-
-	static QString getTensorTypeAsString(TensorType type);
-	static QStringList getAllTypes();
+	explicit CalculateWindow(QWidget *parent = 0);
 
 private:
-	static std::map<TensorType, QString> init();
-	static std::map<TensorType, QString> m_tensorTypes;
+	QComboBox* m_comBoxCalcItem;
+	QPushButton* m_pushBtnOk;
+	QPushButton* m_pushBtnCancel;
+	OperationRequirementWidget* m_calcReqWidget;
+
+private slots:
+	void onOkButtonClicked();
+	void onCancelButtonClicked();
+	void onCalcItemCurrentIndexChanged(int nIndex);
+	void onReqWidgetTensorChoosed(int nTensorIndex);
 };
 
-#endif // TENSOR_TYPES_H
+#endif // CALCULATE_WINDOW_H
