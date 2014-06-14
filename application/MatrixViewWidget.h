@@ -24,6 +24,7 @@
 #include <string>
 
 #include <QScrollArea>
+#include <QString>
 
 class QGridLayout;
 
@@ -33,8 +34,8 @@ class MatrixViewWidget : public QScrollArea
 public:
 	MatrixViewWidget(unsigned nRowNumber, unsigned nColumnNumber, QWidget *parent = 0);
 
-	void setMatrix(boost::numeric::ublas::matrix<std::string> matrix);
-	boost::numeric::ublas::matrix<std::string> getMatrix() const;
+	void setMatrix(boost::numeric::ublas::matrix<QString> matrix);
+	boost::numeric::ublas::matrix<QString> getMatrix() const;
 
 private:
 	// Fields

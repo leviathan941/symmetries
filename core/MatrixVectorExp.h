@@ -27,9 +27,11 @@ class MatrixVectorExp
 {
 
 public:
+	typedef MatrixVector<SimpleExpression>::boostMatrix expBoostMatrix;
+
 	MatrixVectorExp();
 	MatrixVectorExp(const unsigned nRowNumber, const unsigned nColumnNumber);
-	MatrixVectorExp(const std::vector<MatrixVector<SimpleExpression>::boostMatrix>& vecMatrices,
+	MatrixVectorExp(const std::vector<expBoostMatrix>& vecMatrices,
 		const unsigned nRowNumber, const unsigned nColumnNumber);
 	MatrixVectorExp(const MatrixVectorExp& other);
 	virtual ~MatrixVectorExp();
@@ -37,12 +39,12 @@ public:
 	virtual bool operator==(const MatrixVectorExp& other) const;
 	virtual bool operator!=(const MatrixVectorExp& other) const;
 	virtual SimpleExpression& operator()(const unsigned nPosition, const unsigned nRow, const unsigned nColumn);
-	virtual MatrixVector<SimpleExpression>::boostMatrix& operator[](const unsigned nPosition);
+	virtual expBoostMatrix& operator[](const unsigned nPosition);
 
-	void addMatrix(unsigned nPosition, MatrixVector<SimpleExpression>::boostMatrix& matr);
+	void addMatrix(unsigned nPosition, expBoostMatrix& matr);
 	void addMatrix(MatrixVector<SimpleExpression>::boostMatrix& matr);
 	void removeMatrix(unsigned nPosition);
-	void setMatrix(unsigned nPosition, MatrixVector<SimpleExpression>::boostMatrix& matr);
+	void setMatrix(unsigned nPosition, expBoostMatrix& matr);
 	void setElement(unsigned nPosition, unsigned nRow, unsigned nColumn, SimpleExpression& value);
 	void allocateSize(const unsigned vectorSize, const unsigned matrixRowSize, const unsigned matrixColumSize);
 	void clear();

@@ -23,7 +23,7 @@
 
 #include <QGridLayout>
 
-typedef boost::numeric::ublas::matrix<std::string> stringMatrix;
+typedef boost::numeric::ublas::matrix<QString> stringMatrix;
 
 MatrixViewWidget::MatrixViewWidget(unsigned nRowNumber, unsigned nColumnNumber, QWidget *parent) :
 	QScrollArea(parent)
@@ -66,7 +66,7 @@ void MatrixViewWidget::setMatrix(stringMatrix matrix)
 		{
 			MatrixElementWidget* element = static_cast<MatrixElementWidget*>
 				(m_gridLayout->itemAtPosition(i, j)->widget());
-			element->setElement(QString::fromStdString(matrix(i, j).c_str()));
+			element->setElement(matrix(i, j));
 		}
 	}
 }
@@ -83,7 +83,7 @@ stringMatrix MatrixViewWidget::getMatrix() const
 		{
 			MatrixElementWidget* element = static_cast<MatrixElementWidget*>
 				(m_gridLayout->itemAtPosition(i, j)->widget());
-			std::string elementString = element->getElement().toStdString();
+			QString elementString = element->getElement();
 			matrix.insert_element(i, j, elementString);
 		}
 	}

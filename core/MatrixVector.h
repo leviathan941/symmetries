@@ -93,7 +93,7 @@ public:
 
 	void clear();
 
-	//	void printMatrix(unsigned nPosition) const;
+	//void printMatrix(unsigned nPosition) const;
 
 private:
 	std::vector<boostMatrix> m_matrVec;

@@ -16,7 +16,6 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #include "TensorPropWindow.h"
 #include "TensorTypes.h"
 #include "ImportTensorWindow.h"
@@ -35,14 +34,6 @@ TensorPropWindow::TensorPropWindow(QWidget *parent) :
 {
 	setWindowTitle(tr("Tensor properties"));
 
-	m_typeLabel = new QLabel(this);
-	m_typeLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-	m_typeLabel->setText(tr("Type"));
-
-	m_typeComBox = new QComboBox(this);
-	m_typeComBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
-	m_typeComBox->addItems(TensorTypes::getAllTypes());
-
 	m_dimLabel = new QLabel(this);
 	m_dimLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_dimLabel->setText(tr("Dimension"));
@@ -60,7 +51,6 @@ TensorPropWindow::TensorPropWindow(QWidget *parent) :
 	m_cancelButton->setText(tr("Cancel"));
 
 	QFormLayout* mainFormLayout = new QFormLayout;
-	mainFormLayout->addRow(m_typeLabel, m_typeComBox);
 	mainFormLayout->addRow(m_dimLabel, m_dimSpinBox);
 
 	QHBoxLayout* buttonLayout = new QHBoxLayout;

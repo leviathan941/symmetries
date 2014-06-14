@@ -25,6 +25,8 @@
 #include "SimpleItem.h"
 #include "AffineLieAlgebra.h"
 #include "MainWindow.h"
+#include "TensorStore.h"
+#include "Exceptions.h"
 
 AffineConnection getTest2DConstAffine()
 {
@@ -336,11 +338,46 @@ void testAffine2DLieAlgebra()
 	lieAlgebra.printLieSystem();
 }
 
+void testTensorStore()
+{
+	AffineConnection affine = getTest2DConstAffine();
+	MatrixVectorExp tensor = affine.getTorsionTensor();
+	unsigned matrixRowNumber = tensor.getContent().getMatrixRowSize();
+	unsigned matrixColumnNumber = tensor.getContent().getMatrixColumnSize();
+
+	TensorStore::getInstance().addTensor("test", tensor);
+
+	MatrixVector<QString> matrVecString;
+	try
+	{
+		matrVecString = TensorStore::getInstance().getStringTensor(0);
+	}
+	catch(coreException& e)
+	{
+		std::cout << e.what();
+		return;
+	}
+
+	typedef boost::numeric::ublas::matrix<QString> stringMatrix;
+	std::vector<stringMatrix> stringVector = matrVecString.getVector();
+	BOOST_FOREACH(const stringMatrix& matrix, stringVector)
+	{
+		for(unsigned i = 0; i < matrixRowNumber; i++)
+		{
+			for(unsigned j = 0; j < matrixColumnNumber; j++)
+			{
+				std::cout << "(" << i << ";" << j << "): " << matrix(i, j).toStdString() << std::endl;
+			}
+		}
+	}
+}
+
 int main(int argc, char *argv[])
 {
 	//calcTestConst2DAffine();
 	//calcTestConst4DAffine();
 	//testAffine2DLieAlgebra();
+	testTensorStore();
 
 	QApplication app(argc, argv);
 	MainWindow window;

@@ -20,6 +20,10 @@
 cmake_minimum_required(VERSION 2.8.11)
 project(application)
 
+set(APPLICATION_HEADERS
+	TensorStore.h
+	)
+
 set(APPLICATION_UI_HEADERS
 	MainWindow.h
 	AboutWindow.h
@@ -35,6 +39,7 @@ set(APPLICATION_UI_HEADERS
 
 set(APPLICATION_SOURCES
 	main.cpp
+	TensorStore.cpp
 	)
 
 set(APPLICATION_UI_SOURCES
@@ -79,7 +84,7 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/file
 	)
 
-add_executable(${GENERIC_PROJECT_NAME} ${APPLICATION_SOURCES} ${APPLICATION_UI_HEADERS}
-	${APPLICATION_UI_SOURCES} ${RESOURCES_SOURCES})
+add_executable(${GENERIC_PROJECT_NAME} ${APPLICATION_HEADERS} ${APPLICATION_SOURCES}
+	${APPLICATION_UI_HEADERS} ${APPLICATION_UI_SOURCES} ${RESOURCES_SOURCES})
 target_link_libraries(${GENERIC_PROJECT_NAME} ${APPLICATION_LIBS})
 qt5_use_modules(${GENERIC_PROJECT_NAME} Widgets)

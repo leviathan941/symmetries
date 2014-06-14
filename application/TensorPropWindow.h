@@ -16,7 +16,6 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef TENSOR_PROP_WINDOW_H
 #define TENSOR_PROP_WINDOW_H
 
@@ -36,9 +35,7 @@ public:
 private:
 	QPushButton* m_okButton;
 	QPushButton* m_cancelButton;
-	QLabel* m_typeLabel;
 	QLabel* m_dimLabel;
-	QComboBox* m_typeComBox;
 	QSpinBox* m_dimSpinBox;
 
 private slots:
