@@ -51,6 +51,15 @@ public:
 	~fileException() throw() {}
 };
 
+class guiException: public coreException
+{
+public:
+	guiException(const char* strErrorMessage)
+		: coreException(strErrorMessage) {}
+
+	~guiException() throw() {}
+};
+
 #define CATCH_FILE catch(fileException& e)\
 {\
 	std::cout << "File error is happened: " << e.what() << std::endl;\
@@ -59,6 +68,11 @@ public:
 #define CATCH_CORE catch(coreException& e)\
 {\
 	std::cout << "Core error is happened: " << e.what() << std::endl;\
+}
+
+#define CATCH_GUI catch(guiException& e)\
+{\
+	qDebug() << "GUI error is happened: " << e.what();\
 }
 
 #endif // EXCEPTIONS_H

@@ -39,7 +39,7 @@ FileReader::FileReader(boost::filesystem::path &FilePath)
 	}
 	else
 	{
-		throw coreException(error.message().c_str());
+		throw fileException(error.message().c_str());
 	}
 }
 

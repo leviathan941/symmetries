@@ -56,7 +56,7 @@ MatrixVectorExp& TensorStore::getTensor(unsigned nIndex)
 	std::map<unsigned, TensorProperties>::iterator it = m_tensors.find(nIndex);
 	if (it == m_tensors.end())
 	{
-		throw coreException("No such tensor");
+		throw guiException("No such tensor");
 	}
 	return it->second.getTensor();
 }
@@ -67,7 +67,7 @@ MatrixVector<QString> TensorStore::getStringTensor(unsigned nIndex)
 	std::map<unsigned, TensorProperties>::iterator it = m_tensors.find(nIndex);
 	if (it == m_tensors.end())
 	{
-		throw coreException("No such tensor");
+		throw guiException("No such tensor");
 	}
 
 	MatrixVectorExp& tensor = it->second.getTensor();
@@ -100,7 +100,7 @@ QString TensorStore::getTensorName(unsigned nIndex)
 	std::map<unsigned, TensorProperties>::iterator it = m_tensors.find(nIndex);
 	if (it == m_tensors.end())
 	{
-		throw coreException("No such tensor");
+		throw guiException("No such tensor");
 	}
 	return it->second.getTensorName();
 }

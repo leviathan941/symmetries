@@ -29,10 +29,12 @@
 #include <QListWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QDebug>
 
 #define MINIMUM_WIDTH 500
 #define MINIMUM_HEIGHT 400
-#define MARGIN_LEFT_TOP_RIGHT 10
+#define CONTENT_MARGIN 10
+#define HORIZ_SPACING 5
 
 CalculateWindow::CalculateWindow(QWidget *parent) :
 	QDialog(parent)
@@ -51,6 +53,7 @@ CalculateWindow::CalculateWindow(QWidget *parent) :
 	m_tensorView = new TabsWidget(this);
 
 	QHBoxLayout* listAndTensorViewLayout = new QHBoxLayout;
+	listAndTensorViewLayout->setSpacing(HORIZ_SPACING);
 	listAndTensorViewLayout->addLayout(calcListLayout, 0);
 	listAndTensorViewLayout->addWidget(m_tensorView, 1);
 
@@ -65,8 +68,7 @@ CalculateWindow::CalculateWindow(QWidget *parent) :
 	QVBoxLayout* mainLayout = new QVBoxLayout;
 	mainLayout->addLayout(listAndTensorViewLayout);
 	mainLayout->addLayout(okCancelLayout);
-	mainLayout->setContentsMargins(MARGIN_LEFT_TOP_RIGHT, MARGIN_LEFT_TOP_RIGHT,
-		MARGIN_LEFT_TOP_RIGHT, 0);
+	mainLayout->setContentsMargins(CONTENT_MARGIN, CONTENT_MARGIN, CONTENT_MARGIN, CONTENT_MARGIN);
 
 	setLayout(mainLayout);
 
@@ -103,7 +105,7 @@ void CalculateWindow::onCalcItemCurrentIndexChanged(int nIndex)
 			= OperationItems::getTensorTypesByItemId((OperationItems::AllowableItem) nIndex);
 		m_calcReqWidget->addItems(reqTensors);
 	}
-	CATCH_CORE
+	CATCH_GUI
 }
 
 ///////////////////////////////////////////////////////////////////////////

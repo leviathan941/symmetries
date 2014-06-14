@@ -17,32 +17,43 @@
 */
 
 #include "TabsWidget.h"
+#include "MatrixViewWidget.h"
 
-#include <QStackedLayout>
+#include <vector>
+#include <boost/foreach.hpp>
 
 TabsWidget::TabsWidget(QWidget *parent)
 {
-	QStackedLayout* mainLayout = new QStackedLayout;
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	setLayout(mainLayout);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void TabsWidget::add(QWidget *widget, QString tabName)
+void TabsWidget::addMatrix(boost::numeric::ublas::matrix<QString> &matrix, const QString &tabName)
 {
-	QTabWidget::addTab(widget, tabName);
+	MatrixViewWidget* matrixView = new MatrixViewWidget(matrix.size1(), matrix.size2(), this);
+	matrixView->setMatrix(matrix);
+	addTab(matrixView, tabName);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void TabsWidget::remove(int tabNumber)
+void TabsWidget::setTensor(MatrixVector<QString> tensor)
 {
-	QTabWidget::removeTab(tabNumber);
+	removeAll();
+
+	std::vector<boost::numeric::ublas::matrix<QString> > vecMatr = tensor.getVector();
+	int matrNumber = 0;
+	BOOST_FOREACH(boost::numeric::ublas::matrix<QString>& matrix, vecMatr)
+	{
+		QString matrixName("matrix ");
+		matrixName.append(QString::number(++matrNumber));
+		addMatrix(matrix, matrixName);
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////
 void TabsWidget::removeAll()
 {
-	for(int i = QTabWidget::count(); i > -1; --i)
+	for(int i = count(); i >= 0 && count() > 0; --i)
 	{
 		delete widget(i);
 		QTabWidget::removeTab(i);

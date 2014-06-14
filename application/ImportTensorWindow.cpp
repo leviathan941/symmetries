@@ -56,7 +56,7 @@ ImportTensorWindow::ImportTensorWindow(QWidget *parent, int dimension) :
 	{
 		matrixName.append("matrix");
 		matrixName.append(QString(" %1").arg(matrixNumber));
-		inputTabs->add(new MatrixViewWidget(dimension, dimension), matrixName);
+		inputTabs->addTab(new MatrixViewWidget(dimension, dimension), matrixName);
 		matrixName.clear();
 		matrixNumber++;
 	}

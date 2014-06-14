@@ -26,6 +26,7 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QPainter>
+#include <QDebug>
 #include <boost/foreach.hpp>
 
 #define MAIN_STYLESHEET\
@@ -69,13 +70,17 @@ void OperationRequirementWidget::addItems(std::vector<TensorTypes::TensorType> t
 ///////////////////////////////////////////////////////////////////////////
 void OperationRequirementWidget::addRow(TensorTypes::TensorType tensorType)
 {
-	QLabel* tensorLabel = new QLabel(TensorTypes::getTensorTypeAsString(tensorType), this);
-	QComboBox* tensorsChoice = new QComboBox(this);
-	// TODO Fill the combo box.
+	try
+	{
+		QLabel* tensorLabel = new QLabel(TensorTypes::getTensorTypeAsString(tensorType), this);
+		QComboBox* tensorsChoice = new QComboBox(this);
+		// TODO Fill the combo box.
 
-	m_calcTensors.insert(std::make_pair(tensorType, tensorsChoice));
+		m_calcTensors.insert(std::make_pair(tensorType, tensorsChoice));
 
-	m_mainLayout->addRow(tensorLabel, tensorsChoice);
+		m_mainLayout->addRow(tensorLabel, tensorsChoice);
+	}
+	CATCH_GUI
 }
 
 ///////////////////////////////////////////////////////////////////////////

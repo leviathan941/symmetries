@@ -57,7 +57,7 @@ void MatrixViewWidget::setMatrix(stringMatrix matrix)
 	if (matrix.size1() != m_gridLayout->rowCount()
 		|| matrix.size2() != m_gridLayout->columnCount())
 	{
-		throw coreException("The matrix size must be equal to widget size.");
+		throw guiException("The matrix size must be equal to widget size.");
 	}
 
 	for (int i = 0; i < matrix.size1(); ++i)

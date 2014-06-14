@@ -33,7 +33,12 @@ OperationItemMap OperationItems::m_operationItems = []()->OperationItemMap
 	std::vector<TensorTypes::TensorType> tempReqTensors;
 	tempReqTensors.push_back(TensorTypes::METRIC_TENSOR);
 	tempReqTensors.push_back(TensorTypes::TORSION_TENSOR);
-	QString operItemName = TensorTypes::getTensorTypeAsString(TensorTypes::AFFINE_CONNECTION);
+	QString operItemName("Affine Connection");
+	try
+	{
+		operItemName = TensorTypes::getTensorTypeAsString(TensorTypes::AFFINE_CONNECTION);
+	}
+	CATCH_CORE
 	OperationItems::ItemProperties affineConn(operItemName, tempReqTensors);
 	operationItems.insert(std::make_pair(OperationItems::AFFINE_CONNECTION, affineConn));
 	tempReqTensors.clear();
@@ -52,7 +57,7 @@ QString OperationItems::getStringItemById(AllowableItem itemId)
 	OperationItemMap::iterator operIter = m_operationItems.find(itemId);
 	if (operIter == m_operationItems.end())
 	{
-		throw coreException("Fatal error. No such item.");
+		throw guiException("Fatal error. No such item.");
 	}
 	return operIter->second.getItemName();
 }
@@ -74,7 +79,7 @@ std::vector<TensorTypes::TensorType> OperationItems::getTensorTypesByItemId(Allo
 	OperationItemMap::iterator operIter = m_operationItems.find(itemId);
 	if (operIter == m_operationItems.end())
 	{
-		throw coreException("Fatal error. No such item.");
+		throw guiException("Fatal error. No such item.");
 	}
 	return operIter->second.getRequiredTensors();
 }

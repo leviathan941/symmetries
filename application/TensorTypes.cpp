@@ -34,7 +34,7 @@ QString TensorTypes::getTensorTypeAsString(TensorType type)
 	tensorTypeMap::iterator typeIter = m_tensorTypes.find(type);
 	if(typeIter == m_tensorTypes.end())
 	{
-		throw coreException("Fatal error. No such tensor type.");
+		throw guiException("Fatal error. No such tensor type.");
 	}
 	return typeIter->second;
 }

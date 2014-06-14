@@ -53,7 +53,7 @@ OutputViewWidget::OutputViewWidget(QWidget *parent) :
 	// For test:
 	TabsWidget* tabs = new TabsWidget(this);
 	MatrixViewWidget* testTabsWidget = new MatrixViewWidget(50, 50);
-	tabs->add(testTabsWidget,"test");
+	tabs->addTab(testTabsWidget,"test");
 
 	QHBoxLayout* buttonLayout = new QHBoxLayout;
 	buttonLayout->addWidget(m_removeButton);

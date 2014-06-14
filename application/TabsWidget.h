@@ -19,8 +19,9 @@
 #ifndef TABS_WIDGET_H
 #define TABS_WIDGET_H
 
-#include <QTabWidget>
+#include "MatrixVectorExp.h"
 
+#include <QTabWidget>
 
 class TabsWidget : public QTabWidget
 {
@@ -28,8 +29,8 @@ class TabsWidget : public QTabWidget
 public:
 	explicit TabsWidget(QWidget *parent);
 
-	void add(QWidget *widget, QString tabName);
-	void remove(int tabNumber);
+	void addMatrix(boost::numeric::ublas::matrix<QString>& matrix, const QString& tabName);
+	void setTensor(MatrixVector<QString> tensor);
 	void removeAll();
 
 private:

@@ -352,7 +352,7 @@ void testTensorStore()
 	{
 		matrVecString = TensorStore::getInstance().getStringTensor(0);
 	}
-	catch(coreException& e)
+	catch(guiException& e)
 	{
 		std::cout << e.what();
 		return;
