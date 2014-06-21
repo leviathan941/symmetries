@@ -17,24 +17,31 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef EXPRESSION_PARSER_H
-#define EXPRESSION_PARSER_H
+#ifndef TENSOR_PARSER_H
+#define TENSOR_PARSER_H
+
+#include "MatrixVectorExp.h"
 
 #include <QString>
 
 class SimpleItem;
 class SimpleExpression;
 
-class ExpressionParser
+class TensorParser
 {
 public:
+	typedef boost::numeric::ublas::matrix<QString> QStringMatrix;
+
 	static SimpleExpression fromQStringToSimpleExpression(const QString& sExpression);
+	static MatrixVector<QString> fromMatrixVecExpToMatrixVecQString(const MatrixVectorExp& tensor);
+	static MatrixVectorExp fromMatrixVecQStringToMatrixVecExp(
+		const MatrixVector<QString>& stringTensor);
 
 protected:
 	static SimpleItem fromQStringItemToSimpleItem(const QString& sItem);
 
 private:
-	ExpressionParser();
+	TensorParser();
 };
 
-#endif // EXPRESSION_PARSER_H
+#endif // TENSOR_PARSER_H

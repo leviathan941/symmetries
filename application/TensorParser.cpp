@@ -17,22 +17,23 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ExpressionParser.h"
+#include "TensorParser.h"
 #include "SimpleExpression.h"
 #include "SimpleItem.h"
 
 #include <QStringList>
 #include <QRegExp>
+#include <boost/foreach.hpp>
 
 #define ITEM_DELIMETER '*'
 #define EXP_DELIMITER_PLUS '+'
 
-ExpressionParser::ExpressionParser()
+TensorParser::TensorParser()
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////
-SimpleExpression ExpressionParser::fromQStringToSimpleExpression(const QString& sExpression)
+SimpleExpression TensorParser::fromQStringToSimpleExpression(const QString& sExpression)
 {
 	QStringList expItems = sExpression.split(EXP_DELIMITER_PLUS, QString::SkipEmptyParts);
 	SimpleItem itemZero("", 1.0, 0.0);
@@ -49,7 +50,57 @@ SimpleExpression ExpressionParser::fromQStringToSimpleExpression(const QString& 
 }
 
 ///////////////////////////////////////////////////////////////////////////
-SimpleItem ExpressionParser::fromQStringItemToSimpleItem(const QString& sItem)
+MatrixVector<QString> TensorParser::fromMatrixVecExpToMatrixVecQString(
+	const MatrixVectorExp& tensor)
+{
+	unsigned matrixRowNumber = tensor.getContent().getMatrixRowSize();
+	unsigned matrixColumnNumber = tensor.getContent().getMatrixColumnSize();
+	MatrixVector<QString> stringTensor(matrixRowNumber, matrixColumnNumber);
+
+	std::vector<MatrixVectorExp::expBoostMatrix> vec = tensor.getContent().getVector();
+
+	BOOST_FOREACH(MatrixVectorExp::expBoostMatrix& matrix, vec)
+	{
+		QStringMatrix tempMatrix;
+		tempMatrix.resize(matrixRowNumber, matrixColumnNumber);
+		for(unsigned i = 0; i < matrixRowNumber; i++)
+		{
+			for(unsigned j = 0; j < matrixColumnNumber; j++)
+			{
+				tempMatrix(i, j) = QString::fromStdString(matrix(i, j).toString());
+			}
+		}
+		stringTensor.addMatrix(tempMatrix);
+	}
+	return stringTensor;
+}
+
+///////////////////////////////////////////////////////////////////////////
+MatrixVectorExp TensorParser::fromMatrixVecQStringToMatrixVecExp(
+	const MatrixVector<QString>& stringTensor)
+{
+	std::vector<QStringMatrix> vecMatrStr = stringTensor.getVector();
+	MatrixVectorExp inputTensor(stringTensor.getMatrixRowSize(),
+		stringTensor.getMatrixColumnSize());
+	BOOST_FOREACH(std::vector<QStringMatrix>::value_type& tempMatrix, vecMatrStr)
+	{
+		MatrixVectorExp::expBoostMatrix inputMatrix;
+		inputMatrix.resize(tempMatrix.size1(), tempMatrix.size2());
+		for (unsigned i = 0; i < tempMatrix.size1(); ++i)
+		{
+			for (unsigned j = 0; j < tempMatrix.size2(); ++j)
+			{
+				SimpleExpression tempExp = fromQStringToSimpleExpression(tempMatrix(i, j));
+				inputMatrix(i, j) = tempExp;
+			}
+		}
+		inputTensor.addMatrix(inputMatrix);
+	}
+	return inputTensor;
+}
+
+///////////////////////////////////////////////////////////////////////////
+SimpleItem TensorParser::fromQStringItemToSimpleItem(const QString& sItem)
 {
 	QStringList itemTokens = sItem.split(ITEM_DELIMETER, QString::SkipEmptyParts);
 	QString expStr;

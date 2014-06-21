@@ -35,14 +35,18 @@
 #include <QDebug>
 #include <QMessageBox>
 
-#define MINIMUM_WIDTH 500
-#define MINIMUM_HEIGHT 400
+#define MINIMUM_WIDTH 640
+#define MINIMUM_HEIGHT 480
 #define CONTENT_MARGIN 10
 #define HORIZ_SPACING 5
 
 CalculateWindow::CalculateWindow(QWidget *parent) :
 	QDialog(parent)
 {
+	if (!TensorStore::getInstance().size())
+	{
+		throw guiException("You have to add at least one tensor to start a calculation.");
+	}
 	setWindowTitle(tr("Calculate"));
 	setMinimumSize(QSize(MINIMUM_WIDTH, MINIMUM_HEIGHT));
 

@@ -346,7 +346,14 @@ void testTensorStore()
 	unsigned matrixRowNumber = tensor.getContent().getMatrixRowSize();
 	unsigned matrixColumnNumber = tensor.getContent().getMatrixColumnSize();
 
-	TensorStore::getInstance().addTensor("test", tensor);
+	try
+	{
+		TensorStore::getInstance().addTensor("test", tensor);
+	} catch (guiException& e)
+	{
+		std::cout << e.what() << std::endl;
+		return;
+	}
 
 	MatrixVector<QString> matrVecString;
 	try
@@ -378,7 +385,7 @@ int main(int argc, char *argv[])
 	//calcTestConst2DAffine();
 	//calcTestConst4DAffine();
 	//testAffine2DLieAlgebra();
-	testTensorStore();
+	//testTensorStore();
 
 	QApplication app(argc, argv);
 	MainWindow window;

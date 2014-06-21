@@ -20,6 +20,7 @@
 
 #include "TensorListWidget.h"
 #include "TensorPropWindow.h"
+#include "TensorStore.h"
 
 #include <QListWidget>
 #include <QPushButton>
@@ -39,9 +40,6 @@ TensorListWidget::TensorListWidget(QWidget *parent) :
 	QWidget(parent)
 {
 	m_tensorList = new QListWidget(this);
-	// TODO Delete!!!
-	m_tensorList->addItem("Metric Tensor 1");
-	m_tensorList->addItem("Torsion Tensor 1");
 
 	m_pushBtnAddTensor = new QPushButton(this);
 	m_pushBtnAddTensor->setIcon(QIcon(":/icons/plus.png"));
@@ -70,6 +68,18 @@ TensorListWidget::TensorListWidget(QWidget *parent) :
 
 	connect(m_pushBtnAddTensor, SIGNAL(clicked()), this, SLOT(onAddTensorButtonClicked()));
 	connect(m_pushBtnRemoveTensor, SIGNAL(clicked()), this, SLOT(onRemoveTensorButtonClicked()));
+	connect(&TensorStore::getInstance(), SIGNAL(storeUpdated()), this,
+		SLOT(onTensorStoreUpdated()));
+
+	onTensorStoreUpdated();
+}
+
+///////////////////////////////////////////////////////////////////////////
+void TensorListWidget::onTensorStoreUpdated()
+{
+	m_tensorList->clear();
+	QStringList items = TensorStore::getInstance().getTensorNames();
+	m_tensorList->addItems(items);
 }
 
 ///////////////////////////////////////////////////////////////////////////

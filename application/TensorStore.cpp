@@ -19,12 +19,20 @@
 
 #include "TensorStore.h"
 #include "Exceptions.h"
+#include "TensorParser.h"
 
 #include <QStringList>
 
 typedef std::map<unsigned, TensorStore::TensorProperties> TensorsMap;
 
-TensorStore::TensorProperties::TensorProperties(QString& sTensorName, MatrixVectorExp& tensor)
+TensorStore& TensorStore::getInstance()
+{
+	static TensorStore instance;
+	return instance;
+}
+
+///////////////////////////////////////////////////////////////////////////
+TensorStore::TensorProperties::TensorProperties(const QString& sTensorName, MatrixVectorExp& tensor)
 {
 	m_tensorName = sTensorName;
 	m_tensor = tensor;
@@ -43,17 +51,49 @@ MatrixVectorExp& TensorStore::TensorProperties::getTensor()
 }
 
 ///////////////////////////////////////////////////////////////////////////
-TensorStore::TensorStore()
+TensorStore::TensorStore() : QObject()
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-void TensorStore::addTensor(QString sTensorName, MatrixVectorExp& tensor)
+TensorStore::TensorStore(const TensorStore& otherStore)
 {
-	static unsigned newTensorIndex = m_tensors.size();
+	m_tensors = otherStore.m_tensors;
+}
+
+///////////////////////////////////////////////////////////////////////////
+TensorStore& TensorStore::operator=(const TensorStore& otherStore)
+{
+	if (&otherStore != this)
+	{
+		m_tensors = otherStore.m_tensors;
+	}
+	return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+void TensorStore::addTensor(const QString& sTensorName, MatrixVector<QString>& stringTensor)
+{
+	MatrixVectorExp expTensor = TensorParser::fromMatrixVecQStringToMatrixVecExp(stringTensor);
+	addTensor(sTensorName, expTensor);
+}
+
+///////////////////////////////////////////////////////////////////////////
+void TensorStore::addTensor(const QString& sTensorName, MatrixVectorExp& tensor)
+{
+	QStringList existedNames = getTensorNames();
+	if (existedNames.contains(sTensorName))
+	{
+		throw guiException("There is a matrix with that name. "
+			"Please enter another name for the matrix.");
+	}
+
+	unsigned newTensorIndex = m_tensors.size();
 	TensorStore::TensorProperties newTensor(sTensorName, tensor);
-	m_tensors.insert(std::make_pair(newTensorIndex++, newTensor));
+	m_tensors.insert(std::make_pair(newTensorIndex, newTensor));
+
+	emit storeUpdated();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -77,27 +117,7 @@ MatrixVector<QString> TensorStore::getStringTensor(unsigned nIndex)
 	}
 
 	MatrixVectorExp& tensor = it->second.getTensor();
-	unsigned matrixRowNumber = tensor.getContent().getMatrixRowSize();
-	unsigned matrixColumnNumber = tensor.getContent().getMatrixColumnSize();
-	MatrixVector<QString> stringTensor(matrixRowNumber, matrixColumnNumber);
-
-	std::vector<MatrixVectorExp::expBoostMatrix> vec = tensor.getContent().getVector();
-
-
-	BOOST_FOREACH(MatrixVectorExp::expBoostMatrix& matrix, vec)
-	{
-		boost::numeric::ublas::matrix<QString> tempMatrix;
-		tempMatrix.resize(matrixRowNumber, matrixColumnNumber);
-		for(unsigned i = 0; i < matrixRowNumber; i++)
-		{
-			for(unsigned j = 0; j < matrixColumnNumber; j++)
-			{
-				tempMatrix(i, j) = QString::fromStdString(matrix(i, j).toString());
-			}
-		}
-		stringTensor.addMatrix(tempMatrix);
-	}
-	return stringTensor;
+	return TensorParser::fromMatrixVecExpToMatrixVecQString(tensor);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -125,11 +145,24 @@ QStringList TensorStore::getTensorNames() const
 ///////////////////////////////////////////////////////////////////////////
 void TensorStore::removeTensor(unsigned nIndex)
 {
-	m_tensors.erase(nIndex);
+	int nDeleted = m_tensors.erase(nIndex);
+	if (nDeleted)
+	{
+		emit storeUpdated();
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////
 void TensorStore::removeAllTensors()
 {
+	bool bUpdated = m_tensors.size();
 	m_tensors.clear();
+	if (bUpdated)
+		emit storeUpdated();
+}
+
+///////////////////////////////////////////////////////////////////////////
+unsigned TensorStore::size() const
+{
+	return m_tensors.size();
 }
