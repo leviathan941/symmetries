@@ -22,6 +22,7 @@
 #include "MatrixViewWidget.h"
 #include "TensorStore.h"
 #include "TabsWidget.h"
+#include "TensorParser.h"
 
 #include <QListWidget>
 #include <QPushButton>
@@ -29,9 +30,10 @@
 #include <QStackedLayout>
 #include <QPainter>
 #include <QTextEdit>
+#include <QDebug>
 
-typedef std::map<unsigned, MatrixVectorExp> tensorMap;
-typedef std::map<unsigned, QString> resultMap;
+typedef std::map<QString, MatrixVectorExp> tensorMap;
+typedef std::map<QString, QString> resultMap;
 
 #define WIDGET_STYLESHEET\
 	"OutputViewWidget {border: 1px solid; border-color: #999999}"
@@ -51,20 +53,17 @@ OutputViewWidget::OutputViewWidget(QWidget *parent) :
 	m_removeButton = new QPushButton(this);
 	m_removeButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_removeButton->setText(tr("Remove"));
+	m_removeButton->setEnabled(false);
 
 	m_addButton = new QPushButton(this);
 	m_addButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_addButton->setText(tr("Add"));
+	m_addButton->setEnabled(true);
 
 	m_textResult = new QTextEdit(this);
 	m_textResult->setReadOnly(true);
 
 	m_tensorResult = new TabsWidget(this);
-
-	// For test purpose only
-//	MatrixVector<QString> testTensor = TensorStore::getInstance().getStringTensor(0);
-//	m_tensorResult->setTensor(testTensor);
-//	m_resultsList->addItem("Torsion 1");
 
 	QHBoxLayout* buttonLayout = new QHBoxLayout;
 	buttonLayout->addWidget(m_removeButton);
@@ -87,52 +86,112 @@ OutputViewWidget::OutputViewWidget(QWidget *parent) :
 	setLayout(mainLayout);
 
 	connect(m_resultsList, SIGNAL(currentRowChanged(int)), this, SLOT(onCurrentRowChanged(int)));
+	connect(m_removeButton, SIGNAL(clicked()), this, SLOT(onRemoveButtonClicked()));
+	connect(m_addButton, SIGNAL(clicked()), this, SLOT(onAddButtonClicked()));
 }
 
 ///////////////////////////////////////////////////////////////////////////
 void OutputViewWidget::onTensorCalculated(MatrixVectorExp tensor)
 {
-	unsigned tensorIndex = m_resultsList->count();
 	QString tensorName = "Tensor ";
+	unsigned tensorNumber = m_calcTensors.size() + 1;
+	tensorName.append(QString::number(tensorNumber));
 
-	m_calcTensors.insert(std::make_pair(tensorIndex, tensor));
+	m_calcTensors.insert(std::make_pair(tensorName, tensor));
 
-	tensorName.append(QString::number(m_calcTensors.size()));
 	m_resultsList->addItem(tensorName);
+	m_removeButton->setEnabled(true);
 }
 
 ///////////////////////////////////////////////////////////////////////////
 void OutputViewWidget::onOtherCalculated(QString result)
 {
-	unsigned resultIndex = m_resultsList->count();
 	QString resultName = "Result ";
+	unsigned resultNumber = m_calcResults.size() + 1;
+	resultName.append(QString::number(resultNumber));
 
-	m_calcResults.insert(std::make_pair(resultIndex, result));
+	m_calcResults.insert(std::make_pair(resultName, result));
 
-	resultName.append(QString::number(m_calcResults.size()));
 	m_resultsList->addItem(resultName);
+	m_removeButton->setEnabled(true);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void OutputViewWidget::onCurrentRowChanged(int index)
+void OutputViewWidget::onCurrentRowChanged(int nIndex)
 {
-	for(tensorMap::iterator tensorIt = m_calcTensors.begin(); tensorIt != m_calcTensors.end(); tensorIt++)
+	QListWidgetItem* resultListItem = m_resultsList->item(nIndex);
+	if(resultListItem == NULL)
 	{
-		if(tensorIt->first == index)
-		{
-			m_resultLayout->setCurrentWidget(m_tensorResult);
-			return;
-		}
+		qDebug() << "onCurrentRowChanged There is no such item with index: " << nIndex;
+		return;
 	}
 
-	for(resultMap::iterator resultIt = m_calcResults.begin(); resultIt != m_calcResults.end(); resultIt++)
+	tensorMap::iterator tensorIt = m_calcTensors.find(resultListItem->text());
+	if(tensorIt != m_calcTensors.end())
 	{
-		if(resultIt->first == index)
+		m_addButton->setEnabled(true);
+		m_resultLayout->setCurrentWidget(m_tensorResult);
+		m_tensorResult->
+			setTensor(TensorParser::fromMatrixVecExpToMatrixVecQString(tensorIt->second));
+		return;
+	}
+	else
+	{
+		resultMap::iterator resultIt = m_calcResults.find(resultListItem->text());
+		if(resultIt != m_calcResults.end())
 		{
+			m_addButton->setEnabled(false);
 			m_resultLayout->setCurrentWidget(m_textResult);
+			m_textResult->setText(resultIt->second);
 			return;
 		}
 	}
+}
+
+///////////////////////////////////////////////////////////////////////////
+void OutputViewWidget::onRemoveButtonClicked()
+{
+	QListWidgetItem* resultListItem = m_resultsList->item(m_resultsList->currentRow());
+	if(resultListItem == NULL)
+	{
+		qDebug() << "onRemoveButtonClicked There is no such item to remove";
+		return;
+	}
+
+	tensorMap::iterator tensorIt = m_calcTensors.find(resultListItem->text());
+	if(tensorIt != m_calcTensors.end())
+	{
+		m_calcTensors.erase(tensorIt->first);
+		m_resultsList->removeItemWidget(resultListItem);
+	}
+	else
+	{
+		resultMap::iterator resultIt = m_calcResults.find(resultListItem->text());
+		if(resultIt != m_calcResults.end())
+		{
+			m_calcResults.erase(resultIt->first);
+			m_resultsList->removeItemWidget(resultListItem);
+		}
+	}
+	m_resultsList->takeItem(m_resultsList->currentRow());
+
+	m_tensorResult->clear();
+	m_textResult->clear();
+
+	if(m_resultsList->count() == 0)
+	{
+		m_removeButton->setEnabled(false);
+	}
+	else
+	{
+		onCurrentRowChanged(m_resultsList->currentRow());
+	}
+}
+
+///////////////////////////////////////////////////////////////////////////
+void OutputViewWidget::onAddButtonClicked()
+{
+
 }
 
 ///////////////////////////////////////////////////////////////////////////

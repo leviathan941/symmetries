@@ -40,7 +40,9 @@ public:
 public slots:
 	void onTensorCalculated(MatrixVectorExp tensor);
 	void onOtherCalculated(QString result);
-	void onCurrentRowChanged(int index);
+	void onCurrentRowChanged(int nIndex);
+	void onRemoveButtonClicked();
+	void onAddButtonClicked();
 
 private:
 	QListWidget* m_resultsList;
@@ -50,8 +52,8 @@ private:
 	QTextEdit* m_textResult;
 	QStackedLayout* m_resultLayout;
 
-	std::map<unsigned, MatrixVectorExp> m_calcTensors;
-	std::map<unsigned, QString> m_calcResults;
+	std::map<QString, MatrixVectorExp> m_calcTensors;
+	std::map<QString, QString> m_calcResults;
 
 protected:
 	void paintEvent(QPaintEvent* event);
