@@ -37,7 +37,7 @@ public:
 
 	void addItem(TensorTypes::TensorType tensorType);
 	void addItems(std::vector<TensorTypes::TensorType> tensorTypes);
-	std::map<TensorTypes::TensorType, unsigned> getItems();
+	std::map<TensorTypes::TensorType, QString> getItems();
 	void clear();
 
 private:
@@ -56,7 +56,7 @@ private slots:
 	void onReqTensorComBoxActivated(int nIndex);
 
 signals:
-	void tensorChoosed(int nTensorIndex);
+	void tensorChoosed(QString sTensorName);
 };
 
 #endif // OPERATION_REQUIREMENT_WIDGET_H

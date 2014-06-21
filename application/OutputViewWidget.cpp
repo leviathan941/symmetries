@@ -23,6 +23,7 @@
 #include "TensorStore.h"
 #include "TabsWidget.h"
 #include "TensorParser.h"
+#include "Exceptions.h"
 
 #include <QListWidget>
 #include <QPushButton>
@@ -31,6 +32,9 @@
 #include <QPainter>
 #include <QTextEdit>
 #include <QDebug>
+#include <QMessageBox>
+
+#define MAIN_MARGIN 5
 
 typedef std::map<QString, MatrixVectorExp> tensorMap;
 typedef std::map<QString, QString> resultMap;
@@ -58,7 +62,7 @@ OutputViewWidget::OutputViewWidget(QWidget *parent) :
 	m_addButton = new QPushButton(this);
 	m_addButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_addButton->setText(tr("Add"));
-	m_addButton->setEnabled(true);
+	m_addButton->setEnabled(false);
 
 	m_textResult = new QTextEdit(this);
 	m_textResult->setReadOnly(true);
@@ -80,7 +84,7 @@ OutputViewWidget::OutputViewWidget(QWidget *parent) :
 
 	QVBoxLayout* mainLayout = new QVBoxLayout;
 
-	mainLayout->setContentsMargins(5, 5, 5, 5);
+	mainLayout->setContentsMargins(MAIN_MARGIN, MAIN_MARGIN, MAIN_MARGIN, MAIN_MARGIN);
 	mainLayout->addLayout(listAndResults);
 	mainLayout->addLayout(buttonLayout);
 	setLayout(mainLayout);
@@ -122,7 +126,6 @@ void OutputViewWidget::onCurrentRowChanged(int nIndex)
 	QListWidgetItem* resultListItem = m_resultsList->item(nIndex);
 	if(resultListItem == NULL)
 	{
-		qDebug() << "onCurrentRowChanged There is no such item with index: " << nIndex;
 		return;
 	}
 
@@ -191,7 +194,23 @@ void OutputViewWidget::onRemoveButtonClicked()
 ///////////////////////////////////////////////////////////////////////////
 void OutputViewWidget::onAddButtonClicked()
 {
+	int listItemIndex = m_resultsList->currentRow();
+	QListWidgetItem* resultListItem = m_resultsList->item(listItemIndex);
+	if(resultListItem == NULL)
+	{
+		qDebug() << "onAddButtonClicked There is no such item to add";
+		return;
+	}
 
+	tensorMap::iterator tensorIt = m_calcTensors.find(resultListItem->text());
+	if(tensorIt != m_calcTensors.end())
+	{
+		try
+		{
+			TensorStore::getInstance().addTensor(tensorIt->first, tensorIt->second);
+		}
+		CATCH_GUI("Error")
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////

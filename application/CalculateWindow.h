@@ -51,7 +51,7 @@ private slots:
 	void onOkButtonClicked();
 	void onCancelButtonClicked();
 	void onCalcItemCurrentIndexChanged(int nIndex);
-	void onReqWidgetTensorChosen(int nTensorIndex);
+	void onReqWidgetTensorChosen(QString sTensorName);
 
 signals:
 	void connectionCalculated(MatrixVectorExp tensor);

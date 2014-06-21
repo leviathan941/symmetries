@@ -19,7 +19,47 @@
 
 #include "AboutWindow.h"
 
+#include <QLabel>
+#include <QTextEdit>
+#include <QPushButton>
+#include <QTextDocument>
+#include <QVBoxLayout>
+
+#define WINDOW_WIDTH 320
+#define WINDOW_HEIGHT 240
+#define APPNAME_FONT_POINT_SIZE 24
+
 AboutWindow::AboutWindow(QWidget *parent) :
 	QDialog(parent)
 {
+	setWindowTitle(tr("About Symmetries"));
+	setFixedSize(QSize(WINDOW_WIDTH, WINDOW_HEIGHT));
+
+	m_appNameLabel = new QLabel("Symmetries", this);
+	QFont font = m_appNameLabel->font();
+	font.setPointSize(APPNAME_FONT_POINT_SIZE);
+	font.setBold(true);
+	m_appNameLabel->setFont(font);
+
+	QTextDocument* developersInfo = new QTextDocument(this);
+	developersInfo->setHtml("<b>Copyright (C) 2014</b><br><br>"
+		"<i>Alexey Kuzin (amkuzink@gmail.com)</i><br>"
+		"Author, Mainainer, Designer<br><br>"
+		"<i>Mikhail Barenboim (mikelbn@yandex.ru)</i><br>"
+		"Designer");
+	m_developInfo = new QTextEdit(this);
+	m_developInfo->setDocument(developersInfo);
+	m_developInfo->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+	m_developInfo->setReadOnly(true);
+
+	m_pushBtnOk = new QPushButton(tr("OK"), this);
+	m_pushBtnOk->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+
+	QVBoxLayout* mainLayout = new QVBoxLayout;
+	mainLayout->addWidget(m_appNameLabel, 0, Qt::AlignLeft);
+	mainLayout->addWidget(m_developInfo, 1);
+	mainLayout->addWidget(m_pushBtnOk, 0, Qt::AlignRight);
+	setLayout(mainLayout);
+
+	connect(m_pushBtnOk, SIGNAL(clicked()), this, SLOT(close()));
 }

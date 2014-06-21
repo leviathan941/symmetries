@@ -22,11 +22,20 @@
 
 #include <QDialog>
 
+class QLabel;
+class QTextEdit;
+class QPushButton;
+
 class AboutWindow : public QDialog
 {
 	Q_OBJECT
 public:
 	explicit AboutWindow(QWidget *parent = 0);
+
+private:
+	QLabel* m_appNameLabel;
+	QTextEdit* m_developInfo;
+	QPushButton* m_pushBtnOk;
 
 };
 

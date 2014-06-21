@@ -358,7 +358,7 @@ void testTensorStore()
 	MatrixVector<QString> matrVecString;
 	try
 	{
-		matrVecString = TensorStore::getInstance().getStringTensor(0);
+		matrVecString = TensorStore::getInstance().getStringTensor("test");
 	}
 	catch(guiException& e)
 	{

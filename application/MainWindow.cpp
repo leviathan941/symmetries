@@ -76,6 +76,7 @@ void MainWindow::createMenuBar()
 	m_actionImport = new QAction(tr("Import"), this);
 	m_actionImport->setMenuRole(QAction::NoRole);
 	fileMenu->addAction(m_actionImport);
+	m_actionImport->setVisible(false);
 
 	m_actionCalculate = new QAction(tr("Calculate"), this);
 	m_actionCalculate->setMenuRole(QAction::NoRole);

@@ -87,8 +87,8 @@ CalculateWindow::CalculateWindow(QWidget *parent) :
 	connect(m_pushBtnCancel, SIGNAL(clicked()), this, SLOT(onCancelButtonClicked()));
 	connect(m_comBoxCalcItem, SIGNAL(currentIndexChanged(int)), this,
 		SLOT(onCalcItemCurrentIndexChanged(int)));
-	connect(m_calcReqWidget, SIGNAL(tensorChoosed(int)), this,
-		SLOT(onReqWidgetTensorChosen(int)));
+	connect(m_calcReqWidget, SIGNAL(tensorChoosed(QString)), this,
+		SLOT(onReqWidgetTensorChosen(QString)));
 
 	onCalcItemCurrentIndexChanged(0);
 }
@@ -96,25 +96,25 @@ CalculateWindow::CalculateWindow(QWidget *parent) :
 ///////////////////////////////////////////////////////////////////////////
 void CalculateWindow::calculateAffineConnection()
 {
-	std::map<TensorTypes::TensorType, unsigned> chosenTensors = m_calcReqWidget->getItems();
+	std::map<TensorTypes::TensorType, QString> chosenTensors = m_calcReqWidget->getItems();
 
-	std::map<TensorTypes::TensorType, unsigned>::iterator iter = chosenTensors.find(
+	std::map<TensorTypes::TensorType, QString>::iterator iter = chosenTensors.find(
 		TensorTypes::METRIC_TENSOR);
 	if (iter == chosenTensors.end())
 	{
 		throw guiException("Metric tensor has not been chosen.");
 	}
-	unsigned metricTensorIndex = iter->second;
+	QString metricTensorName = iter->second;
 
 	iter = chosenTensors.find(TensorTypes::TORSION_TENSOR);
 	if (iter == chosenTensors.end())
 	{
 		throw guiException("Torsion tensor has not been chosen.");
 	}
-	unsigned torsionTensorIndex = iter->second;
+	QString torsionTensorName = iter->second;
 
-	MatrixVectorExp metricTensor = TensorStore::getInstance().getTensor(metricTensorIndex);
-	MatrixVectorExp torsionTensor = TensorStore::getInstance().getTensor(torsionTensorIndex);
+	MatrixVectorExp metricTensor = TensorStore::getInstance().getTensor(metricTensorName);
+	MatrixVectorExp torsionTensor = TensorStore::getInstance().getTensor(torsionTensorName);
 	MatrixVectorExp christoffelSymbols;
 	try
 	{
@@ -131,16 +131,16 @@ void CalculateWindow::calculateAffineConnection()
 ///////////////////////////////////////////////////////////////////////////
 void CalculateWindow::buildAffineLieAlgebra()
 {
-	std::map<TensorTypes::TensorType, unsigned> chosenTensors = m_calcReqWidget->getItems();
-	std::map<TensorTypes::TensorType, unsigned>::iterator iter = chosenTensors.find(
+	std::map<TensorTypes::TensorType, QString> chosenTensors = m_calcReqWidget->getItems();
+	std::map<TensorTypes::TensorType, QString>::iterator iter = chosenTensors.find(
 		TensorTypes::AFFINE_CONNECTION);
 	if (iter == chosenTensors.end())
 	{
 		throw guiException("Affine connection has not been chosen.");
 	}
-	unsigned affineConnectionIndex = iter->second;
+	QString affineConnectionName = iter->second;
 
-	MatrixVectorExp affineConnection = TensorStore::getInstance().getTensor(affineConnectionIndex);
+	MatrixVectorExp affineConnection = TensorStore::getInstance().getTensor(affineConnectionName);
 
 	AffineLieAlgebra lieAlgebra = Calculation::buildAffineLieAlgebra(affineConnection);
 	std::string lieAlgebraAsString = lieAlgebra.toString();
@@ -156,14 +156,16 @@ void CalculateWindow::onOkButtonClicked()
 		{
 			case OperationItems::AFFINE_CONNECTION:
 				calculateAffineConnection();
+				close();
 				break;
 
 			case OperationItems::AFFINE_LIE_ALGEBRA:
 				buildAffineLieAlgebra();
+				close();
 				break;
 
 			default:
-				throw guiException("Operation item has not been chose.");
+				throw guiException("Operation item has not been chosen.");
 				break;
 		}
 	}
@@ -191,11 +193,11 @@ void CalculateWindow::onCalcItemCurrentIndexChanged(int nIndex)
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void CalculateWindow::onReqWidgetTensorChosen(int nTensorIndex)
+void CalculateWindow::onReqWidgetTensorChosen(QString sTensorName)
 {
-	if (nTensorIndex < 0)
+	if (sTensorName < 0)
 		return;
 
-	MatrixVector<QString> tensor = TensorStore::getInstance().getStringTensor(nTensorIndex);
+	MatrixVector<QString> tensor = TensorStore::getInstance().getStringTensor(sTensorName);
 	m_tensorView->setTensor(tensor);
 }

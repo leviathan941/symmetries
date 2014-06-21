@@ -34,25 +34,12 @@ public:
 
 	void addTensor(const QString& sTensorName, MatrixVectorExp& tensor);
 	void addTensor(const QString& sTensorName, MatrixVector<QString>& stringTensor);
-	MatrixVectorExp& getTensor(unsigned nIndex);
-	MatrixVector<QString> getStringTensor(unsigned nIndex);
-	QString getTensorName(unsigned nIndex) const;
+	MatrixVectorExp& getTensor(const QString& sTensorName);
+	MatrixVector<QString> getStringTensor(const QString& sTensorName);
 	QStringList getTensorNames() const;
-	void removeTensor(unsigned nIndex);
+	void removeTensor(const QString& sTensorName);
 	void removeAllTensors();
 	unsigned size() const;
-
-	class TensorProperties
-	{
-	public:
-		TensorProperties(const QString& sTensorName, MatrixVectorExp& tensor);
-		QString getTensorName() const;
-		MatrixVectorExp& getTensor();
-
-	private:
-		QString m_tensorName;
-		MatrixVectorExp m_tensor;
-	};
 
 signals:
 	void storeUpdated();
@@ -62,7 +49,7 @@ private:
 	TensorStore(const TensorStore& otherStore);
 	TensorStore& operator=(const TensorStore& otherStore);
 
-	std::map<unsigned, TensorProperties> m_tensors;
+	std::map<QString, MatrixVectorExp> m_tensors;
 };
 
 #endif // TENSOR_STORE_H

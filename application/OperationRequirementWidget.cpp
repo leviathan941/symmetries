@@ -78,8 +78,7 @@ void OperationRequirementWidget::addRow(TensorTypes::TensorType tensorType)
 	}
 	tensorsChoice->addItems(tensorNames);
 	tensorsChoice->setCurrentIndex(-1);
-	connect(tensorsChoice, SIGNAL(activated(int)), this,
-		SLOT(onReqTensorComBoxActivated(int)));
+	connect(tensorsChoice, SIGNAL(activated(int)), this, SLOT(onReqTensorComBoxActivated(int)));
 
 	m_calcTensors.insert(std::make_pair(tensorType, tensorsChoice));
 
@@ -87,18 +86,18 @@ void OperationRequirementWidget::addRow(TensorTypes::TensorType tensorType)
 }
 
 ///////////////////////////////////////////////////////////////////////////
-std::map<TensorTypes::TensorType, unsigned> OperationRequirementWidget::getItems()
+std::map<TensorTypes::TensorType, QString> OperationRequirementWidget::getItems()
 {
-	std::map<TensorTypes::TensorType, unsigned> outMap;
+	std::map<TensorTypes::TensorType, QString> outMap;
 	BOOST_FOREACH(ComBoxMap::value_type& reqTensor, m_calcTensors)
 	{
-		int tensorIndex = reqTensor.second->currentIndex();
-		if (tensorIndex < 0)
+		QString sTensorName = reqTensor.second->currentText();
+		if (sTensorName.isEmpty())
 		{
-			throw guiException("Some tensor has not been chosen."
+			throw guiException("Some tensor has not been chosen. "
 				"Please select all required tensors");
 		}
-		outMap.insert(std::make_pair(reqTensor.first, tensorIndex));
+		outMap.insert(std::make_pair(reqTensor.first, sTensorName));
 	}
 	return outMap;
 }
@@ -134,7 +133,8 @@ void OperationRequirementWidget::clearLayout(QLayout* layout)
 ///////////////////////////////////////////////////////////////////////////
 void OperationRequirementWidget::onReqTensorComBoxActivated(int nIndex)
 {
-	emit tensorChoosed(nIndex);
+	QStringList tensors = TensorStore::getInstance().getTensorNames();
+	emit tensorChoosed(tensors.at(nIndex));
 }
 
 ///////////////////////////////////////////////////////////////////////////

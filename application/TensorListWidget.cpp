@@ -92,5 +92,9 @@ void TensorListWidget::onAddTensorButtonClicked()
 ///////////////////////////////////////////////////////////////////////////
 void TensorListWidget::onRemoveTensorButtonClicked()
 {
-	// Placeholder
+	QListWidgetItem* item = m_tensorList->currentItem();
+	if (item)
+	{
+		TensorStore::getInstance().removeTensor(item->text());
+	}
 }

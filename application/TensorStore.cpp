@@ -23,31 +23,12 @@
 
 #include <QStringList>
 
-typedef std::map<unsigned, TensorStore::TensorProperties> TensorsMap;
+typedef std::map<QString, MatrixVectorExp> TensorsMap;
 
 TensorStore& TensorStore::getInstance()
 {
 	static TensorStore instance;
 	return instance;
-}
-
-///////////////////////////////////////////////////////////////////////////
-TensorStore::TensorProperties::TensorProperties(const QString& sTensorName, MatrixVectorExp& tensor)
-{
-	m_tensorName = sTensorName;
-	m_tensor = tensor;
-}
-
-///////////////////////////////////////////////////////////////////////////
-QString TensorStore::TensorProperties::getTensorName() const
-{
-	return m_tensorName;
-}
-
-///////////////////////////////////////////////////////////////////////////
-MatrixVectorExp& TensorStore::TensorProperties::getTensor()
-{
-	return m_tensor;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -86,49 +67,35 @@ void TensorStore::addTensor(const QString& sTensorName, MatrixVectorExp& tensor)
 	if (existedNames.contains(sTensorName))
 	{
 		throw guiException("There is a matrix with that name. "
-			"Please enter another name for the matrix.");
+			"Please rename for the matrix.");
 	}
 
-	unsigned newTensorIndex = m_tensors.size();
-	TensorStore::TensorProperties newTensor(sTensorName, tensor);
-	m_tensors.insert(std::make_pair(newTensorIndex, newTensor));
+	m_tensors.insert(std::make_pair(sTensorName, tensor));
 
 	emit storeUpdated();
 }
 
 ///////////////////////////////////////////////////////////////////////////
-MatrixVectorExp& TensorStore::getTensor(unsigned nIndex)
+MatrixVectorExp& TensorStore::getTensor(const QString& sTensorName)
 {
-	TensorsMap::iterator it = m_tensors.find(nIndex);
+	TensorsMap::iterator it = m_tensors.find(sTensorName);
 	if (it == m_tensors.end())
 	{
 		throw guiException("No such tensor");
 	}
-	return it->second.getTensor();
+	return it->second;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-MatrixVector<QString> TensorStore::getStringTensor(unsigned nIndex)
+MatrixVector<QString> TensorStore::getStringTensor(const QString& sTensorName)
 {
-	TensorsMap::iterator it = m_tensors.find(nIndex);
+	TensorsMap::iterator it = m_tensors.find(sTensorName);
 	if (it == m_tensors.end())
 	{
 		throw guiException("No such tensor");
 	}
 
-	MatrixVectorExp& tensor = it->second.getTensor();
-	return TensorParser::fromMatrixVecExpToMatrixVecQString(tensor);
-}
-
-///////////////////////////////////////////////////////////////////////////
-QString TensorStore::getTensorName(unsigned nIndex) const
-{
-	TensorsMap::const_iterator it = m_tensors.find(nIndex);
-	if (it == m_tensors.end())
-	{
-		throw guiException("No such tensor");
-	}
-	return it->second.getTensorName();
+	return TensorParser::fromMatrixVecExpToMatrixVecQString(it->second);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -137,15 +104,15 @@ QStringList TensorStore::getTensorNames() const
 	QStringList tensorNames;
 	BOOST_FOREACH(const TensorsMap::value_type& tensorItem, m_tensors)
 	{
-		tensorNames.append(tensorItem.second.getTensorName());
+		tensorNames.append(tensorItem.first);
 	}
 	return tensorNames;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void TensorStore::removeTensor(unsigned nIndex)
+void TensorStore::removeTensor(const QString& sTensorName)
 {
-	int nDeleted = m_tensors.erase(nIndex);
+	int nDeleted = m_tensors.erase(sTensorName);
 	if (nDeleted)
 	{
 		emit storeUpdated();
