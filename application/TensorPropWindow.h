@@ -35,6 +35,8 @@ public:
 private:
 	QPushButton* m_okButton;
 	QPushButton* m_cancelButton;
+	QLabel*m_compCountLabel;
+	QSpinBox* m_comCountSpinBox;
 	QLabel* m_dimLabel;
 	QSpinBox* m_dimSpinBox;
 
