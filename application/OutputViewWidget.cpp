@@ -20,13 +20,18 @@
 
 #include "OutputViewWidget.h"
 #include "MatrixViewWidget.h"
-#include "TabsWidget.h"
 #include "TensorStore.h"
+#include "TabsWidget.h"
 
 #include <QListWidget>
 #include <QPushButton>
 #include <QFormLayout>
+#include <QStackedLayout>
 #include <QPainter>
+#include <QTextEdit>
+
+typedef std::map<unsigned, MatrixVectorExp> tensorMap;
+typedef std::map<unsigned, QString> resultMap;
 
 #define WIDGET_STYLESHEET\
 	"OutputViewWidget {border: 1px solid; border-color: #999999}"
@@ -51,27 +56,83 @@ OutputViewWidget::OutputViewWidget(QWidget *parent) :
 	m_addButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_addButton->setText(tr("Add"));
 
+	m_textResult = new QTextEdit(this);
+	m_textResult->setReadOnly(true);
+
+	m_tensorResult = new TabsWidget(this);
+
 	// For test purpose only
-	TabsWidget* tabs = new TabsWidget(this);
-	MatrixVector<QString> testTensor = TensorStore::getInstance().getStringTensor(0);
-	tabs->setTensor(testTensor);
-	m_resultsList->addItem("Torsion 1");
+//	MatrixVector<QString> testTensor = TensorStore::getInstance().getStringTensor(0);
+//	m_tensorResult->setTensor(testTensor);
+//	m_resultsList->addItem("Torsion 1");
 
 	QHBoxLayout* buttonLayout = new QHBoxLayout;
 	buttonLayout->addWidget(m_removeButton);
 	buttonLayout->addWidget(m_addButton);
 	buttonLayout->setAlignment(Qt::AlignRight);
 
-	QHBoxLayout* listAndTabs = new QHBoxLayout;
-	listAndTabs->addWidget(m_resultsList);
-	listAndTabs->addWidget(tabs);
+	m_resultLayout = new QStackedLayout;
+	m_resultLayout->addWidget(m_textResult);
+	m_resultLayout->addWidget(m_tensorResult);
+
+	QHBoxLayout* listAndResults = new QHBoxLayout;
+	listAndResults->addWidget(m_resultsList);
+	listAndResults->addLayout(m_resultLayout);
 
 	QVBoxLayout* mainLayout = new QVBoxLayout;
 
 	mainLayout->setContentsMargins(5, 5, 5, 5);
-	mainLayout->addLayout(listAndTabs);
+	mainLayout->addLayout(listAndResults);
 	mainLayout->addLayout(buttonLayout);
 	setLayout(mainLayout);
+
+	connect(m_resultsList, SIGNAL(currentRowChanged(int)), this, SLOT(onCurrentRowChanged(int)));
+}
+
+///////////////////////////////////////////////////////////////////////////
+void OutputViewWidget::onTensorCalculated(MatrixVectorExp tensor)
+{
+	unsigned tensorIndex = m_resultsList->count();
+	QString tensorName = "Tensor ";
+
+	m_calcTensors.insert(std::make_pair(tensorIndex, tensor));
+
+	tensorName.append(QString::number(m_calcTensors.size()));
+	m_resultsList->addItem(tensorName);
+}
+
+///////////////////////////////////////////////////////////////////////////
+void OutputViewWidget::onOtherCalculated(QString result)
+{
+	unsigned resultIndex = m_resultsList->count();
+	QString resultName = "Result ";
+
+	m_calcResults.insert(std::make_pair(resultIndex, result));
+
+	resultName.append(QString::number(m_calcResults.size()));
+	m_resultsList->addItem(resultName);
+}
+
+///////////////////////////////////////////////////////////////////////////
+void OutputViewWidget::onCurrentRowChanged(int index)
+{
+	for(tensorMap::iterator tensorIt = m_calcTensors.begin(); tensorIt != m_calcTensors.end(); tensorIt++)
+	{
+		if(tensorIt->first == index)
+		{
+			m_resultLayout->setCurrentWidget(m_tensorResult);
+			return;
+		}
+	}
+
+	for(resultMap::iterator resultIt = m_calcResults.begin(); resultIt != m_calcResults.end(); resultIt++)
+	{
+		if(resultIt->first == index)
+		{
+			m_resultLayout->setCurrentWidget(m_textResult);
+			return;
+		}
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////

@@ -47,7 +47,7 @@ void TabsWidget::setTensor(MatrixVector<QString> tensor)
 	int matrNumber = 0;
 	BOOST_FOREACH(boost::numeric::ublas::matrix<QString>& matrix, vecMatr)
 	{
-		QString matrixName("matrix ");
+		QString matrixName("Matrix ");
 		matrixName.append(QString::number(++matrNumber));
 		addMatrix(matrix, matrixName);
 	}

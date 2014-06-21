@@ -21,10 +21,15 @@
 #ifndef OUTPUT_VIEW_WIDGET_H
 #define OUTPUT_VIEW_WIDGET_H
 
+#include "MatrixVectorExp.h"
+
 #include <QWidget>
 
+class TabsWidget;
 class QListWidget;
 class QPushButton;
+class QTextEdit;
+class QStackedLayout;
 
 class OutputViewWidget : public QWidget
 {
@@ -32,10 +37,21 @@ class OutputViewWidget : public QWidget
 public:
 	explicit OutputViewWidget(QWidget *parent = 0);
 
+public slots:
+	void onTensorCalculated(MatrixVectorExp tensor);
+	void onOtherCalculated(QString result);
+	void onCurrentRowChanged(int index);
+
 private:
 	QListWidget* m_resultsList;
 	QPushButton* m_removeButton;
 	QPushButton* m_addButton;
+	TabsWidget* m_tensorResult;
+	QTextEdit* m_textResult;
+	QStackedLayout* m_resultLayout;
+
+	std::map<unsigned, MatrixVectorExp> m_calcTensors;
+	std::map<unsigned, QString> m_calcResults;
 
 protected:
 	void paintEvent(QPaintEvent* event);

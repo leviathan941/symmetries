@@ -117,5 +117,10 @@ void MainWindow::onActionExitTriggered(bool bChecked)
 void MainWindow::onActionCalculateTriggered(bool bChecked)
 {
 	CalculateWindow* calcWindow = new CalculateWindow(this);
+	connect(calcWindow, SIGNAL(connectionCalculated(MatrixVectorExp)), m_outputViewWidget,
+		SLOT(onTensorCalculated(MatrixVectorExp)));
+	connect(calcWindow, SIGNAL(lieAlgebraBuilt(QString)), m_outputViewWidget,
+		SLOT(onOtherCalculated(QString)));
+
 	calcWindow->exec();
 }
