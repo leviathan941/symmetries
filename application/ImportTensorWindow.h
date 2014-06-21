@@ -1,6 +1,7 @@
 /*
 	Symmetries
 	Copyright (C) 2014 Mikhail Barenboim <mikelbn@yandex.ru>
+	Copyright (C) 2014 Alexey Kuzin <amkuzink@gmail.com>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,16 +21,18 @@
 #define IMPORT_TENSOR_WINDOW_H
 
 #include <QDialog>
+#include <boost/numeric/ublas/matrix.hpp>
 
 class QPushButton;
 class QLabel;
 class QLineEdit;
+class TabsWidget;
 
 class ImportTensorWindow : public QDialog
 {
 	Q_OBJECT
 public:
-	explicit ImportTensorWindow(QWidget *parent = 0, int dimension = 0);
+	explicit ImportTensorWindow(QWidget *parent = 0, int nDimension = 0);
 
 private:
 	QPushButton* m_importButton;
@@ -37,11 +40,17 @@ private:
 	QPushButton* m_cancelButton;
 	QLabel* m_nameLabel;
 	QLineEdit* m_nameLine;
+	TabsWidget* m_inputTabsWidget;
+
+	boost::numeric::ublas::matrix<QString> getMatrixFromTab(int nTab);
 
 private slots:
 	void onImportClicked();
 	void onOkClicked();
 	void onCancelClicked();
+
+protected:
+	void closeEvent(QCloseEvent* event);
 };
 
 #endif // IMPORT_TENSOR_WINDOW_H

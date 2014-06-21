@@ -21,10 +21,9 @@ cmake_minimum_required(VERSION 2.8.11)
 project(application)
 
 set(APPLICATION_HEADERS
-	TensorStore.h
 	TensorTypes.h
 	OperationItems.h
-	ExpressionParser.h
+	TensorParser.h
 	)
 
 set(APPLICATION_UI_HEADERS
@@ -39,14 +38,14 @@ set(APPLICATION_UI_HEADERS
 	TensorPropWindow.h
 	CalculateWindow.h
 	OperationRequirementWidget.h
+	TensorStore.h
 	)
 
 set(APPLICATION_SOURCES
 	main.cpp
-	TensorStore.cpp
 	TensorTypes.cpp
 	OperationItems.cpp
-	ExpressionParser.cpp
+	TensorParser.cpp
 	)
 
 set(APPLICATION_UI_SOURCES
@@ -61,6 +60,7 @@ set(APPLICATION_UI_SOURCES
 	TensorPropWindow.cpp
 	CalculateWindow.cpp
 	OperationRequirementWidget.cpp
+	TensorStore.cpp
 	)
 
 include_directories(

@@ -23,29 +23,29 @@
 #include "MatrixVectorExp.h"
 
 #include <QString>
+#include <QObject>
 #include <map>
-#include <boost/noncopyable.hpp>
 
-class TensorStore : public boost::noncopyable
+class TensorStore : public QObject
 {
+	Q_OBJECT
 public:
-	static TensorStore& getInstance()
-	{
-		static TensorStore instance;
-		return instance;
-	}
-	void addTensor(QString sTensorName, MatrixVectorExp& tensor);
+	static TensorStore& getInstance();
+
+	void addTensor(const QString& sTensorName, MatrixVectorExp& tensor);
+	void addTensor(const QString& sTensorName, MatrixVector<QString>& stringTensor);
 	MatrixVectorExp& getTensor(unsigned nIndex);
 	MatrixVector<QString> getStringTensor(unsigned nIndex);
 	QString getTensorName(unsigned nIndex) const;
 	QStringList getTensorNames() const;
 	void removeTensor(unsigned nIndex);
 	void removeAllTensors();
+	unsigned size() const;
 
 	class TensorProperties
 	{
 	public:
-		TensorProperties(QString& sTensorName, MatrixVectorExp& tensor);
+		TensorProperties(const QString& sTensorName, MatrixVectorExp& tensor);
 		QString getTensorName() const;
 		MatrixVectorExp& getTensor();
 
@@ -54,8 +54,13 @@ public:
 		MatrixVectorExp m_tensor;
 	};
 
+signals:
+	void storeUpdated();
+
 private:
 	TensorStore();
+	TensorStore(const TensorStore& otherStore);
+	TensorStore& operator=(const TensorStore& otherStore);
 
 	std::map<unsigned, TensorProperties> m_tensors;
 };

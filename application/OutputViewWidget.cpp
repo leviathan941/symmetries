@@ -52,10 +52,10 @@ OutputViewWidget::OutputViewWidget(QWidget *parent) :
 	m_addButton->setText(tr("Add"));
 
 	// For test purpose only
-	TabsWidget* tabs = new TabsWidget(this);
-	MatrixVector<QString> testTensor = TensorStore::getInstance().getStringTensor(0);
-	tabs->setTensor(testTensor);
-	m_resultsList->addItem("Torsion 1");
+	//TabsWidget* tabs = new TabsWidget(this);
+	//MatrixVector<QString> testTensor = TensorStore::getInstance().getStringTensor(0);
+	//tabs->setTensor(testTensor);
+	//m_resultsList->addItem("Torsion 1");
 
 	QHBoxLayout* buttonLayout = new QHBoxLayout;
 	buttonLayout->addWidget(m_removeButton);
@@ -64,7 +64,7 @@ OutputViewWidget::OutputViewWidget(QWidget *parent) :
 
 	QHBoxLayout* listAndTabs = new QHBoxLayout;
 	listAndTabs->addWidget(m_resultsList);
-	listAndTabs->addWidget(tabs);
+	//listAndTabs->addWidget(tabs);
 
 	QVBoxLayout* mainLayout = new QVBoxLayout;
 

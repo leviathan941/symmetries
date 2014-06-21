@@ -85,6 +85,11 @@ stringMatrix MatrixViewWidget::getMatrix() const
 			MatrixElementWidget* element = qobject_cast<MatrixElementWidget*>
 				(m_gridLayout->itemAtPosition(i, j)->widget());
 			QString elementString = element->getElement();
+			elementString.replace(" ", "");
+			if (elementString.isEmpty())
+			{
+				throw guiException("No one matrix's element cannot be empty.");
+			}
 			matrix.insert_element(i, j, elementString);
 		}
 	}

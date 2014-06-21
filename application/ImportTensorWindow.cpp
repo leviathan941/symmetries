@@ -20,13 +20,18 @@
 #include "ImportTensorWindow.h"
 #include "TabsWidget.h"
 #include "MatrixViewWidget.h"
+#include "TensorStore.h"
+#include "Exceptions.h"
 
 #include <QPushButton>
 #include <QLabel>
 #include <QLineEdit>
 #include <QFormLayout>
+#include <QDebug>
+#include <QMessageBox>
+#include <QCloseEvent>
 
-ImportTensorWindow::ImportTensorWindow(QWidget *parent, int dimension) :
+ImportTensorWindow::ImportTensorWindow(QWidget *parent, int nDimension) :
 	QDialog(parent)
 {
 	setWindowTitle(tr("Enter the tensor"));
@@ -50,15 +55,14 @@ ImportTensorWindow::ImportTensorWindow(QWidget *parent, int dimension) :
 	m_cancelButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_cancelButton->setText(tr("Cancel"));
 
-	TabsWidget* inputTabs = new TabsWidget(this);
+	m_inputTabsWidget = new TabsWidget(this);
 	QString matrixName = "";
 	int matrixNumber = 1;
 
-	while(matrixNumber < dimension + 1)
+	while(matrixNumber < nDimension + 1)
 	{
-		matrixName.append("matrix");
-		matrixName.append(QString(" %1").arg(matrixNumber));
-		inputTabs->addTab(new MatrixViewWidget(dimension, dimension), matrixName);
+		matrixName.append(tr("Matrix %1").arg(matrixNumber));
+		m_inputTabsWidget->addTab(new MatrixViewWidget(nDimension, nDimension), matrixName);
 		matrixName.clear();
 		matrixNumber++;
 	}
@@ -81,7 +85,7 @@ ImportTensorWindow::ImportTensorWindow(QWidget *parent, int dimension) :
 
 	QVBoxLayout* mainLayout = new QVBoxLayout;
 	mainLayout->addLayout(nameLayout);
-	mainLayout->addWidget(inputTabs);
+	mainLayout->addWidget(m_inputTabsWidget);
 	mainLayout->addLayout(buttonLayout);
 
 	this->setLayout(mainLayout);
@@ -89,6 +93,14 @@ ImportTensorWindow::ImportTensorWindow(QWidget *parent, int dimension) :
 	connect(m_importButton, SIGNAL(clicked()), this, SLOT(onImportClicked()));
 	connect(m_okButton, SIGNAL(clicked()), this, SLOT(onOkClicked()));
 	connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(onCancelClicked()));
+}
+
+///////////////////////////////////////////////////////////////////////////
+boost::numeric::ublas::matrix<QString> ImportTensorWindow::getMatrixFromTab(int nTab)
+{
+	MatrixViewWidget* matrixWidget = static_cast<MatrixViewWidget*>(
+		m_inputTabsWidget->widget(nTab));
+	return matrixWidget->getMatrix();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -100,12 +112,39 @@ void ImportTensorWindow::onImportClicked()
 ///////////////////////////////////////////////////////////////////////////
 void ImportTensorWindow::onOkClicked()
 {
-	// Placeholder
+	try
+	{
+		QString sTensorName = m_nameLine->text();
+		if (sTensorName.isEmpty())
+		{
+			throw guiException("Please enter the name of the tensor.");
+		}
+
+		MatrixVector<QString> tensor;
+		for (int i = 0, nCount = m_inputTabsWidget->count(); i < nCount; ++i)
+		{
+			boost::numeric::ublas::matrix<QString> tempMatrix = getMatrixFromTab(i);
+			if (i == 0)
+			{
+				tensor.allocateSize(0, tempMatrix.size1(), tempMatrix.size2());
+			}
+			tensor.addMatrix(tempMatrix);
+		}
+		TensorStore::getInstance().addTensor(sTensorName, tensor);
+		close();
+	}
+	CATCH_GUI("Warning")
 }
 
 ///////////////////////////////////////////////////////////////////////////
 void ImportTensorWindow::onCancelClicked()
 {
-	ImportTensorWindow::close();
+	close();
+}
+
+///////////////////////////////////////////////////////////////////////////
+void ImportTensorWindow::closeEvent(QCloseEvent* event)
+{
+	event->accept();
 	parentWidget()->close();
 }

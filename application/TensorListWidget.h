@@ -37,6 +37,9 @@ private:
 	QPushButton* m_pushBtnAddTensor;
 	QPushButton* m_pushBtnRemoveTensor;
 
+public slots:
+	void onTensorStoreUpdated();
+
 private slots:
 	void onAddTensorButtonClicked();
 	void onRemoveTensorButtonClicked();

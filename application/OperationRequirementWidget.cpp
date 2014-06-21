@@ -50,14 +50,10 @@ OperationRequirementWidget::OperationRequirementWidget(QWidget *parent) :
 ///////////////////////////////////////////////////////////////////////////
 void OperationRequirementWidget::addItem(TensorTypes::TensorType tensorType)
 {
-	try
+	if (m_calcTensors.find(tensorType) == m_calcTensors.end())
 	{
-		if (m_calcTensors.find(tensorType) == m_calcTensors.end())
-		{
-			addRow(tensorType);
-		}
+		addRow(tensorType);
 	}
-	CATCH_CORE
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -72,26 +68,22 @@ void OperationRequirementWidget::addItems(std::vector<TensorTypes::TensorType> t
 ///////////////////////////////////////////////////////////////////////////
 void OperationRequirementWidget::addRow(TensorTypes::TensorType tensorType)
 {
-	try
+	QLabel* tensorLabel = new QLabel(TensorTypes::getTensorTypeAsString(tensorType), this);
+	QComboBox* tensorsChoice = new QComboBox(this);
+
+	QStringList tensorNames = TensorStore::getInstance().getTensorNames();
+	if (tensorNames.empty())
 	{
-		QLabel* tensorLabel = new QLabel(TensorTypes::getTensorTypeAsString(tensorType), this);
-		QComboBox* tensorsChoice = new QComboBox(this);
-
-		QStringList tensorNames = TensorStore::getInstance().getTensorNames();
-		if (tensorNames.empty())
-		{
-			throw guiException("You need to add tensors to calculate anything");
-		}
-		tensorsChoice->addItems(tensorNames);
-		tensorsChoice->setCurrentIndex(-1);
-		connect(tensorsChoice, SIGNAL(activated(int)), this,
-			SLOT(onReqTensorComBoxActivated(int)));
-
-		m_calcTensors.insert(std::make_pair(tensorType, tensorsChoice));
-
-		m_mainLayout->addRow(tensorLabel, tensorsChoice);
+		throw guiException("You need to add tensors to calculate anything");
 	}
-	CATCH_GUI("Error")
+	tensorsChoice->addItems(tensorNames);
+	tensorsChoice->setCurrentIndex(-1);
+	connect(tensorsChoice, SIGNAL(activated(int)), this,
+		SLOT(onReqTensorComBoxActivated(int)));
+
+	m_calcTensors.insert(std::make_pair(tensorType, tensorsChoice));
+
+	m_mainLayout->addRow(tensorLabel, tensorsChoice);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -101,7 +93,12 @@ std::map<TensorTypes::TensorType, unsigned> OperationRequirementWidget::getItems
 	BOOST_FOREACH(ComBoxMap::value_type& reqTensor, m_calcTensors)
 	{
 		int tensorIndex = reqTensor.second->currentIndex();
-		outMap.insert(std::make_pair(reqTensor.first, (tensorIndex < 0) ? 0 : tensorIndex));
+		if (tensorIndex < 0)
+		{
+			throw guiException("Some tensor has not been chosen."
+				"Please select all required tensors");
+		}
+		outMap.insert(std::make_pair(reqTensor.first, tensorIndex));
 	}
 	return outMap;
 }

@@ -23,12 +23,15 @@
 #include "TensorListWidget.h"
 #include "OutputViewWidget.h"
 #include "CalculateWindow.h"
+#include "Exceptions.h"
 // Qt
 #include <QMenuBar>
 #include <QAction>
 #include <QDialog>
 #include <QHBoxLayout>
 #include <QApplication>
+#include <QMessageBox>
+#include <QDebug>
 
 #define MINIMUM_WIDTH 800
 #define MINIMUM_HEIGHT 600
@@ -116,6 +119,10 @@ void MainWindow::onActionExitTriggered(bool bChecked)
 ///////////////////////////////////////////////////////////////////////////
 void MainWindow::onActionCalculateTriggered(bool bChecked)
 {
-	CalculateWindow* calcWindow = new CalculateWindow(this);
-	calcWindow->exec();
+	try
+	{
+		CalculateWindow* calcWindow = new CalculateWindow(this);
+		calcWindow->exec();
+	}
+	CATCH_GUI("Error")
 }
