@@ -34,13 +34,17 @@ TensorPropWindow::TensorPropWindow(QWidget *parent) :
 {
 	setWindowTitle(tr("Tensor properties"));
 
-	m_dimLabel = new QLabel(this);
-	m_dimLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-	m_dimLabel->setText(tr("Dimension"));
+	m_dimLabel = new QLabel(tr("Matrix Dimension:"), this);
 
 	m_dimSpinBox = new QSpinBox(this);
 	m_dimSpinBox->setRange(SPIN_BOX_MIN_VALUE, SPIN_BOX_MAX_VALUE);
 	m_dimSpinBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+	m_compCountLabel = new QLabel(tr("Components Number:"), this);
+
+	m_comCountSpinBox = new QSpinBox(this);
+	m_comCountSpinBox->setRange(SPIN_BOX_MIN_VALUE, SPIN_BOX_MAX_VALUE);
+	m_comCountSpinBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
 	m_okButton = new QPushButton(this);
 	m_okButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -52,6 +56,7 @@ TensorPropWindow::TensorPropWindow(QWidget *parent) :
 
 	QFormLayout* mainFormLayout = new QFormLayout;
 	mainFormLayout->addRow(m_dimLabel, m_dimSpinBox);
+	mainFormLayout->addRow(m_compCountLabel, m_comCountSpinBox);
 
 	QHBoxLayout* buttonLayout = new QHBoxLayout;
 	buttonLayout->addWidget(m_okButton);
@@ -71,8 +76,9 @@ TensorPropWindow::TensorPropWindow(QWidget *parent) :
 ///////////////////////////////////////////////////////////////////////////
 void TensorPropWindow::onOkClicked()
 {
-	int dimension = m_dimSpinBox->value();
-	ImportTensorWindow importTensorWindow(this, dimension);
+	int nDimension = m_dimSpinBox->value();
+	int nCompCount = m_comCountSpinBox->value();
+	ImportTensorWindow importTensorWindow(this, nDimension, nCompCount);
 	importTensorWindow.exec();
 }
 

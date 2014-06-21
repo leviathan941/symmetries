@@ -31,7 +31,7 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 
-ImportTensorWindow::ImportTensorWindow(QWidget *parent, int nDimension) :
+ImportTensorWindow::ImportTensorWindow(QWidget *parent, int nDimension, int nCompCount) :
 	QDialog(parent)
 {
 	setWindowTitle(tr("Enter the tensor"));
@@ -59,7 +59,7 @@ ImportTensorWindow::ImportTensorWindow(QWidget *parent, int nDimension) :
 	QString matrixName = "";
 	int matrixNumber = 1;
 
-	while(matrixNumber < nDimension + 1)
+	while(matrixNumber < nCompCount + 1)
 	{
 		matrixName.append(tr("Matrix %1").arg(matrixNumber));
 		m_inputTabsWidget->addTab(new MatrixViewWidget(nDimension, nDimension), matrixName);

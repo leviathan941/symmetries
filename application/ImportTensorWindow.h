@@ -32,7 +32,7 @@ class ImportTensorWindow : public QDialog
 {
 	Q_OBJECT
 public:
-	explicit ImportTensorWindow(QWidget *parent = 0, int nDimension = 0);
+	explicit ImportTensorWindow(QWidget *parent = 0, int nDimension = 0, int nCompCount = 0);
 
 private:
 	QPushButton* m_importButton;
