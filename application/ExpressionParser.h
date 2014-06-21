@@ -22,12 +22,16 @@
 
 #include <QString>
 
+class SimpleItem;
 class SimpleExpression;
 
 class ExpressionParser
 {
 public:
-	static SimpleExpression fromQStringToSimpleExp(const QString& exp);
+	static SimpleExpression fromQStringToSimpleExpression(const QString& sExpression);
+
+protected:
+	static SimpleItem fromQStringItemToSimpleItem(const QString& sItem);
 
 private:
 	ExpressionParser();

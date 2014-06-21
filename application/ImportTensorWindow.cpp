@@ -40,6 +40,7 @@ ImportTensorWindow::ImportTensorWindow(QWidget *parent, int dimension) :
 	m_importButton = new QPushButton(this);
 	m_importButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_importButton->setText(tr("Import"));
+	m_importButton->setVisible(false);
 
 	m_okButton = new QPushButton(this);
 	m_okButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -106,4 +107,5 @@ void ImportTensorWindow::onOkClicked()
 void ImportTensorWindow::onCancelClicked()
 {
 	ImportTensorWindow::close();
+	parentWidget()->close();
 }

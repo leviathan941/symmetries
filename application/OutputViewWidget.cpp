@@ -21,6 +21,7 @@
 #include "OutputViewWidget.h"
 #include "MatrixViewWidget.h"
 #include "TabsWidget.h"
+#include "TensorStore.h"
 
 #include <QListWidget>
 #include <QPushButton>
@@ -50,10 +51,11 @@ OutputViewWidget::OutputViewWidget(QWidget *parent) :
 	m_addButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_addButton->setText(tr("Add"));
 
-	// For test:
+	// For test purpose only
 	TabsWidget* tabs = new TabsWidget(this);
-	MatrixViewWidget* testTabsWidget = new MatrixViewWidget(50, 50);
-	tabs->addTab(testTabsWidget,"test");
+	MatrixVector<QString> testTensor = TensorStore::getInstance().getStringTensor(0);
+	tabs->setTensor(testTensor);
+	m_resultsList->addItem("Torsion 1");
 
 	QHBoxLayout* buttonLayout = new QHBoxLayout;
 	buttonLayout->addWidget(m_removeButton);

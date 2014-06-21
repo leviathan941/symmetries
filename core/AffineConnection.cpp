@@ -92,10 +92,9 @@ void AffineConnection::setTorsionTensor(MatrixVectorExp& matrVectorExp)
 const MatrixVectorExp& AffineConnection::calculateChristoffelSymbols()
 {
 	if(m_metricTensor.size1() != m_torsionTensor.getContent().getMatrixRowSize() ||
-	m_metricTensor.size2() != m_torsionTensor.getContent().getMatrixColumnSize() ||
-	m_torsionTensor.getContent().getVectorSize() != m_metricTensor.size1() ||
-	m_torsionTensor.getContent().getVectorSize() != m_metricTensor.size2()
-	)
+		m_metricTensor.size2() != m_torsionTensor.getContent().getMatrixColumnSize() ||
+		m_torsionTensor.getContent().getVectorSize() != m_metricTensor.size1() ||
+		m_torsionTensor.getContent().getVectorSize() != m_metricTensor.size2())
 	{
 		std::cerr << "Error. All matrices must have the same dimension." << std::endl;
 		throw coreException("Incorrect matrix dimentions.");

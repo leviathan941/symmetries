@@ -39,6 +39,9 @@ TensorListWidget::TensorListWidget(QWidget *parent) :
 	QWidget(parent)
 {
 	m_tensorList = new QListWidget(this);
+	// TODO Delete!!!
+	m_tensorList->addItem("Metric Tensor 1");
+	m_tensorList->addItem("Torsion Tensor 1");
 
 	m_pushBtnAddTensor = new QPushButton(this);
 	m_pushBtnAddTensor->setIcon(QIcon(":/icons/plus.png"));

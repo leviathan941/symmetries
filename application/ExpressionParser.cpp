@@ -24,26 +24,44 @@
 #include <QStringList>
 #include <QRegExp>
 
-#define QSTRING_DELIMETER '*'
+#define ITEM_DELIMETER '*'
+#define EXP_DELIMITER_PLUS '+'
 
 ExpressionParser::ExpressionParser()
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////
-SimpleExpression ExpressionParser::fromQStringToSimpleExp(const QString& exp)
+SimpleExpression ExpressionParser::fromQStringToSimpleExpression(const QString& sExpression)
 {
-	QStringList expItems = exp.split(QSTRING_DELIMETER);
+	QStringList expItems = sExpression.split(EXP_DELIMITER_PLUS, QString::SkipEmptyParts);
+	SimpleItem itemZero("", 1.0, 0.0);
+	SimpleExpression outExp;
+	for (unsigned i = 0; i < expItems.size(); ++i)
+	{
+		SimpleItem tempItem(fromQStringItemToSimpleItem(expItems[i]));
+		if (tempItem != itemZero)
+		{
+			outExp.pushItem(tempItem);
+		}
+	}
+	return outExp;
+}
+
+///////////////////////////////////////////////////////////////////////////
+SimpleItem ExpressionParser::fromQStringItemToSimpleItem(const QString& sItem)
+{
+	QStringList itemTokens = sItem.split(ITEM_DELIMETER, QString::SkipEmptyParts);
 	QString expStr;
 	double nMultiplier = 1.0;
-	for(unsigned i = 0; i < expItems.size(); i++)
+	for (unsigned i = 0; i < itemTokens.size(); ++i)
 	{
 		bool bIsNumber = false;
-		double nNumber = expItems[i].toDouble(&bIsNumber);
-		if(bIsNumber)
+		double nNumber = itemTokens[i].toDouble(&bIsNumber);
+		if (!bIsNumber)
 		{
 			QRegExp notAlphaNumRegExp("[^a-zA-Z\\d]");
-			QString tempString(expItems[i]);
+			QString tempString(itemTokens[i]);
 			if (tempString.at(0) == QChar('-'))
 			{
 				nMultiplier *= -1;
@@ -56,6 +74,5 @@ SimpleExpression ExpressionParser::fromQStringToSimpleExp(const QString& exp)
 		}
 	}
 	SimpleItem simItem(expStr.toStdString(), 1.0, nMultiplier);
-	SimpleExpression simExp(simItem);
-	return simExp;
+	return simItem;
 }
