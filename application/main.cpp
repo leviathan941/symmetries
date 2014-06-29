@@ -380,12 +380,33 @@ void testTensorStore()
 	}
 }
 
+void testFileReader()
+{
+	boost::filesystem::path metricFilePath("metric_tensor.txt");
+	FileReader metricReader(metricFilePath);
+	FileReader::MatrixExp metricTensor = metricReader.FromFileToMatrixExp();
+	for(unsigned i = 0; i < metricTensor.size1(); i++)
+	{
+		for(unsigned j = 0; j < metricTensor.size2(); j++)
+		{
+			std::cout << "(" << i << ";" << j << "): " << metricTensor(i, j).toString()
+				<< std::endl;
+		}
+	}
+
+	boost::filesystem::path torsionFilePath("torsion_tensor.txt");
+	FileReader torsionReader(torsionFilePath);
+	MatrixVectorExp torsionTensor = torsionReader.FromFileToMatrixVecExp();
+	torsionTensor.print();
+}
+
 int main(int argc, char *argv[])
 {
 	//calcTestConst2DAffine();
 	//calcTestConst4DAffine();
 	//testAffine2DLieAlgebra();
 	//testTensorStore();
+	//testFileReader();
 
 	QApplication app(argc, argv);
 	MainWindow window;

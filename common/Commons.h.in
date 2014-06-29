@@ -17,27 +17,10 @@
 */
 
 
-#ifndef ABOUT_WINDOW_H
-#define ABOUT_WINDOW_H
+#ifndef COMMONS_H
+#define COMMONS_H
 
-#include <QDialog>
+#define PROGRAM_VERSION ("@Symmetries_MAJOR_VERSION@.@Symmetries_MINOR_VERSION@.@Symmetries_PATCH_VERSION@")
+#define PROGRAM_NAME ("@CMAKE_PROJECT_NAME@")
 
-class QLabel;
-class QTextEdit;
-class QPushButton;
-
-class AboutWindow : public QDialog
-{
-	Q_OBJECT
-public:
-	explicit AboutWindow(QWidget *parent = 0);
-
-private:
-	QLabel* m_appNameLabel;
-	QLabel* m_appVersionLabel;
-	QTextEdit* m_developInfo;
-	QPushButton* m_pushBtnOk;
-
-};
-
-#endif // ABOUT_WINDOW_H
+#endif // COMMONS_H

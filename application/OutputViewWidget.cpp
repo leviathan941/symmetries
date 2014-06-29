@@ -68,6 +68,7 @@ OutputViewWidget::OutputViewWidget(QWidget *parent) :
 	m_textResult->setReadOnly(true);
 
 	m_tensorResult = new TabsWidget(this);
+	m_tensorResult->setReadOnly(true);
 
 	QHBoxLayout* buttonLayout = new QHBoxLayout;
 	buttonLayout->addWidget(m_removeButton);

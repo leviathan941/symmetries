@@ -22,6 +22,7 @@
 #include "SimpleItem.h"
 
 #include <algorithm>
+#include <boost/lexical_cast.hpp>
 
 #define MATRIX_SIZE_START_SYMBOL '['
 #define MATRIX_SIZE_END_SYMBOL ']'
@@ -147,8 +148,14 @@ void FileReader::exciseMatrixSize(std::string &strInput, unsigned &nRowNumber, u
 		throw fileException("Matrix size must contain 2 digits");
 	}
 
-	nRowNumber = std::stoi(vecMatrixSizes[0]);
-	nColumnNumber = std::stoi(vecMatrixSizes[1]);
+	try
+	{
+		nRowNumber = boost::lexical_cast<unsigned>(vecMatrixSizes[0]);
+		nColumnNumber = boost::lexical_cast<unsigned>(vecMatrixSizes[1]);
+	} catch (boost::bad_lexical_cast e)
+	{
+		throw fileException("Failed to cast Row anf Column numbers.");
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -164,15 +171,22 @@ FileReader::MatrixExp FileReader::getMatrixFromString(const std::string &strInpu
 
 	MatrixExp matr(nRowNumber, nColumnNumber);
 	unsigned nElem(0);
-	for(unsigned i = 0; i < matr.size1(); ++i)
+	try
 	{
-		for(unsigned j = 0; j < matr.size2(); ++j)
+		for(unsigned i = 0; i < matr.size1(); ++i)
 		{
-			// At the moment only matrix which contains digits can be read from a file
-			// TODO: Add full support of reading from a file into Expression
-			SimpleExpression exp(SimpleItem(std::string(""), 0, std::stod(vecTemp[nElem++])));
-			matr.insert_element(i, j, exp);
+			for(unsigned j = 0; j < matr.size2(); ++j)
+			{
+				// At the moment only matrix which contains digits can be read from a file
+				// TODO: Add full support of reading from a file into Expression
+				SimpleExpression exp(SimpleItem(std::string(""), 0,
+					boost::lexical_cast<double>(vecTemp[nElem++])));
+				matr.insert_element(i, j, exp);
+			}
 		}
+	} catch (boost::bad_lexical_cast e)
+	{
+		throw fileException("Only digital matrices are supported.");
 	}
 
 	return matr;

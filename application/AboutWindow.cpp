@@ -18,6 +18,7 @@
 
 
 #include "AboutWindow.h"
+#include "Commons.h"
 
 #include <QLabel>
 #include <QTextEdit>
@@ -26,7 +27,7 @@
 #include <QVBoxLayout>
 
 #define WINDOW_WIDTH 320
-#define WINDOW_HEIGHT 240
+#define WINDOW_HEIGHT 280
 #define APPNAME_FONT_POINT_SIZE 24
 
 AboutWindow::AboutWindow(QWidget *parent) :
@@ -35,16 +36,20 @@ AboutWindow::AboutWindow(QWidget *parent) :
 	setWindowTitle(tr("About Symmetries"));
 	setFixedSize(QSize(WINDOW_WIDTH, WINDOW_HEIGHT));
 
-	m_appNameLabel = new QLabel("Symmetries", this);
+	m_appNameLabel = new QLabel(PROGRAM_NAME, this);
 	QFont font = m_appNameLabel->font();
 	font.setPointSize(APPNAME_FONT_POINT_SIZE);
 	font.setBold(true);
 	m_appNameLabel->setFont(font);
 
+	QString appVersion("Version: ");
+	appVersion.append(PROGRAM_VERSION);
+	m_appVersionLabel = new QLabel(appVersion, this);
+
 	QTextDocument* developersInfo = new QTextDocument(this);
 	developersInfo->setHtml("<b>Copyright (C) 2014</b><br><br>"
 		"<i>Alexey Kuzin (amkuzink@gmail.com)</i><br>"
-		"Author, Mainainer, Designer<br><br>"
+		"Author, Maintainer, Designer<br><br>"
 		"<i>Mikhail Barenboim (mikelbn@yandex.ru)</i><br>"
 		"Designer");
 	m_developInfo = new QTextEdit(this);
@@ -57,6 +62,7 @@ AboutWindow::AboutWindow(QWidget *parent) :
 
 	QVBoxLayout* mainLayout = new QVBoxLayout;
 	mainLayout->addWidget(m_appNameLabel, 0, Qt::AlignLeft);
+	mainLayout->addWidget(m_appVersionLabel, 0, Qt::AlignLeft);
 	mainLayout->addWidget(m_developInfo, 1);
 	mainLayout->addWidget(m_pushBtnOk, 0, Qt::AlignRight);
 	setLayout(mainLayout);

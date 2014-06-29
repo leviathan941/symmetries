@@ -65,6 +65,7 @@ set(APPLICATION_UI_SOURCES
 
 include_directories(
 	${CMAKE_SOURCE_DIR}/core
+	${CMAKE_BINARY_DIR}/common
 	)
 
 set(APPLICATION_LIBS

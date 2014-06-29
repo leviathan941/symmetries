@@ -262,7 +262,7 @@ std::string SimpleItem::toString() const
 {
 	std::stringstream strStream;
 
-	if (m_nMultiplier == -1.0)
+	if (m_nMultiplier == -1.0 && !m_Variables.empty())
 	{
 		strStream << "-";
 	} else if (m_nMultiplier == 1.0)
