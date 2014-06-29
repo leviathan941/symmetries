@@ -28,6 +28,7 @@ typedef std::map<OperationItems::AllowableItem, OperationItems::ItemProperties> 
 
 OperationItemMap OperationItems::m_operationItems = []()->OperationItemMap
 {
+	TensorTypes::init();
 	OperationItemMap operationItems;
 
 	std::vector<TensorTypes::TensorType> tempReqTensors;

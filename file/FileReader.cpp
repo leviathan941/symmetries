@@ -36,7 +36,7 @@ FileReader::FileReader(boost::filesystem::path &FilePath)
 	boost::system::error_code error;
 	if(boost::filesystem::exists(FilePath, error) && boost::filesystem::is_regular_file(FilePath, error))
 	{
-		m_file.open(FilePath.c_str(), std::ios_base::in);
+		m_file.open(FilePath.string(), std::ios_base::in);
 	}
 	else
 	{

@@ -37,8 +37,10 @@ public:
 	static QString getTensorTypeAsString(TensorType type);
 	static QStringList getAllTypes();
 
+	static void init();
+
 private:
-	static std::map<TensorType, QString> init();
+	static std::map<TensorType, QString> createTensorTypes();
 	static std::map<TensorType, QString> m_tensorTypes;
 };
 

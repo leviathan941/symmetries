@@ -29,6 +29,7 @@ find_package(Boost COMPONENTS filesystem system REQUIRED)
 set(COMMON_INCLUDE_DIRS
 	${COMMON_INCLUDE_DIRS}
 	${Boost_INCLUDE_DIRS}
+	${CMAKE_BINARY_DIR}/common
 	)
 
 add_definitions(

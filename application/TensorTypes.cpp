@@ -27,7 +27,13 @@
 
 typedef std::map<TensorTypes::TensorType, QString> tensorTypeMap;
 
-tensorTypeMap TensorTypes::m_tensorTypes(TensorTypes::init());
+tensorTypeMap TensorTypes::m_tensorTypes(TensorTypes::createTensorTypes());
+
+///////////////////////////////////////////////////////////////////////////
+void TensorTypes::init()
+{
+	m_tensorTypes = createTensorTypes();
+}
 
 ///////////////////////////////////////////////////////////////////////////
 QString TensorTypes::getTensorTypeAsString(TensorType type)
@@ -54,7 +60,7 @@ QStringList TensorTypes::getAllTypes()
 }
 
 ///////////////////////////////////////////////////////////////////////////
-tensorTypeMap TensorTypes::init()
+tensorTypeMap TensorTypes::createTensorTypes()
 {
 	tensorTypeMap tensorTypes;
 	tensorTypes.insert(std::make_pair(METRIC_TENSOR, "Metric tensor"));

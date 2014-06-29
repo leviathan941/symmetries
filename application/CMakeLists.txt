@@ -65,10 +65,10 @@ set(APPLICATION_UI_SOURCES
 
 include_directories(
 	${CMAKE_SOURCE_DIR}/core
-	${CMAKE_BINARY_DIR}/common
 	)
 
 set(APPLICATION_LIBS
+	${Boost_LIBRARIES}
 	core
 	file
 	)
@@ -81,6 +81,8 @@ set(CMAKE_AUTOMOC ON)
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	# Add path to Qt5 installation directory here to CMAKE_PREFIX_PATH
 	set(CMAKE_PREFIX_PATH $ENV{HOME}/Library/Frameworks/Qt5.3.0/5.3/clang_64/)
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+	set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -mwindows)
 endif()
 
 find_package(Qt5Widgets REQUIRED)
